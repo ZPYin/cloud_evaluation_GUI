@@ -1077,6 +1077,11 @@ massDustTotStd = sqrt(nanvar(handles.ret_mass_d_std_Profi(flagLayer) .* (lidarDa
 massNonDustTot = nansum(handles.ret_mass_nd_Profi(flagLayer) .* (lidarData.height(2) - lidarData.height(1))) * 1e9;
 massNonDustTotStd = sqrt(nanvar(handles.ret_mass_nd_std_Profi(flagLayer) .* (lidarData.height(2) - lidarData.height(1)))) * 1e9;
 
+flagRefH = (lidarData.height >= str2double(handles.ref_H_bottom_tb.String) * 1000) & (lidarData.height <= str2double(handles.ref_H_top_tb.String) * 1000);
+molDepol_meas = str2double(handles.gainRatio_tb.String) .* nansum(CH2_PC(flagRefH)) ./ nansum(CH1_PC(flagRefH));
+molDepol_std_meas =  molDepol_meas .* sqrt( 1 ./ PLidar_SNR(nansum(CH1_PC(flagRefH)), sum(flagRefH) * CH1_BG).^2 + 1 ./ PLidar_SNR(nansum(CH2_PC(flagRefH)), sum(flagRefH) * CH2_BG).^2);
+
+handles.log_tb.String{end + 1} = sprintf('Estimated mol depol: %6.4f+-%6.4f', molDepol_meas, molDepol_std_meas);
 handles.log_tb.String{end + 1} = sprintf('Layer dust conc.    : %6.1f+-%6.1f ug*m-2', massDustTot, massDustTotStd);
 handles.log_tb.String{end + 1} = sprintf('Layer non-dust conc.: %6.1f+-%6.1f ug*m-2', massNonDustTot, massNonDustTotStd);
 scrollDownLogBox(handles.log_tb);
@@ -1450,6 +1455,9 @@ display_RCS_colorplot(handles.RCS_colorplot_axes, handles.mTime, handles.height,
 
 % VDR colorplot
 display_VDR_colorplot(handles.VDR_colorplot_axes, handles.mTime, handles.height, handles.VDR, 'tRange', [datenum(handles.starttime_tb.String, 'yyyy-mm-dd HH:MM:SS'), datenum(handles.stoptime_tb.String, 'yyyy-mm-dd HH:MM:SS')], 'hRange', [str2double(handles.H_base_tb.String), str2double(handles.H_top_tb.String)], 'cRange', [str2double(handles.VDR_bottom_tb.String), str2double(handles.VDR_top_tb.String)], 'Temp', handles.Temp, 'CBH', str2double(handles.cloud_base_tb.String), 'CTH', str2double(handles.cloud_top_tb.String), 'CTT', handles.CTT, 'layer_starttime', datenum(handles.ret_starttime_tb.String, 'yyyy-mm-dd HH:MM:SS'), 'layer_stoptime', datenum(handles.ret_stoptime_tb.String, 'yyyy-mm-dd HH:MM:SS'));
+
+% RCS profile
+display_RCS_profi(handles.RCS_lineplot_axes, handles.height, handles.RCS_Profi, handles.mol_RCS_Profi, 'scale', handles.RCS_scale_pm.String{handles.RCS_scale_pm.Value}, 'hRange', [str2double(handles.H_base_tb.String), str2double(handles.H_top_tb.String)], 'RCSRange', [str2double(handles.RCS_bottom_tb.String), str2double(handles.RCS_top_tb.String)], 'CBH', str2double(handles.cloud_base_tb.String), 'CTH', str2double(handles.cloud_top_tb.String), 'CTT', handles.CTT);
 
 % sig profile
 display_sig_profi(handles.ret_sig_lineplot_axes, handles.ret_height, handles.ret_RCS_Profi, handles.ret_mol_RCS_Profi, 'scale', handles.RCS_scale_pm.String{handles.RCS_scale_pm.Value}, 'hRange', [str2double(handles.ret_H_bottom_tb.String), str2double(handles.ret_H_top_tb.String)], 'RCSRange', [str2double(handles.RCS_bottom_tb.String), str2double(handles.RCS_top_tb.String)], 'caliRange', [str2double(handles.ref_H_bottom_tb.String), str2double(handles.ref_H_top_tb.String)]);

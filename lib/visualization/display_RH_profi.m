@@ -49,11 +49,11 @@ p1 = plot(RH, height, 'Color', 'b', 'LineWidth', 2);
 hold on;
 
 if ~ isempty(p.Results.CBH)
-    plot(p.Results.RHRange, [p.Results.CBH, p.Results.CBH], '--k', 'LineWidth', 2);
+    plot(p.Results.RHRange, [p.Results.CBH, p.Results.CBH], '--m', 'LineWidth', 2);
 end
 
 if ~ isempty(p.Results.CTH)
-    plot(p.Results.RHRange, [p.Results.CTH, p.Results.CTH], '--k', 'LineWidth', 2);
+    plot(p.Results.RHRange, [p.Results.CTH, p.Results.CTH], '--m', 'LineWidth', 2);
 end
 
 if (~ isempty(p.Results.CTT)) && (~ isempty(p.Results.CTH))

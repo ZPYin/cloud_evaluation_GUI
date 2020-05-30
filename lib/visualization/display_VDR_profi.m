@@ -53,11 +53,11 @@ hold on;
 p2 = plot(mol_VDR, height, 'Color', 'b', 'LineStyle', '--', 'LineWidth', 2);
 
 if ~ isempty(p.Results.CBH)
-    plot(p.Results.VDRRange, [p.Results.CBH, p.Results.CBH], '--k', 'LineWidth', 2);
+    plot(p.Results.VDRRange, [p.Results.CBH, p.Results.CBH], '--m', 'LineWidth', 2);
 end
 
 if ~ isempty(p.Results.CTH)
-    plot(p.Results.VDRRange, [p.Results.CTH, p.Results.CTH], '--k', 'LineWidth', 2);
+    plot(p.Results.VDRRange, [p.Results.CTH, p.Results.CTH], '--m', 'LineWidth', 2);
 end
 
 if (~ isempty(p.Results.CTT)) && (~ isempty(p.Results.CTH))

@@ -67,11 +67,11 @@ else
 end
 
 if ~ isempty(p.Results.CBH)
-    plot(p.Results.RCSRange, [p.Results.CBH, p.Results.CBH], '--k', 'LineWidth', 2);
+    plot(p.Results.RCSRange, [p.Results.CBH, p.Results.CBH], '--m', 'LineWidth', 2);
 end
 
 if ~ isempty(p.Results.CTH)
-    plot(p.Results.RCSRange, [p.Results.CTH, p.Results.CTH], '--k', 'LineWidth', 2);
+    plot(p.Results.RCSRange, [p.Results.CTH, p.Results.CTH], '--m', 'LineWidth', 2);
 end
 
 if (~ isempty(p.Results.CTT)) && (~ isempty(p.Results.CTH))
