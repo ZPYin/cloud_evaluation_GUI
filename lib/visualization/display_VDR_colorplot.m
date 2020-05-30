@@ -26,6 +26,10 @@ function [fh] = display_VDR_colorplot(ax, mTime, height, VDR, varargin)
 %       cloud top height. (km)
 %   CTT: numeric
 %       cloud top temperature. (celsius)
+%   layer_starttime: numeric
+%       layer start time.
+%   layer_stoptime: numeric
+%       layer stop time.
 %Outputs:
 %   fh: figure
 %       figure handle.
@@ -48,6 +52,8 @@ addParameter(p, 'Temp', [], @isnumeric);
 addParameter(p, 'CBH', NaN, @isnumeric);
 addParameter(p, 'CTH', NaN, @isnumeric);
 addParameter(p, 'CTT', NaN, @isnumeric);
+addParameter(p, 'layer_starttime', NaN, @isnumeric);
+addParameter(p, 'layer_stoptime', NaN, @isnumeric);
 
 parse(p, ax, mTime, height, VDR, varargin{:});
 
@@ -76,6 +82,14 @@ end
 
 if (~ isempty(p.Results.CTT)) && (~ isempty(p.Results.CTH))
     text(mean(p.Results.tRange), p.Results.CTH, sprintf('%5.1f \\circC', p.Results.CTT), 'Color', 'r', 'FontWeight', 'Bold', 'Units', 'Data');
+end
+
+if ~ isempty(p.Results.CBH)
+    plot([p.Results.layer_starttime, p.Results.layer_starttime], p.Results.hRange, '--y', 'LineWidth', 2);
+end
+
+if ~ isempty(p.Results.CTH)
+    plot([p.Results.layer_stoptime, p.Results.layer_stoptime], p.Results.hRange, '--y', 'LineWidth', 2);
 end
 
 hold off;

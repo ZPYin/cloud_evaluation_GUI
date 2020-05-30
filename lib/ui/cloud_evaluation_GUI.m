@@ -244,6 +244,8 @@ else
     handles.log_tb.String{end + 1} = sprintf('[%s] load info file successfully!', tNow());
 end
 
+handles.infoFile_tb.String = handles.infoFile;
+
 guidata(hObject, handles);
 
 
@@ -522,6 +524,11 @@ function overview_plot_btn_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+if ~ exist(handles.settings.dataDir, 'dir')
+    handles.log_tb.String{end + 1} = sprintf('[%s] Lidar data does not exist: %s', tNow, handles.settings.String);
+    scrollDownLogBox(handles.log_tb);
+end
+
 % read lidar data
 lidarData = PLidar_readdata(handles.settings.dataDir, [datenum(handles.starttime_tb.String, 'yyyy-mm-dd HH:MM:SS'), datenum(handles.stoptime_tb.String, 'yyyy-mm-dd HH:MM:SS')], [str2double(handles.H_base_tb.String) * 1000, str2double(handles.H_top_tb.String) * 1000], handles.settings.data_version);
 
@@ -561,10 +568,10 @@ handles.cloud_top_sig_2_bg = nanmean(nanmean(elSig(cloudTopLayerIndx, :), 1), 2)
 
 %% update plots
 % RCS colorplot
-display_RCS_colorplot(handles.RCS_colorplot_axes, handles.mTime, handles.height, handles.RCS, 'scale', handles.RCS_scale_pm.String{handles.RCS_scale_pm.Value}, 'tRange', [datenum(handles.starttime_tb.String, 'yyyy-mm-dd HH:MM:SS'), datenum(handles.stoptime_tb.String, 'yyyy-mm-dd HH:MM:SS')], 'hRange', [str2double(handles.H_base_tb.String), str2double(handles.H_top_tb.String)], 'cRange', [str2double(handles.RCS_bottom_tb.String), str2double(handles.RCS_top_tb.String)], 'Temp', handles.Temp, 'CBH', str2double(handles.cloud_base_tb.String), 'CTH', str2double(handles.cloud_top_tb.String), 'CTT', handles.CTT);
+display_RCS_colorplot(handles.RCS_colorplot_axes, handles.mTime, handles.height, handles.RCS, 'scale', handles.RCS_scale_pm.String{handles.RCS_scale_pm.Value}, 'tRange', [datenum(handles.starttime_tb.String, 'yyyy-mm-dd HH:MM:SS'), datenum(handles.stoptime_tb.String, 'yyyy-mm-dd HH:MM:SS')], 'hRange', [str2double(handles.H_base_tb.String), str2double(handles.H_top_tb.String)], 'cRange', [str2double(handles.RCS_bottom_tb.String), str2double(handles.RCS_top_tb.String)], 'Temp', handles.Temp, 'CBH', str2double(handles.cloud_base_tb.String), 'CTH', str2double(handles.cloud_top_tb.String), 'CTT', handles.CTT, 'layer_starttime', datenum(handles.ret_starttime_tb.String, 'yyyy-mm-dd HH:MM:SS'), 'layer_stoptime', datenum(handles.ret_stoptime_tb.String, 'yyyy-mm-dd HH:MM:SS'));
 
 % VDR colorplot
-display_VDR_colorplot(handles.VDR_colorplot_axes, handles.mTime, handles.height, handles.VDR, 'tRange', [datenum(handles.starttime_tb.String, 'yyyy-mm-dd HH:MM:SS'), datenum(handles.stoptime_tb.String, 'yyyy-mm-dd HH:MM:SS')], 'hRange', [str2double(handles.H_base_tb.String), str2double(handles.H_top_tb.String)], 'cRange', [str2double(handles.VDR_bottom_tb.String), str2double(handles.VDR_top_tb.String)], 'Temp', handles.Temp, 'CBH', str2double(handles.cloud_base_tb.String), 'CTH', str2double(handles.cloud_top_tb.String), 'CTT', handles.CTT);
+display_VDR_colorplot(handles.VDR_colorplot_axes, handles.mTime, handles.height, handles.VDR, 'tRange', [datenum(handles.starttime_tb.String, 'yyyy-mm-dd HH:MM:SS'), datenum(handles.stoptime_tb.String, 'yyyy-mm-dd HH:MM:SS')], 'hRange', [str2double(handles.H_base_tb.String), str2double(handles.H_top_tb.String)], 'cRange', [str2double(handles.VDR_bottom_tb.String), str2double(handles.VDR_top_tb.String)], 'Temp', handles.Temp, 'CBH', str2double(handles.cloud_base_tb.String), 'CTH', str2double(handles.cloud_top_tb.String), 'CTT', handles.CTT, 'layer_starttime', datenum(handles.ret_starttime_tb.String, 'yyyy-mm-dd HH:MM:SS'), 'layer_stoptime', datenum(handles.ret_stoptime_tb.String, 'yyyy-mm-dd HH:MM:SS'));
 
 % RCS profile
 display_RCS_profi(handles.RCS_lineplot_axes, handles.height, handles.RCS_Profi, handles.mol_RCS_Profi, 'scale', handles.RCS_scale_pm.String{handles.RCS_scale_pm.Value}, 'hRange', [str2double(handles.H_base_tb.String), str2double(handles.H_top_tb.String)], 'RCSRange', [str2double(handles.RCS_bottom_tb.String), str2double(handles.RCS_top_tb.String)], 'CBH', str2double(handles.cloud_base_tb.String), 'CTH', str2double(handles.cloud_top_tb.String), 'CTT', handles.CTT);
@@ -1045,6 +1052,12 @@ handles.ret_mass_nd_Profi = ret_mass_nd_Profi;
 handles.ret_mass_nd_std_Profi = ret_mass_nd_std_Profi;
 
 %% update plots
+% RCS colorplot
+display_RCS_colorplot(handles.RCS_colorplot_axes, handles.mTime, handles.height, handles.RCS, 'scale', handles.RCS_scale_pm.String{handles.RCS_scale_pm.Value}, 'tRange', [datenum(handles.starttime_tb.String, 'yyyy-mm-dd HH:MM:SS'), datenum(handles.stoptime_tb.String, 'yyyy-mm-dd HH:MM:SS')], 'hRange', [str2double(handles.H_base_tb.String), str2double(handles.H_top_tb.String)], 'cRange', [str2double(handles.RCS_bottom_tb.String), str2double(handles.RCS_top_tb.String)], 'Temp', handles.Temp, 'CBH', str2double(handles.cloud_base_tb.String), 'CTH', str2double(handles.cloud_top_tb.String), 'CTT', handles.CTT, 'layer_starttime', datenum(handles.ret_starttime_tb.String, 'yyyy-mm-dd HH:MM:SS'), 'layer_stoptime', datenum(handles.ret_stoptime_tb.String, 'yyyy-mm-dd HH:MM:SS'));
+
+% VDR colorplot
+display_VDR_colorplot(handles.VDR_colorplot_axes, handles.mTime, handles.height, handles.VDR, 'tRange', [datenum(handles.starttime_tb.String, 'yyyy-mm-dd HH:MM:SS'), datenum(handles.stoptime_tb.String, 'yyyy-mm-dd HH:MM:SS')], 'hRange', [str2double(handles.H_base_tb.String), str2double(handles.H_top_tb.String)], 'cRange', [str2double(handles.VDR_bottom_tb.String), str2double(handles.VDR_top_tb.String)], 'Temp', handles.Temp, 'CBH', str2double(handles.cloud_base_tb.String), 'CTH', str2double(handles.cloud_top_tb.String), 'CTT', handles.CTT, 'layer_starttime', datenum(handles.ret_starttime_tb.String, 'yyyy-mm-dd HH:MM:SS'), 'layer_stoptime', datenum(handles.ret_stoptime_tb.String, 'yyyy-mm-dd HH:MM:SS'));
+
 % sig profile
 display_sig_profi(handles.ret_sig_lineplot_axes, handles.ret_height, handles.ret_RCS_Profi, handles.ret_mol_RCS_Profi, 'scale', handles.RCS_scale_pm.String{handles.RCS_scale_pm.Value}, 'hRange', [str2double(handles.ret_H_bottom_tb.String), str2double(handles.ret_H_top_tb.String)], 'RCSRange', [str2double(handles.RCS_bottom_tb.String), str2double(handles.RCS_top_tb.String)], 'caliRange', [str2double(handles.ref_H_bottom_tb.String), str2double(handles.ref_H_top_tb.String)]);
 
@@ -1174,9 +1187,11 @@ function VDR_Range_btn_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 %% update VDR
-display_VDR_colorplot(handles.VDR_colorplot_axes, handles.mTime, handles.height, handles.VDR, 'tRange', [datenum(handles.starttime_tb.String, 'yyyy-mm-dd HH:MM:SS'), datenum(handles.stoptime_tb.String, 'yyyy-mm-dd HH:MM:SS')], 'hRange', [str2double(handles.H_base_tb.String), str2double(handles.H_top_tb.String)], 'cRange', [str2double(handles.VDR_bottom_tb.String), str2double(handles.VDR_top_tb.String)], 'Temp', handles.Temp, 'CBH', str2double(handles.cloud_base_tb.String), 'CTH', str2double(handles.cloud_top_tb.String), 'CTT', handles.CTT);
+% RCS colorplot
+display_RCS_colorplot(handles.RCS_colorplot_axes, handles.mTime, handles.height, handles.RCS, 'scale', handles.RCS_scale_pm.String{handles.RCS_scale_pm.Value}, 'tRange', [datenum(handles.starttime_tb.String, 'yyyy-mm-dd HH:MM:SS'), datenum(handles.stoptime_tb.String, 'yyyy-mm-dd HH:MM:SS')], 'hRange', [str2double(handles.H_base_tb.String), str2double(handles.H_top_tb.String)], 'cRange', [str2double(handles.RCS_bottom_tb.String), str2double(handles.RCS_top_tb.String)], 'Temp', handles.Temp, 'CBH', str2double(handles.cloud_base_tb.String), 'CTH', str2double(handles.cloud_top_tb.String), 'CTT', handles.CTT, 'layer_starttime', datenum(handles.ret_starttime_tb.String, 'yyyy-mm-dd HH:MM:SS'), 'layer_stoptime', datenum(handles.ret_stoptime_tb.String, 'yyyy-mm-dd HH:MM:SS'));
 
-display_VDR_profi(handles.VDR_lineplot_axes, handles.height, handles.VDR_Profi, str2double(handles.mol_depol_tb.String) .* ones(size(handles.height)), 'hRange', [str2double(handles.H_base_tb.String), str2double(handles.H_top_tb.String)], 'VDRRange', [str2double(handles.VDR_bottom_tb.String), str2double(handles.VDR_top_tb.String)], 'CBH', str2double(handles.cloud_base_tb.String), 'CTH', str2double(handles.cloud_top_tb.String), 'CTT', handles.CTT);
+% VDR colorplot
+display_VDR_colorplot(handles.VDR_colorplot_axes, handles.mTime, handles.height, handles.VDR, 'tRange', [datenum(handles.starttime_tb.String, 'yyyy-mm-dd HH:MM:SS'), datenum(handles.stoptime_tb.String, 'yyyy-mm-dd HH:MM:SS')], 'hRange', [str2double(handles.H_base_tb.String), str2double(handles.H_top_tb.String)], 'cRange', [str2double(handles.VDR_bottom_tb.String), str2double(handles.VDR_top_tb.String)], 'Temp', handles.Temp, 'CBH', str2double(handles.cloud_base_tb.String), 'CTH', str2double(handles.cloud_top_tb.String), 'CTT', handles.CTT, 'layer_starttime', datenum(handles.ret_starttime_tb.String, 'yyyy-mm-dd HH:MM:SS'), 'layer_stoptime', datenum(handles.ret_stoptime_tb.String, 'yyyy-mm-dd HH:MM:SS'));
 
 % depol profile
 display_depol_profi(handles.ret_depol_lineplot_axes, handles.ret_height, handles.ret_VDR_Profi, handles.ret_PDR_Profi, 'hRange', [str2double(handles.ret_H_bottom_tb.String), str2double(handles.ret_H_top_tb.String)], 'DepolRange', [str2double(handles.VDR_bottom_tb.String), str2double(handles.VDR_top_tb.String)], 'LBH', str2double(handles.LayerBase_tb.String), 'LTH', str2double(handles.LayerTop_tb.String));
@@ -1431,10 +1446,10 @@ function RCS_range_btn_Callback(hObject, eventdata, handles)
 
 %% update RCS
 % RCS colorplot
-display_RCS_colorplot(handles.RCS_colorplot_axes, handles.mTime, handles.height, handles.RCS, 'scale', handles.RCS_scale_pm.String{handles.RCS_scale_pm.Value}, 'tRange', [datenum(handles.starttime_tb.String, 'yyyy-mm-dd HH:MM:SS'), datenum(handles.stoptime_tb.String, 'yyyy-mm-dd HH:MM:SS')], 'hRange', [str2double(handles.H_base_tb.String), str2double(handles.H_top_tb.String)], 'cRange', [str2double(handles.RCS_bottom_tb.String), str2double(handles.RCS_top_tb.String)], 'Temp', handles.Temp, 'CBH', str2double(handles.cloud_base_tb.String), 'CTH', str2double(handles.cloud_top_tb.String), 'CTT', handles.CTT);
+display_RCS_colorplot(handles.RCS_colorplot_axes, handles.mTime, handles.height, handles.RCS, 'scale', handles.RCS_scale_pm.String{handles.RCS_scale_pm.Value}, 'tRange', [datenum(handles.starttime_tb.String, 'yyyy-mm-dd HH:MM:SS'), datenum(handles.stoptime_tb.String, 'yyyy-mm-dd HH:MM:SS')], 'hRange', [str2double(handles.H_base_tb.String), str2double(handles.H_top_tb.String)], 'cRange', [str2double(handles.RCS_bottom_tb.String), str2double(handles.RCS_top_tb.String)], 'Temp', handles.Temp, 'CBH', str2double(handles.cloud_base_tb.String), 'CTH', str2double(handles.cloud_top_tb.String), 'CTT', handles.CTT, 'layer_starttime', datenum(handles.ret_starttime_tb.String, 'yyyy-mm-dd HH:MM:SS'), 'layer_stoptime', datenum(handles.ret_stoptime_tb.String, 'yyyy-mm-dd HH:MM:SS'));
 
-% RCS profile
-display_RCS_profi(handles.RCS_lineplot_axes, handles.height, handles.RCS_Profi, handles.mol_RCS_Profi, 'scale', handles.RCS_scale_pm.String{handles.RCS_scale_pm.Value}, 'hRange', [str2double(handles.H_base_tb.String), str2double(handles.H_top_tb.String)], 'RCSRange', [str2double(handles.RCS_bottom_tb.String), str2double(handles.RCS_top_tb.String)], 'CBH', str2double(handles.cloud_base_tb.String), 'CTH', str2double(handles.cloud_top_tb.String), 'CTT', handles.CTT);
+% VDR colorplot
+display_VDR_colorplot(handles.VDR_colorplot_axes, handles.mTime, handles.height, handles.VDR, 'tRange', [datenum(handles.starttime_tb.String, 'yyyy-mm-dd HH:MM:SS'), datenum(handles.stoptime_tb.String, 'yyyy-mm-dd HH:MM:SS')], 'hRange', [str2double(handles.H_base_tb.String), str2double(handles.H_top_tb.String)], 'cRange', [str2double(handles.VDR_bottom_tb.String), str2double(handles.VDR_top_tb.String)], 'Temp', handles.Temp, 'CBH', str2double(handles.cloud_base_tb.String), 'CTH', str2double(handles.cloud_top_tb.String), 'CTT', handles.CTT, 'layer_starttime', datenum(handles.ret_starttime_tb.String, 'yyyy-mm-dd HH:MM:SS'), 'layer_stoptime', datenum(handles.ret_stoptime_tb.String, 'yyyy-mm-dd HH:MM:SS'));
 
 % sig profile
 display_sig_profi(handles.ret_sig_lineplot_axes, handles.ret_height, handles.ret_RCS_Profi, handles.ret_mol_RCS_Profi, 'scale', handles.RCS_scale_pm.String{handles.RCS_scale_pm.Value}, 'hRange', [str2double(handles.ret_H_bottom_tb.String), str2double(handles.ret_H_top_tb.String)], 'RCSRange', [str2double(handles.RCS_bottom_tb.String), str2double(handles.RCS_top_tb.String)], 'caliRange', [str2double(handles.ref_H_bottom_tb.String), str2double(handles.ref_H_top_tb.String)]);
