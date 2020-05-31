@@ -72,12 +72,12 @@ for iDate = 1:length(mDateArr)
     if isfield(subdata, 'height')
         data.height = subdata.height;
         data.altitude = subdata.altitude;
-        data.time = [data.time, subdata.time];
-        data.records = [data.records, subdata.records];
+        data.time = cat(2, data.time, subdata.time);
+        data.records = cat(1, data.records, subdata.records);
         data.CH1_PC = cat(2, data.CH1_PC, subdata.CH1_PC);
         data.CH2_PC = cat(2, data.CH2_PC, subdata.CH2_PC);
-        data.CH1_BG = [data.CH1_BG, subdata.CH1_BG];
-        data.CH2_BG = [data.CH2_BG, subdata.CH2_BG];
+        data.CH1_BG = cat(2, data.CH1_BG, subdata.CH1_BG);
+        data.CH2_BG = cat(2, data.CH2_BG, subdata.CH2_BG);
         data.CH1_overflow = cat(2, data.CH1_overflow, subdata.CH1_overflow);
         data.CH2_overflow = cat(2, data.CH2_overflow, subdata.CH2_overflow);
     end

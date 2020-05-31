@@ -22,7 +22,7 @@ function varargout = cloud_evaluation_GUI(varargin)
 
 % Edit the above text to modify the response to help cloud_evaluation_GUI
 
-% Last Modified by GUIDE v2.5 29-May-2020 15:09:18
+% Last Modified by GUIDE v2.5 31-May-2020 09:55:32
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -1198,6 +1198,9 @@ display_RCS_colorplot(handles.RCS_colorplot_axes, handles.mTime, handles.height,
 % VDR colorplot
 display_VDR_colorplot(handles.VDR_colorplot_axes, handles.mTime, handles.height, handles.VDR, 'tRange', [datenum(handles.starttime_tb.String, 'yyyy-mm-dd HH:MM:SS'), datenum(handles.stoptime_tb.String, 'yyyy-mm-dd HH:MM:SS')], 'hRange', [str2double(handles.H_base_tb.String), str2double(handles.H_top_tb.String)], 'cRange', [str2double(handles.VDR_bottom_tb.String), str2double(handles.VDR_top_tb.String)], 'Temp', handles.Temp, 'CBH', str2double(handles.cloud_base_tb.String), 'CTH', str2double(handles.cloud_top_tb.String), 'CTT', handles.CTT, 'layer_starttime', datenum(handles.ret_starttime_tb.String, 'yyyy-mm-dd HH:MM:SS'), 'layer_stoptime', datenum(handles.ret_stoptime_tb.String, 'yyyy-mm-dd HH:MM:SS'));
 
+% VDR profile
+display_VDR_profi(handles.VDR_lineplot_axes, handles.height, handles.VDR_Profi, str2double(handles.mol_depol_tb.String) .* ones(size(handles.height)), 'hRange', [str2double(handles.H_base_tb.String), str2double(handles.H_top_tb.String)], 'VDRRange', [str2double(handles.VDR_bottom_tb.String), str2double(handles.VDR_top_tb.String)], 'CBH', str2double(handles.cloud_base_tb.String), 'CTH', str2double(handles.cloud_top_tb.String), 'CTT', handles.CTT);
+
 % depol profile
 display_depol_profi(handles.ret_depol_lineplot_axes, handles.ret_height, handles.ret_VDR_Profi, handles.ret_PDR_Profi, 'hRange', [str2double(handles.ret_H_bottom_tb.String), str2double(handles.ret_H_top_tb.String)], 'DepolRange', [str2double(handles.VDR_bottom_tb.String), str2double(handles.VDR_top_tb.String)], 'LBH', str2double(handles.LayerBase_tb.String), 'LTH', str2double(handles.LayerTop_tb.String));
 
@@ -1476,3 +1479,10 @@ display_mass_profi(handles.ret_mass_lineplot_axes, handles.ret_height, handles.r
 
 % Update handles structure
 guidata(hObject, handles);
+
+
+% --------------------------------------------------------------------
+function Untitled_1_Callback(hObject, eventdata, handles)
+% hObject    handle to Untitled_1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
