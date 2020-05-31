@@ -38,7 +38,7 @@ addRequired(p, 'mol_RCS', @isnumeric);
 addParameter(p, 'scale', 'linear', @ischar);
 addParameter(p, 'hRange', [0, 1000], @isnumeric);
 addParameter(p, 'RCSRange', [0, 1e12], @isnumeric);
-addParameter(p, 'caliRange', [10, 11], @isnumeric);
+addParameter(p, 'caliRange', [], @isnumeric);
 
 parse(p, ax, height, RCS, mol_RCS, varargin{:});
 

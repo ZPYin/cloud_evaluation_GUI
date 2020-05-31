@@ -22,7 +22,7 @@ function varargout = cloud_evaluation_GUI(varargin)
 
 % Edit the above text to modify the response to help cloud_evaluation_GUI
 
-% Last Modified by GUIDE v2.5 31-May-2020 09:55:32
+% Last Modified by GUIDE v2.5 31-May-2020 15:56:50
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -716,7 +716,7 @@ function export_fig_btn_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-saveFile = fullfile(handles.settings.saveDir, sprintf('cloud_eval_output_%s-%s_%05d-%05d_sm%s.png', datestr(handles.starttime_tb.String, 'yyyymmdd_HHMM'), datestr(handles.stoptime_tb.String, 'HHMM'), str2double(handles.H_base_tb.String) * 1000, str2double(handles.H_top_tb.String) * 1000, handles.smoothwin_tb.String));
+saveFile = fullfile(handles.settings.saveDir, sprintf('cloud_eval_output_%s-%s_%05d-%05d_sm%s.png', datestr(handles.starttime_tb.String, 'yyyymmdd_HHMM'), datestr(handles.stoptime_tb.String, 'HHMM'), str2double(handles.cloud_base_tb.String) * 1000, str2double(handles.cloud_top_tb.String) * 1000, handles.smoothwin_tb.String));
 export_fig(gcf, saveFile, '-r300');
 
 %% update status
@@ -1030,6 +1030,7 @@ ret_mass_nd_Profi = nondustInfo.massConc;
 ret_mass_nd_std_Profi = nondustInfo.massConcStd;
 
 flagRefH = (lidarData.height <= str2double(handles.ref_H_top_tb.String) * 1000) & (lidarData.height >= str2double(handles.ref_H_bottom_tb.String) * 1000);
+
 %% update data in handles
 handles.retLidarData = lidarData;
 handles.retMTime = lidarData.time;
@@ -1486,3 +1487,53 @@ function Untitled_1_Callback(hObject, eventdata, handles)
 % hObject    handle to Untitled_1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in ret_clear_btn.
+function ret_clear_btn_Callback(hObject, eventdata, handles)
+% hObject    handle to ret_clear_btn (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+%% update data in handles
+handles.retLidarData = struct();
+handles.retMTime = NaN(1, 100);
+handles.ret_height = NaN(1, 100);
+handles.ret_Temp_Profi = NaN(1, 100);
+handles.ret_RCS_Profi = NaN(1, 100);
+handles.ret_mol_RCS_Profi = NaN(1, 100);
+handles.ret_bsc_Profi = NaN(1, 100);
+handles.ret_bsc_d_Profi = NaN(1, 100);
+handles.ret_bsc_d_std_Profi = NaN(1, 100);
+handles.ret_bsc_nd_Profi = NaN(1, 100);
+handles.ret_bsc_nd_std_Profi = NaN(1, 100);
+handles.ret_VDR_Profi = NaN(1, 100);
+handles.ret_VDR_std_Profi = NaN(1, 100);
+handles.ret_PDR_Profi = NaN(1, 100);
+handles.ret_PDR_std_Profi = NaN(1, 100);
+handles.ret_mass_d_Profi = NaN(1, 100);
+handles.ret_mass_d_std_Profi = NaN(1, 100);
+handles.ret_mass_nd_Profi = NaN(1, 100);
+handles.ret_mass_nd_std_Profi = NaN(1, 100);
+
+%% update plots
+% RCS colorplot
+display_RCS_colorplot(handles.RCS_colorplot_axes, handles.mTime, handles.height, handles.RCS, 'scale', handles.RCS_scale_pm.String{handles.RCS_scale_pm.Value}, 'tRange', [datenum(handles.starttime_tb.String, 'yyyy-mm-dd HH:MM:SS'), datenum(handles.stoptime_tb.String, 'yyyy-mm-dd HH:MM:SS')], 'hRange', [str2double(handles.H_base_tb.String), str2double(handles.H_top_tb.String)], 'cRange', [str2double(handles.RCS_bottom_tb.String), str2double(handles.RCS_top_tb.String)], 'Temp', handles.Temp, 'CBH', str2double(handles.cloud_base_tb.String), 'CTH', str2double(handles.cloud_top_tb.String), 'CTT', handles.CTT);
+
+% VDR colorplot
+display_VDR_colorplot(handles.VDR_colorplot_axes, handles.mTime, handles.height, handles.VDR, 'tRange', [datenum(handles.starttime_tb.String, 'yyyy-mm-dd HH:MM:SS'), datenum(handles.stoptime_tb.String, 'yyyy-mm-dd HH:MM:SS')], 'hRange', [str2double(handles.H_base_tb.String), str2double(handles.H_top_tb.String)], 'cRange', [str2double(handles.VDR_bottom_tb.String), str2double(handles.VDR_top_tb.String)], 'Temp', handles.Temp, 'CBH', str2double(handles.cloud_base_tb.String), 'CTH', str2double(handles.cloud_top_tb.String), 'CTT', handles.CTT);
+
+% sig profile
+display_sig_profi(handles.ret_sig_lineplot_axes, handles.ret_height, handles.ret_RCS_Profi, handles.ret_mol_RCS_Profi, 'scale', handles.RCS_scale_pm.String{handles.RCS_scale_pm.Value}, 'hRange', [str2double(handles.ret_H_bottom_tb.String), str2double(handles.ret_H_top_tb.String)], 'RCSRange', [str2double(handles.RCS_bottom_tb.String), str2double(handles.RCS_top_tb.String)]);
+
+% bsc profile
+display_bsc_profi(handles.ret_bsc_lineplot_axes, handles.ret_height, handles.ret_bsc_Profi * 1e6, 'hRange', [str2double(handles.ret_H_bottom_tb.String), str2double(handles.ret_H_top_tb.String)], 'aerBscRange', [str2double(handles.bsc_bottom_tb.String), str2double(handles.bsc_top_tb.String)], 'dustBsc', handles.ret_bsc_d_Profi * 1e6, 'nondustBsc', handles.ret_bsc_nd_Profi * 1e6);
+
+% depol profile
+display_depol_profi(handles.ret_depol_lineplot_axes, handles.ret_height, handles.ret_VDR_Profi, handles.ret_PDR_Profi, 'hRange', [str2double(handles.ret_H_bottom_tb.String), str2double(handles.ret_H_top_tb.String)], 'DepolRange', [str2double(handles.VDR_bottom_tb.String), str2double(handles.VDR_top_tb.String)]);
+
+% mass profile
+display_mass_profi(handles.ret_mass_lineplot_axes, handles.ret_height, handles.ret_mass_nd_Profi * 1e9, handles.ret_mass_d_Profi * 1e9, 'hRange', [str2double(handles.ret_H_bottom_tb.String), str2double(handles.ret_H_top_tb.String)], 'massRange', [str2double(handles.mass_bottom_tb.String), str2double(handles.mass_top_tb.String)]);
+
+% Update handles structure
+guidata(hObject, handles);

@@ -75,7 +75,14 @@ if ~ isempty(p.Results.CTH)
 end
 
 if (~ isempty(p.Results.CTT)) && (~ isempty(p.Results.CTH))
-    text(mean(p.Results.RCSRange), p.Results.CTH, sprintf('%5.1f \\circC', p.Results.CTT), 'Color', 'r', 'FontWeight', 'Bold', 'Units', 'Data');
+
+    if strcmpi(p.Results.scale, 'linear')
+        posAnnotation = mean(p.Results.RCSRange);
+    else
+        posAnnotation = 10 .^ (mean(log10(p.Results.RCSRange)));
+    end
+
+    text(posAnnotation, p.Results.CTH, sprintf('%5.1f \\circC', p.Results.CTT), 'Color', 'r', 'FontWeight', 'Bold', 'Units', 'Data');
 end
 
 hold off;
