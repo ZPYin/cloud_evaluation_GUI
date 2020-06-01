@@ -1,8 +1,8 @@
 function temp2D = read_gridTemp_GDAS1(mTime, altitude, ...
-                                                         folder, gdas1site, deltaTime)
-%read_gridTemp_GDAS1 read gridded gdas1 data
+                                    folder, gdas1site, deltaTime)
+%read_gridTemp_GDAS1 read gridded GDAS1 data
 %Example:
-%   temp2D = read_gridTemp_GDAS1(mTime, altitude, gdas1site, folder, gdas1site, deltaTime)
+%   temp2D = read_gridTemp_GDAS1(mTime, altitude, folder, gdas1site, deltaTime)
 %Inputs:
 %   mTime: array
 %       measurement time. (UTC)
@@ -37,14 +37,16 @@ gdas1Files = cell(0);
 gdas1Times = [];
 for iDate = 1:length(dates)
     thisDate = dates(iDate);
-    filesInDay = listfile(fullfile(folder, gdas1site, datestr(thisDate, 'yyyy'), datestr(thisDate, 'mm')), sprintf('.*%s.*.gdas1', datestr(thisDate, 'yyyymmdd')));
+    filesInDay = listfile(fullfile(folder, gdas1site, ...
+        datestr(thisDate, 'yyyy'), datestr(thisDate, 'mm')), ...
+        sprintf('.*%s.*.gdas1', datestr(thisDate, 'yyyymmdd')));
 
     for iFile = 1:length(filesInDay)
         thisTime = gdas1FileTimestamp(basename(filesInDay{iFile}));
 
         if (thisTime >= tRange(1)) && (thisTime <= tRange(2))
-            gdas1Files{end + 1} = filesInDay{iFile};
-            gdas1Times = [gdas1Times, thisTime];
+            gdas1Files = cat(2, gdas1Files, filesInDay{iFile});
+            gdas1Times = cat(2, gdas1Times, thisTime);
         end
     end
 end
@@ -70,8 +72,10 @@ for iFile = 1:length(gdas1FilesSorted)
 end
 
 %% grided GDAS1 data
-[TIME, ALT] = meshgrid(time, altitude);
-[TIMEGrid, ALTGrid] = meshgrid(mTime, altitude);
-temp2D = interp2(TIME, ALT, temp, TIMEGrid, ALTGrid, 'linear');
+if ~ isempty(temp)
+    [TIME, ALT] = meshgrid(time, altitude);
+    [TIMEGrid, ALTGrid] = meshgrid(mTime, altitude);
+    temp2D = interp2(TIME, ALT, temp, TIMEGrid, ALTGrid, 'linear');
+end
 
 end

@@ -1,6 +1,5 @@
-function [temp, pres, relh, meteor_time] = read_meteordata(measTime, ...
-    altitude, varargin)
-%read_meteordata Read the meteorological data according the input 
+function [temp, pres, relh, meteor_time] = read_meteordata(measTime, altitude, varargin)
+%read_meteordata Read the meteorological data according to the input 
 %meteorological data type.
 %Example:
 %   % Usecase 1: read GDAS1 data
@@ -32,7 +31,7 @@ function [temp, pres, relh, meteor_time] = read_meteordata(measTime, ...
 %       ERA-5 data folder.
 %Outputs:
 %   temp: array
-%       temperature for each range bin. [°C]
+%       temperature for each range bin. [??C]
 %   pres: array
 %       pressure for each range bin. [hPa]
 %   relh: array
@@ -58,10 +57,10 @@ addParameter(p, 'ERA5Folder', '', @ischar);
 
 parse(p, measTime, altitude, varargin{:});
 
-temp = [];
-pres = [];
-relh = [];
-meteor_time = [];
+temp = NaN(size(altitude));
+pres = NaN(size(altitude));
+relh = NaN(size(altitude));
+meteor_time = NaN(size(altitude));
 
 switch lower(p.Results.meteor_data)
 
@@ -83,7 +82,7 @@ case 'gdas1'
 case 'radiosonde'
 
     % Radiosonde profile
-    sondeFile = radiosonde_search(p.Results.RadiosondeFolder, measTime, p.Results.RadiosondeType);
+    sondeFile = radiosonde_search(fullfile(p.Results.RadiosondeFolder, p.Results.station), measTime, p.Results.RadiosondeType);
     [rs_alt, rs_temp, rs_pres, rs_relh, meteor_time] = ...
         read_radiosonde(sondeFile, p.Results.RadiosondeType);
    
@@ -111,6 +110,19 @@ case 'era-5'
 
     warning('Not implemented');
     return;
+
+case 'standard_atmosphere'
+
+    % read standard_atmosphere data as default values.
+    [sa_alt, ~, ~, sa_temp, sa_pres] = atmo(max(altitude/1000)+1, 0.03, 1);
+
+    pres = interp1(sa_alt, sa_pres / 1e2, altitude / 1000);
+    temp = interp1(sa_alt, sa_temp - 273.17, altitude / 1000);   % convert to [\circC]
+    relh = NaN(size(temp));
+
+otherwise
+
+    error('Unknown meteorological data: %s', p.Results.meteor_data);
 
 end
 

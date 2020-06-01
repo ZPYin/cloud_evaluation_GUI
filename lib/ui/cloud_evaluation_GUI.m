@@ -22,7 +22,7 @@ function varargout = cloud_evaluation_GUI(varargin)
 
 % Edit the above text to modify the response to help cloud_evaluation_GUI
 
-% Last Modified by GUIDE v2.5 31-May-2020 15:56:50
+% Last Modified by GUIDE v2.5 01-Jun-2020 23:18:24
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -157,6 +157,12 @@ else
     handles.settings = settings;
 
     handles.log_tb.String{end + 1} = sprintf('[%s] load settings successfully!', tNow());
+
+    % validate settings
+    if ~ exist(settings.dataDir, 'dir')
+        logPrint(handles.log_tb, sprintf('dataDir does not exist'));
+    end
+
 end
 
 guidata(hObject, handles);
@@ -525,7 +531,7 @@ function overview_plot_btn_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 if ~ exist(handles.settings.dataDir, 'dir')
-    handles.log_tb.String{end + 1} = sprintf('[%s] Lidar data does not exist: %s', tNow, handles.settings.String);
+    handles.log_tb.String{end + 1} = sprintf('[%s] Lidar data does not exist: %s', tNow, handles.setting_tb.String);
     scrollDownLogBox(handles.log_tb);
 end
 
@@ -1537,3 +1543,8 @@ display_mass_profi(handles.ret_mass_lineplot_axes, handles.ret_height, handles.r
 
 % Update handles structure
 guidata(hObject, handles);
+
+
+function logPrint(fh, inStr)
+    fh.String{end + 1} = inStr;
+    scrollDownLogBox(fh);

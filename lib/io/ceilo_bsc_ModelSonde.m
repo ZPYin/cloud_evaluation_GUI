@@ -24,10 +24,10 @@ function [ pressure, altitude, temperature, relh ] = ceilo_bsc_ModelSonde( filen
 %       (Raw version from Birgit Heese.)
 %       2018-12-15. Add ouput of relh
 
-pressure    = NaN;
-altitude    = NaN;
-temperature = NaN;
-relh        = NaN;
+pressure    = [];
+altitude    = [];
+temperature = [];
+relh        = [];
 
 % in automated version filename is passed with wildcard character instead
 % of lon/lat information. to get exact filename, list files first. filename
