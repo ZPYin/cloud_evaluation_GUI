@@ -26,10 +26,18 @@ function [fh] = display_VDR_colorplot(ax, mTime, height, VDR, varargin)
 %       cloud top height. (km)
 %   CTT: numeric
 %       cloud top temperature. (celsius)
-%   layer_starttime: numeric
-%       layer start time.
-%   layer_stoptime: numeric
-%       layer stop time.
+%   cloud_starttime: numeric
+%       start time of the cloud contaminated profile.
+%   cloud_stoptime: numeric
+%       stop time of the cloud contaminated profile.
+%   ret_starttime: numeric
+%       start time of the averaged region.
+%   ret_stoptime: numeric
+%       stop time of the averaged region.
+%   ret_bottom: numeric
+%       bottom of the averaged region. (km)
+%   ret_top: numeric
+%       top of the averaged region. (km)
 %Outputs:
 %   fh: figure
 %       figure handle.
@@ -52,8 +60,13 @@ addParameter(p, 'Temp', [], @isnumeric);
 addParameter(p, 'CBH', NaN, @isnumeric);
 addParameter(p, 'CTH', NaN, @isnumeric);
 addParameter(p, 'CTT', NaN, @isnumeric);
-addParameter(p, 'layer_starttime', NaN, @isnumeric);
-addParameter(p, 'layer_stoptime', NaN, @isnumeric);
+addParameter(p, 'cloud_starttime', NaN, @isnumeric);
+addParameter(p, 'cloud_stoptime', NaN, @isnumeric);
+addParameter(p, 'ret_starttime', NaN, @isnumeric);
+addParameter(p, 'ret_stoptime', NaN, @isnumeric);
+addParameter(p, 'ret_bottom', NaN, @isnumeric);
+addParameter(p, 'ret_top', NaN, @isnumeric);
+
 
 parse(p, ax, mTime, height, VDR, varargin{:});
 
@@ -68,28 +81,20 @@ caxis(p.Results.cRange)
 if (~ isempty(p.Results.Temp)) && (numel(p.Results.Temp) == numel(VDR)) && ...
     (any(any((~ isnan(p.Results.Temp)), 1), 2))
     [c1, h] = contour(mTime, height, p.Results.Temp, [0, -40.0], ...
-                      'LineColor', 'w', 'LineWidth', 2, 'LineStyle', '--');
-    clabel(c1, h, 'FontSize', 10, 'Color', 'white', 'FontWeight', 'bold');
+                      'LineColor', 'm', 'LineWidth', 2, 'LineStyle', '--');
+    clabel(c1, h, 'FontSize', 10, 'Color', 'm', 'FontWeight', 'bold');
 end
 
-if ~ isempty(p.Results.CBH)
-    plot(p.Results.tRange, [p.Results.CBH, p.Results.CBH], '--m', 'LineWidth', 2);
-end
-
-if ~ isempty(p.Results.CTH)
-    plot(p.Results.tRange, [p.Results.CTH, p.Results.CTH], '--m', 'LineWidth', 2);
+if (~ isnan(p.Results.cloud_starttime)) && (~ isnan(p.Results.cloud_stoptime)) && (~ isnan(p.Results.CBH)) && (~ isnan(p.Results.CTH))
+    rectangle('Position', [p.Results.cloud_starttime, p.Results.CBH, (p.Results.cloud_stoptime - p.Results.cloud_starttime), (p.Results.CTH - p.Results.CBH)], 'EdgeColor', 'w', 'LineWidth', 2, 'LineStyle', '--', 'FaceColor', 'none');
 end
 
 if (~ isempty(p.Results.CTT)) && (~ isempty(p.Results.CTH))
-    text(mean(p.Results.tRange), p.Results.CTH, sprintf('%5.1f \\circC', p.Results.CTT), 'Color', 'r', 'FontWeight', 'Bold', 'Units', 'Data');
+    text(mean([p.Results.cloud_starttime, p.Results.cloud_stoptime]), p.Results.CTH, sprintf('%5.1f \\circC', p.Results.CTT), 'Color', 'r', 'FontWeight', 'Bold', 'Units', 'Data');
 end
 
-if ~ isempty(p.Results.CBH)
-    plot([p.Results.layer_starttime, p.Results.layer_starttime], p.Results.hRange, '--y', 'LineWidth', 2);
-end
-
-if ~ isempty(p.Results.CTH)
-    plot([p.Results.layer_stoptime, p.Results.layer_stoptime], p.Results.hRange, '--y', 'LineWidth', 2);
+if (~ isnan(p.Results.ret_starttime)) && (~ isnan(p.Results.ret_stoptime)) && (~ isnan(p.Results.ret_bottom)) && (~ isnan(p.Results.ret_top))
+    rectangle('Position', [p.Results.ret_starttime, p.Results.ret_bottom, (p.Results.ret_stoptime - p.Results.ret_starttime), (p.Results.ret_top - p.Results.ret_bottom)], 'EdgeColor', 'y', 'LineWidth', 2, 'LineStyle', '--', 'FaceColor', 'none');
 end
 
 hold off;
