@@ -710,7 +710,9 @@ metadata.processor_name = progInfo.Name;
 metadata.processor_author = progInfo.Author;
 
 %% save the results
-saveFile = fullfile(handles.settings.saveDir, sprintf('cloud_eval_output_%s-%s_%05d-%05d_sm%04d.mat', datestr(overviewInfo.mTime(1), 'yyyymmdd_HHMM'), datestr(overviewInfo.mTime(end), 'HHMM'), overviewInfo.CBH * 1000, overviewInfo.CTH * 1000, retrievalInfo.smooth_window));
+cloud_starttime = datenum(handles.cloud_start_tb.String, 'yyyy-mm-dd HH:MM:SS');
+cloud_stoptime = datenum(handles.cloud_stop_tb.String, 'yyyy-mm-dd HH:MM:SS');
+saveFile = fullfile(handles.settings.saveDir, sprintf('cloud_eval_output_%s-%s_%05d-%05d_sm%04d.mat', datestr(cloud_starttime, 'yyyymmdd_HHMM'), datestr(cloud_stoptime, 'yyyymmdd_HHMM'), overviewInfo.CBH * 1000, overviewInfo.CTH * 1000, retrievalInfo.smooth_window));
 save(saveFile, 'overviewInfo', 'retrievalInfo', 'settings', 'metadata', 'widgetInfo', '-v6');
 
 %% update status
@@ -727,7 +729,9 @@ function export_fig_btn_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-saveFile = fullfile(handles.settings.saveDir, sprintf('cloud_eval_output_%s-%s_%05d-%05d_sm%s.png', datestr(handles.starttime_tb.String, 'yyyymmdd_HHMM'), datestr(handles.stoptime_tb.String, 'HHMM'), str2double(handles.cloud_base_tb.String) * 1000, str2double(handles.cloud_top_tb.String) * 1000, handles.smoothwin_tb.String));
+cloud_starttime = datenum(handles.cloud_start_tb.String, 'yyyy-mm-dd HH:MM:SS');
+cloud_stoptime = datenum(handles.cloud_stop_tb.String, 'yyyy-mm-dd HH:MM:SS');
+saveFile = fullfile(handles.settings.saveDir, sprintf('cloud_eval_output_%s-%s_%05d-%05d_sm%s.png', datestr(cloud_starttime, 'yyyymmdd_HHMM'), datestr(cloud_stoptime, 'yyyymmdd_HHMM'), str2double(handles.cloud_base_tb.String) * 1000, str2double(handles.cloud_top_tb.String) * 1000, handles.smoothwin_tb.String));
 export_fig(gcf, saveFile, '-r300');
 
 %% update status
