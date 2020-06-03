@@ -96,12 +96,12 @@ end
 if (~ isempty(p.Results.Temp)) && (numel(p.Results.Temp) == numel(RCS)) && ...
     (any(any((~ isnan(p.Results.Temp)), 1), 2))
     [c1, h] = contour(mTime, height, p.Results.Temp, [0, -40.0], ...
-                      'LineColor', 'm', 'LineWidth', 2, 'LineStyle', '--');
-    clabel(c1, h, 'FontSize', 10, 'Color', 'm', 'FontWeight', 'bold');
+                      'LineColor', 'w', 'LineWidth', 2, 'LineStyle', '--');
+    clabel(c1, h, 'FontSize', 10, 'Color', 'w', 'FontWeight', 'bold');
 end
 
 if (~ isnan(p.Results.cloud_starttime)) && (~ isnan(p.Results.cloud_stoptime)) && (~ isnan(p.Results.CBH)) && (~ isnan(p.Results.CTH))
-    rectangle('Position', [p.Results.cloud_starttime, p.Results.CBH, (p.Results.cloud_stoptime - p.Results.cloud_starttime), (p.Results.CTH - p.Results.CBH)], 'EdgeColor', 'w', 'LineWidth', 2, 'LineStyle', '--', 'FaceColor', 'none');
+    rectangle('Position', [p.Results.cloud_starttime, p.Results.CBH, (p.Results.cloud_stoptime - p.Results.cloud_starttime), (p.Results.CTH - p.Results.CBH)], 'EdgeColor', 'm', 'LineWidth', 2, 'LineStyle', '--', 'FaceColor', 'none');
 end
 
 if (~ isempty(p.Results.CTT)) && (~ isempty(p.Results.CTH))
