@@ -78,7 +78,7 @@ handles.mol_RCS_Profi = NaN(1, 100);
 handles.Temp_Profi = NaN(1, 100);
 handles.CTT = NaN;
 handles.RH_Profi = NaN(1, 100);
-handles.retLidarData = struc();
+handles.retLidarData = struct();
 handles.ret_height = NaN(1, 100);
 handles.ret_RCS_Profi = NaN(1, 100);
 handles.ret_mol_RCS_Profi = NaN(1, 100);
@@ -549,7 +549,7 @@ if isempty(lidarData.time)
 end
 
 % read meteorological data
-[Temp_Profi, Pres_Profi, RH_Profi] = read_meteordata(mean([datenum(handles.starttime_tb.String, 'yyyy-mm-dd HH:MM:SS'), datenum(handles.stoptime_tb.String, 'yyyy-mm-dd HH:MM:SS')]) - datenum(0, 1, 0, 8, 0, 0), lidarData.altitude, 'meteor_data', handles.meteor_data_pm.String{handles.meteor_data_pm.Value}, 'station', 'wuhan', 'GDAS1Folder', handles.settings.GDAS1Dir, 'RadiosondeFolder', handles.settings.soundingDir, 'ERA5Folder', handles.settings.ERA5Dir);
+[Temp_Profi, Pres_Profi, RH_Profi] = read_meteordata(mean([datenum(handles.cloud_start_tb.String, 'yyyy-mm-dd HH:MM:SS'), datenum(handles.cloud_stop_tb.String, 'yyyy-mm-dd HH:MM:SS')]) - datenum(0, 1, 0, 8, 0, 0), lidarData.altitude, 'meteor_data', handles.meteor_data_pm.String{handles.meteor_data_pm.Value}, 'station', 'wuhan', 'GDAS1Folder', handles.settings.GDAS1Dir, 'RadiosondeFolder', handles.settings.soundingDir, 'ERA5Folder', handles.settings.ERA5Dir);
 Temp_2D = read_gridTemp(lidarData.time - datenum(0, 1, 0, 8, 0, 0), lidarData.altitude, 'meteor_data', handles.meteor_data_pm.String{handles.meteor_data_pm.Value}, 'station', 'wuhan', 'GDAS1Folder', handles.settings.GDAS1Dir, 'RadiosondeFolder', handles.settings.soundingDir, 'ERA5Folder', handles.settings.ERA5Dir);
 
 %% Rayleigh scattering
@@ -998,7 +998,7 @@ if isempty(lidarData.time)
 end
 
 % read meteorological data
-[ret_Temp_Profi, ret_Pres_Profi, ~] = read_meteordata(mean([datenum(handles.starttime_tb.String, 'yyyy-mm-dd HH:MM:SS'), datenum(handles.stoptime_tb.String, 'yyyy-mm-dd HH:MM:SS')]) - datenum(0, 1, 0, 8, 0, 0), lidarData.altitude, 'meteor_data', handles.meteor_data_pm.String{handles.meteor_data_pm.Value}, 'station', 'wuhan', 'GDAS1Folder', handles.settings.GDAS1Dir, 'RadiosondeFolder', handles.settings.soundingDir, 'ERA5Folder', handles.settings.ERA5Dir);
+[ret_Temp_Profi, ret_Pres_Profi, ~] = read_meteordata(mean([datenum(handles.ret_starttime_tb.String, 'yyyy-mm-dd HH:MM:SS'), datenum(handles.ret_stoptime_tb.String, 'yyyy-mm-dd HH:MM:SS')]) - datenum(0, 1, 0, 8, 0, 0), lidarData.altitude, 'meteor_data', handles.meteor_data_pm.String{handles.meteor_data_pm.Value}, 'station', 'wuhan', 'GDAS1Folder', handles.settings.GDAS1Dir, 'RadiosondeFolder', handles.settings.soundingDir, 'ERA5Folder', handles.settings.ERA5Dir);
 
 %% Rayleigh scattering
 [molBsc532, molExt532] = rayleigh_scattering(532, ret_Pres_Profi, ret_Temp_Profi + 273.14, 360, 80);
