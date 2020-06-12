@@ -73,7 +73,15 @@ case 'gdas1'
     if isempty(gdas1_alt)
         return;
     end
-        
+
+    if length(gdas1_temp) == 1
+        temp = gdas1_temp .* ones(size(altitude));
+        pres = gdas1_pres .* ones(size(altitude));
+        relh = gdas1_relh .* ones(size(altitude));
+
+        return;
+    end
+
     meteor_time = gdas1FileTimestamp(basename(gdas1_file));
     temp = interp1(gdas1_alt, gdas1_temp, altitude);
     pres = interp1(gdas1_alt, gdas1_pres, altitude);
@@ -85,8 +93,16 @@ case 'radiosonde'
     sondeFile = radiosonde_search(fullfile(p.Results.RadiosondeFolder, p.Results.station), measTime, p.Results.RadiosondeType);
     [rs_alt, rs_temp, rs_pres, rs_relh, meteor_time] = ...
         read_radiosonde(sondeFile, p.Results.RadiosondeType);
-   
-    if isempty(rs_alt) 
+
+    if isempty(rs_alt)
+        return;
+    end
+
+    if length(rs_temp) == 1
+        temp = rs_temp .* ones(size(altitude));
+        pres = rs_pres .* ones(size(altitude));
+        relh = rs_relh .* ones(size(altitude));
+
         return;
     end
 
