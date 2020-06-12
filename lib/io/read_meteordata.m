@@ -70,10 +70,11 @@ case 'gdas1'
     [gdas1_alt, gdas1_temp, gdas1_pres, gdas1_relh, gdas1_file] = read_gdas1(measTime, ...
         p.Results.station, p.Results.GDAS1Folder);
 
-    if isempty(gdas1_alt)
+    if isempty(gdas1_alt) || (~ (sum(~ isnan(gdas1_temp)) >= 2))
+        % no data or not enough numeric data
         return;
     end
-        
+
     meteor_time = gdas1FileTimestamp(basename(gdas1_file));
     temp = interp1(gdas1_alt, gdas1_temp, altitude);
     pres = interp1(gdas1_alt, gdas1_pres, altitude);
@@ -85,8 +86,9 @@ case 'radiosonde'
     sondeFile = radiosonde_search(fullfile(p.Results.RadiosondeFolder, p.Results.station), measTime, p.Results.RadiosondeType);
     [rs_alt, rs_temp, rs_pres, rs_relh, meteor_time] = ...
         read_radiosonde(sondeFile, p.Results.RadiosondeType);
-   
-    if isempty(rs_alt) 
+
+    if isempty(rs_alt) || (~ (sum(~ isnan(rs_temp)) >= 2))
+        % no data or not enough numeric data
         return;
     end
 
