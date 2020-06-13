@@ -75,9 +75,9 @@ case 'gdas1'
     end
 
     if length(gdas1_temp) == 1
-        temp = gdas1_temp .* ones(length(altitude));
-        pres = gdas1_pres .* ones(length(altitude));
-        relh = gdas1_relh .* ones(length(altitude));
+        temp = gdas1_temp .* ones(size(altitude));
+        pres = gdas1_pres .* ones(size(altitude));
+        relh = gdas1_relh .* ones(size(altitude));
 
         return;
     end
@@ -99,9 +99,9 @@ case 'radiosonde'
     end
 
     if length(rs_temp) == 1
-        temp = rs_temp .* ones(length(altitude));
-        pres = rs_pres .* ones(length(altitude));
-        relh = rs_relh .* ones(length(altitude));
+        temp = rs_temp .* ones(size(altitude));
+        pres = rs_pres .* ones(size(altitude));
+        relh = rs_relh .* ones(size(altitude));
 
         return;
     end
