@@ -83,10 +83,19 @@ handles.ret_height = NaN(1, 100);
 handles.ret_RCS_Profi = NaN(1, 100);
 handles.ret_mol_RCS_Profi = NaN(1, 100);
 handles.ret_bsc_Profi = NaN(1, 100);
+handles.ret_bsc_std_Profi = NaN(1, 100);
+handles.ret_bsc_d_Profi = NaN(1, 100);
+handles.ret_bsc_d_std_Profi = NaN(1, 100);
+handles.ret_bsc_nd_Profi = NaN(1, 100);
+handles.ret_bsc_nd_std_Profi = NaN(1, 100);
 handles.ret_VDR_Profi = NaN(1, 100);
+handles.ret_VDR_std_Profi = NaN(1, 100);
 handles.ret_PDR_Profi = NaN(1, 100);
+handles.ret_PDR_std_Profi = NaN(1, 100);
 handles.ret_mass_nd_Profi = NaN(1, 100);
+handles.ret_mass_nd_std_Profi = NaN(1, 100);
 handles.ret_mass_d_Profi = NaN(1, 100);
+handles.ret_mass_d_std_Profi = NaN(1, 100);
 handles.projectDir = projectDir;
 handles.log_tb.String = {'Enjoy the day'};
 
@@ -1643,7 +1652,5 @@ switch choice
 
     case 'No thank you'
         % do nothing
-
-end
 
 end
