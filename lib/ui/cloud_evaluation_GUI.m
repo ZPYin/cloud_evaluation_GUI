@@ -22,7 +22,7 @@ function varargout = cloud_evaluation_GUI(varargin)
 
 % Edit the above text to modify the response to help cloud_evaluation_GUI
 
-% Last Modified by GUIDE v2.5 14-Jun-2020 17:58:43
+% Last Modified by GUIDE v2.5 14-Jun-2020 18:31:25
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -276,6 +276,7 @@ function infoFile_tb_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of infoFile_tb as text
 %        str2double(get(hObject,'String')) returns contents of infoFile_tb as a double
+
 
 
 % --- Executes during object creation, after setting all properties.
@@ -1654,3 +1655,65 @@ switch choice
         % do nothing
 
 end
+
+
+% --- Executes on key press with focus on infoFile_tb and none of its controls.
+function infoFile_tb_KeyPressFcn(hObject, eventdata, handles)
+% hObject    handle to infoFile_tb (see GCBO)
+% eventdata  structure with the following fields (see MATLAB.UI.CONTROL.UICONTROL)
+%	Key: name of the key that was pressed, in lower case
+%	Character: character interpretation of the key(s) that was pressed
+%	Modifier: name(s) of the modifier key(s) (i.e., control, shift) pressed
+% handles    structure with handles and user data (see GUIDATA)
+
+switch eventdata.Key
+case 'return'
+    handles.infoFile = handles.infoFile_tb.String;
+
+    % read infos
+    load(handles.infoFile);
+
+    %% update status
+    handles.setting_tb.String = widgetInfo.settingFile;
+    handles.starttime_tb.String = widgetInfo.starttime;
+    handles.stoptime_tb.String = widgetInfo.stoptime;
+    handles.H_base_tb.String = widgetInfo.H_base;
+    handles.H_top_tb.String = widgetInfo.H_top;
+    handles.cloud_start_tb.String = widgetInfo.cloud_start;
+    handles.cloud_stop_tb.String = widgetInfo.cloud_stop;
+    handles.cloud_base_tb.String = widgetInfo.cloud_base;
+    handles.cloud_top_tb.String = widgetInfo.cloud_top;
+    handles.meteor_data_pm.Value = find(strcmpi(handles.meteor_data_pm.String, widgetInfo.meteor_data));
+    handles.cloud_phase_pm.Value = find(strcmpi(handles.cloud_phase_pm.String, widgetInfo.cloud_phase));
+    handles.CTT_tb.String = widgetInfo.CTT;
+    handles.gainRatio_tb.String = widgetInfo.gainRatio;
+    handles.cloud_top_signal_2_bg_tb.String = widgetInfo.cloud_top_sig_2_bg;
+    handles.ret_starttime_tb.String = widgetInfo.ret_starttime;
+    handles.ret_stoptime_tb.String = widgetInfo.ret_stoptime;
+    handles.ret_H_bottom_tb.String = widgetInfo.ret_H_bottom;
+    handles.ret_H_top_tb.String = widgetInfo.ret_H_top;
+    handles.ref_H_bottom_tb.String = widgetInfo.ref_H_bottom;
+    handles.ref_H_top_tb.String = widgetInfo.ref_H_top;
+    handles.bsc_bottom_tb.String = widgetInfo.bsc_bottom;
+    handles.bsc_top_tb.String = widgetInfo.bsc_top;
+    handles.ref_value_tb.String = widgetInfo.ref_value;
+    handles.mass_bottom_tb.String = widgetInfo.mass_bottom;
+    handles.mass_top_tb.String = widgetInfo.mass_top;
+    handles.lr_tb.String = widgetInfo.lr;
+    handles.mol_depol_tb.String = widgetInfo.mol_depol;
+    handles.LayerBase_tb.String = widgetInfo.LayerBase;
+    handles.LayerTop_tb.String = widgetInfo.LayerTop;
+    handles.smoothwin_tb.String = widgetInfo.smoothwin;
+    handles.RCS_scale_pm.Value = find(strcmpi(handles.RCS_scale_pm.String, widgetInfo.RCS_scale));
+    handles.RCS_bottom_tb.String = widgetInfo.RCS_bottom;
+    handles.RCS_top_tb.String = widgetInfo.RCS_top;
+    handles.VDR_bottom_tb.String = widgetInfo.VDR_bottom;
+    handles.VDR_top_tb.String = widgetInfo.VDR_top;
+    handles.Temp_bottom_tb.String = widgetInfo.Temp_bottom;
+    handles.Temp_top_tb.String = widgetInfo.Temp_top;
+
+    handles.log_tb.String{end + 1} = sprintf('[%s] load info file successfully!', tNow());
+
+end
+
+guidata(hObject, handles);
