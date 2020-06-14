@@ -22,7 +22,7 @@ function varargout = cloud_evaluation_GUI(varargin)
 
 % Edit the above text to modify the response to help cloud_evaluation_GUI
 
-% Last Modified by GUIDE v2.5 02-Jun-2020 18:01:03
+% Last Modified by GUIDE v2.5 14-Jun-2020 17:58:43
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -1614,4 +1614,36 @@ function cloud_stop_tb_CreateFcn(hObject, eventdata, handles)
 %       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in delete_btn.
+function delete_btn_Callback(hObject, eventdata, handles)
+% hObject    handle to delete_btn (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+% Construct a questdlg with three options
+
+choice = questdlg('Delete the case?', ...
+    'Delete...', ...
+    'Yes','No','Cancel','No');
+
+% Handle response
+switch choice
+    case 'Yes'
+        delete(handles.infoFile);
+
+        handles.log_tb.String{end + 1} = sprintf('Deleted %s', handles.infoFile);
+        scrollDownLogBox(handles.log_tb);
+
+    case 'Cake'
+
+        handles.log_tb.String{end + 1} = sprintf('Cancelled to delete %s', handles.infoFile);
+        scrollDownLogBox(handles.log_tb);
+
+    case 'No thank you'
+        % do nothing
+
+end
+
 end
