@@ -125,10 +125,12 @@ case 2
     data.height = height(hIndx);
     data.altitude = data.height + station_altitude;
 
-    data.CH1_PC = transpose(h5read(h5File, '/CH1/gluedPC_Data', startIndx, len));
-    data.CH2_PC = transpose(h5read(h5File, '/CH2/gluedPC_Data', startIndx, len));
+    CH1_PC = transpose(h5read(h5File, '/CH1/gluedPC_Data', startIndx, len));
+    CH2_PC = transpose(h5read(h5File, '/CH2/gluedPC_Data', startIndx, len));
     data.CH1_BG = h5read(h5File, '/CH1/background', [1, startIndx(1)], [1, len(1)]);
     data.CH2_BG = h5read(h5File, '/CH2/background', [1, startIndx(1)], [1, len(1)]);
+    data.CH1_PC = CH1_PC - repmat(data.CH1_BG, len(2), 1);
+    data.CH2_PC = CH2_PC - repmat(data.CH2_BG, len(2), 1);
     data.CH1_overflow = transpose(h5read(h5File, '/CH1/overflow', startIndx, len));
     data.CH2_overflow = transpose(h5read(h5File, '/CH2/overflow', startIndx, len));
     records = h5read(h5File, '/data_information/CH1/Records_Scan', [1, startIndx(1)], [1, len(1)]);
