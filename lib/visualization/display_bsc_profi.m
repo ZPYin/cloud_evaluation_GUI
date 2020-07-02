@@ -54,8 +54,6 @@ hold on;
 p2 = plot(p.Results.dustBsc, height, 'Color', 'y', 'LineStyle', '--', 'LineWidth', 2, 'DisplayName', 'dust');
 p3 = plot(p.Results.nondustBsc, height, 'Color', 'm', 'LineStyle', '--', 'LineWidth', 2, 'DisplayName', 'non-dust');
 
-legend([p1, p2, p3], 'Location', 'NorthEast');
-
 if ~ isempty(p.Results.LBH)
     plot(p.Results.aerBscRange, [p.Results.LBH, p.Results.LBH], '--k', 'LineWidth', 2);
 end
@@ -72,6 +70,8 @@ title('par. backs. (Mm-1*sr-1)');
 
 xlim(p.Results.aerBscRange);
 ylim(p.Results.hRange);
+
+legend([p1, p2, p3], 'Location', 'NorthEast');
 
 set(gca, 'XMinorTick', 'on', ...
     'XTick', linspace(p.Results.aerBscRange(1), p.Results.aerBscRange(end), 5), ...

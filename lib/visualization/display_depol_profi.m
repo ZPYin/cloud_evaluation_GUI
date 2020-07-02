@@ -49,8 +49,6 @@ p1 = plot(VDR, height, 'Color', 'g', 'LineWidth', 2, 'DisplayName', '\delta_v');
 hold on;
 p2 = plot(PDR, height, 'Color', 'b', 'LineWidth', 2, 'DisplayName', '\delta_p');
 
-legend([p1, p2], 'Location', 'NorthEast');
-
 if ~ isempty(p.Results.LBH)
     plot(p.Results.DepolRange, [p.Results.LBH, p.Results.LBH], '--k', 'LineWidth', 2);
 end
@@ -67,6 +65,8 @@ title('depol. ratio.');
 
 xlim(p.Results.DepolRange);
 ylim(p.Results.hRange);
+
+legend([p1, p2], 'Location', 'NorthEast');
 
 set(gca, 'XMinorTick', 'on', ...
     'XTick', linspace(p.Results.DepolRange(1), p.Results.DepolRange(end), 5), ...

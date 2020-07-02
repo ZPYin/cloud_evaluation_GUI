@@ -49,8 +49,6 @@ p1 = plot(mass_nd, height, 'Color', 'm', 'LineWidth', 2, 'DisplayName', 'non-dus
 hold on;
 p2 = plot(mass_d, height, 'Color', 'y', 'LineWidth', 2, 'DisplayName', 'dust');
 
-legend([p1, p2], 'Location', 'NorthEast');
-
 if ~ isempty(p.Results.LBH)
     plot(p.Results.massRange, [p.Results.LBH, p.Results.LBH], '--k', 'LineWidth', 2);
 end
@@ -66,6 +64,8 @@ title('mass conc. (ug*m-3)');
 
 xlim(p.Results.massRange);
 ylim(p.Results.hRange);
+
+legend([p1, p2], 'Location', 'NorthEast');
 
 set(gca, 'XMinorTick', 'on', ...
     'XTick', linspace(p.Results.massRange(1), p.Results.massRange(end), 5), ...

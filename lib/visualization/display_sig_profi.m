@@ -60,6 +60,13 @@ else
     error('Wrong range corrected signal scale mode');
 end
 
+xlabel('');
+ylabel('Height (km)');
+title('Cloud-free RCS');
+
+xlim(p.Results.RCSRange);
+ylim(p.Results.hRange);
+
 if ~ isempty(p.Results.caliRange)
     flagH = (height >= p.Results.caliRange(1)) & (height <= p.Results.caliRange(end));
     p3 = plot(RCS(flagH), height(flagH), '-r', 'LineWidth', 2, 'DisplayName', 'Ref-range');
@@ -70,13 +77,6 @@ else
 end
 
 hold off;
-
-xlabel('');
-ylabel('Height (km)');
-title('Cloud-free RCS');
-
-xlim(p.Results.RCSRange);
-ylim(p.Results.hRange);
 
 set(gca, 'XMinorTick', 'on', ...
     'YMinorTick', 'on', ...
