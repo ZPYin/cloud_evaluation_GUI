@@ -1725,6 +1725,16 @@ function uiROIBox_ClickedCallback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-rect = getrect(handles.RCS_colorplot_axes);
+[startPos, endPos] = rubberbandbox(handles.RCS_colorplot_axes, handles.VDR_colorplot_axes);
+
+cloud_startT = startPos(1);
+cloud_stopT = endPos(1);
+cloud_baseH = endPos(2);
+cloud_topH = startPos(2);
+
+handles.cloud_start_tb.String = datestr(cloud_startT, 'yyyy-mm-dd HH:MM:SS');
+handles.cloud_stop_tb.String = datestr(cloud_stopT, 'yyyy-mm-dd HH:MM:SS');
+handles.cloud_base_tb.String = sprintf('%6.3f', cloud_baseH);
+handles.cloud_top_tb.String = sprintf('%6.3f', cloud_topH);
 
 guidata(hObject, handles);
