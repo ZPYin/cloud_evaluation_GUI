@@ -22,7 +22,7 @@ function varargout = cloud_evaluation_GUI(varargin)
 
 % Edit the above text to modify the response to help cloud_evaluation_GUI
 
-% Last Modified by GUIDE v2.5 04-Jul-2020 17:08:32
+% Last Modified by GUIDE v2.5 04-Jul-2020 22:38:16
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -1725,7 +1725,15 @@ function uiROIBox_ClickedCallback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-[startPos, endPos] = rubberbandbox(handles.RCS_colorplot_axes, handles.VDR_colorplot_axes);
+if isfield(handles, 'rect_RCS')
+    delete(handles.rect_RCS);
+end
+
+if isfield(handles, 'rect_VDR')
+    delete(handles.rect_VDR);
+end
+
+[startPos, endPos, handles.rect_RCS, handles.rect_VDR] = rubberbandbox(handles.RCS_colorplot_axes, handles.VDR_colorplot_axes);
 
 cloud_startT = startPos(1);
 cloud_stopT = endPos(1);
@@ -1738,3 +1746,24 @@ handles.cloud_base_tb.String = sprintf('%6.3f', cloud_baseH);
 handles.cloud_top_tb.String = sprintf('%6.3f', cloud_topH);
 
 guidata(hObject, handles);
+
+
+% --------------------------------------------------------------------
+
+% hObject    handle to uiROIBox (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function uitoggletool3_ClickedCallback(hObject, eventdata, handles)
+% hObject    handle to uitoggletool3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function uitoggletool5_ClickedCallback(hObject, eventdata, handles)
+% hObject    handle to uitoggletool5 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)

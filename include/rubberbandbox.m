@@ -1,4 +1,4 @@
-function [p1,p2]=rubberbandbox(varargin)
+function [p1,p2,lh,lh2]=rubberbandbox(varargin)
 % Function to draw a rubberband box and return the start and end points
 % Usage: [p1,p2]=rubberbox;     uses current axes
 %        [p1,p2]=rubberbox(h);  uses axes refered to by handle, h
@@ -6,6 +6,9 @@ function [p1,p2]=rubberbandbox(varargin)
 % Written/Edited by Bob Hamans (B.C.Hamans@student.tue.nl)
 % Edited by Zhenping
 % 02-04-2003
+
+lh = [];
+lh2 = [];
 
 %Check for optional argument
 switch nargin
