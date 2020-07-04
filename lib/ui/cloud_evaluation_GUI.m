@@ -22,7 +22,7 @@ function varargout = cloud_evaluation_GUI(varargin)
 
 % Edit the above text to modify the response to help cloud_evaluation_GUI
 
-% Last Modified by GUIDE v2.5 14-Jun-2020 18:31:25
+% Last Modified by GUIDE v2.5 04-Jul-2020 17:08:32
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -1715,5 +1715,16 @@ case 'return'
     handles.log_tb.String{end + 1} = sprintf('[%s] load info file successfully!', tNow());
 
 end
+
+guidata(hObject, handles);
+
+
+% --------------------------------------------------------------------
+function uiROIBox_ClickedCallback(hObject, eventdata, handles)
+% hObject    handle to uiROIBox (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+rect = getrect(handles.RCS_colorplot_axes);
 
 guidata(hObject, handles);
