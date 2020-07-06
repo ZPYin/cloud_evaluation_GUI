@@ -22,7 +22,7 @@ function varargout = cloud_evaluation_GUI(varargin)
 
 % Edit the above text to modify the response to help cloud_evaluation_GUI
 
-% Last Modified by GUIDE v2.5 04-Jul-2020 22:38:16
+% Last Modified by GUIDE v2.5 06-Jul-2020 19:33:47
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -642,99 +642,12 @@ function save_btn_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-%% extract handles information
-overviewInfo.lidarData = handles.lidarData;
-overviewInfo.mTime = handles.mTime;
-overviewInfo.height = handles.height;
-overviewInfo.RCS = handles.RCS;
-overviewInfo.VDR = handles.VDR;
-overviewInfo.Temp = handles.Temp;
-overviewInfo.RCS_Profi = handles.RCS_Profi;
-overviewInfo.VDR_Profi = handles.VDR_Profi;
-overviewInfo.mol_RCS_Profi = handles.mol_RCS_Profi;
-overviewInfo.Temp_Profi = handles.Temp_Profi;
-overviewInfo.CTT = handles.CTT;
-overviewInfo.CBH = str2double(handles.cloud_base_tb.String);
-overviewInfo.CTH = str2double(handles.cloud_top_tb.String);
-overviewInfo.meteor_data = handles.meteor_data_pm.String{handles.meteor_data_pm.Value};
-overviewInfo.RH_Profi = handles.RH_Profi;
-overviewInfo.gainRatio = str2double(handles.gainRatio_tb.String);
-overviewInfo.cloud_top_sig_2_bg = handles.cloud_top_sig_2_bg;
-overviewInfo.cloud_phase = handles.cloud_phase_pm.String{handles.cloud_phase_pm.Value};
-retrievalInfo.retLidarData = handles.retLidarData;
-retrievalInfo.ret_height = handles.ret_height;
-retrievalInfo.ret_RCS_Profi = handles.ret_RCS_Profi;
-retrievalInfo.ret_mol_RCS_Profi = handles.ret_mol_RCS_Profi;
-retrievalInfo.ret_bsc_Profi = handles.ret_bsc_Profi;
-retrievalInfo.ret_bsc_std_Profi = handles.ret_bsc_std_Profi;
-retrievalInfo.ret_bsc_d_Profi = handles.ret_bsc_d_Profi;
-retrievalInfo.ret_bsc_d_std_Profi = handles.ret_bsc_d_std_Profi;
-retrievalInfo.ret_bsc_nd_Profi = handles.ret_bsc_nd_Profi;
-retrievalInfo.ret_bsc_nd_std_Profi = handles.ret_bsc_nd_std_Profi;
-retrievalInfo.ret_VDR_Profi = handles.ret_VDR_Profi;
-retrievalInfo.ret_VDR_std_Profi = handles.ret_VDR_std_Profi;
-retrievalInfo.ret_PDR_Profi = handles.ret_PDR_Profi;
-retrievalInfo.ret_PDR_std_Profi = handles.ret_PDR_std_Profi;
-retrievalInfo.ret_mass_nd_Profi = handles.ret_mass_nd_Profi;
-retrievalInfo.ret_mass_nd_std_Profi = handles.ret_mass_nd_std_Profi;
-retrievalInfo.ret_mass_d_Profi = handles.ret_mass_d_Profi;
-retrievalInfo.ret_mass_d_std_Profi = handles.ret_mass_d_std_Profi;
-retrievalInfo.LBH = str2double(handles.LayerBase_tb.String);
-retrievalInfo.LTH = str2double(handles.LayerTop_tb.String);
-retrievalInfo.refH = [str2double(handles.ref_H_bottom_tb.String), str2double(handles.ref_H_top_tb.String)];
-retrievalInfo.refValue = str2double(handles.ref_value_tb.String);
-retrievalInfo.molDepol= str2double(handles.mol_depol_tb.String);
-retrievalInfo.smooth_window = str2double(handles.smoothwin_tb.String);
-settings = handles.settings;
-widgetInfo.settingFile = handles.setting_tb.String;
-widgetInfo.infoFile = handles.infoFile_tb.String;
-widgetInfo.starttime = handles.starttime_tb.String;
-widgetInfo.stoptime = handles.stoptime_tb.String;
-widgetInfo.H_base = handles.H_base_tb.String;
-widgetInfo.H_top = handles.H_top_tb.String;
-widgetInfo.cloud_base = handles.cloud_base_tb.String;
-widgetInfo.cloud_top = handles.cloud_top_tb.String;
-widgetInfo.cloud_start = handles.cloud_start_tb.String;
-widgetInfo.cloud_stop = handles.cloud_stop_tb.String;
-widgetInfo.meteor_data = handles.meteor_data_pm.String{handles.meteor_data_pm.Value};
-widgetInfo.cloud_phase = handles.cloud_phase_pm.String{handles.cloud_phase_pm.Value};
-widgetInfo.CTT = handles.CTT_tb.String;
-widgetInfo.gainRatio = handles.gainRatio_tb.String;
-widgetInfo.cloud_top_sig_2_bg = handles.cloud_top_signal_2_bg_tb.String;
-widgetInfo.ret_starttime = handles.ret_starttime_tb.String;
-widgetInfo.ret_stoptime = handles.ret_stoptime_tb.String;
-widgetInfo.ret_H_bottom = handles.ret_H_bottom_tb.String;
-widgetInfo.ret_H_top = handles.ret_H_top_tb.String;
-widgetInfo.ref_H_bottom = handles.ref_H_bottom_tb.String;
-widgetInfo.ref_H_top = handles.ref_H_top_tb.String;
-widgetInfo.bsc_bottom = handles.bsc_bottom_tb.String;
-widgetInfo.bsc_top = handles.bsc_top_tb.String;
-widgetInfo.ref_value = handles.ref_value_tb.String;
-widgetInfo.mass_bottom = handles.mass_bottom_tb.String;
-widgetInfo.mass_top = handles.mass_top_tb.String;
-widgetInfo.lr = handles.lr_tb.String;
-widgetInfo.mol_depol = handles.mol_depol_tb.String;
-widgetInfo.LayerBase = handles.LayerBase_tb.String;
-widgetInfo.LayerTop = handles.LayerTop_tb.String;
-widgetInfo.smoothwin = handles.smoothwin_tb.String;
-widgetInfo.RCS_scale = handles.RCS_scale_pm.String{handles.RCS_scale_pm.Value};
-widgetInfo.RCS_bottom = handles.RCS_bottom_tb.String;
-widgetInfo.RCS_top = handles.RCS_top_tb.String;
-widgetInfo.VDR_bottom = handles.VDR_bottom_tb.String;
-widgetInfo.VDR_top = handles.VDR_top_tb.String;
-widgetInfo.Temp_bottom = handles.Temp_bottom_tb.String;
-widgetInfo.Temp_top = handles.Temp_top_tb.String;
-metadata.history = sprintf('Processed by cloud_evaluation_GUI at %s', tNow);
-progInfo = programInfo();
-metadata.processor_version = progInfo.Version;
-metadata.processor_name = progInfo.Name;
-metadata.processor_author = progInfo.Author;
-
-%% save the results
 cloud_starttime = datenum(handles.cloud_start_tb.String, 'yyyy-mm-dd HH:MM:SS');
 cloud_stoptime = datenum(handles.cloud_stop_tb.String, 'yyyy-mm-dd HH:MM:SS');
-saveFile = fullfile(handles.settings.saveDir, sprintf('cloud_eval_output_%s-%s_%05d-%05d_sm%04d.mat', datestr(cloud_starttime, 'yyyymmdd_HHMM'), datestr(cloud_stoptime, 'yyyymmdd_HHMM'), int32(overviewInfo.CBH * 1000), int32(overviewInfo.CTH * 1000), retrievalInfo.smooth_window));
-save(saveFile, 'overviewInfo', 'retrievalInfo', 'settings', 'metadata', 'widgetInfo', '-v6');
+
+saveFile = fullfile(handles.settings.saveDir, sprintf('cloud_eval_output_%s-%s_%05d-%05d_sm%04d.mat', datestr(cloud_starttime, 'yyyymmdd_HHMM'), datestr(cloud_stoptime, 'yyyymmdd_HHMM'), int32(str2double(handles.cloud_base_tb.String) * 1000), int32(str2double(handles.cloud_top_tb.String) * 1000), str2double(handles.smoothwin_tb.String)));
+
+save_2_mat(handles, saveFile);
 
 %% update status
 handles.log_tb.String{end + 1} = sprintf('[%s] Results have been saved to %s', tNow, saveFile);
@@ -1767,3 +1680,214 @@ function uitoggletool5_ClickedCallback(hObject, eventdata, handles)
 % hObject    handle to uitoggletool5 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function file_menu_Callback(hObject, eventdata, handles)
+% hObject    handle to file_menu (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function edit_menu_Callback(hObject, eventdata, handles)
+% hObject    handle to edit_menu (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function tools_menu_Callback(hObject, eventdata, handles)
+% hObject    handle to tools_menu (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function help_Callback(hObject, eventdata, handles)
+% hObject    handle to help (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function tutorial_Callback(hObject, eventdata, handles)
+% hObject    handle to tutorial (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+web('https://github.com/ZPYin/cloud_evaluation_GUI/wiki', '-browser')
+
+% --------------------------------------------------------------------
+function update_Callback(hObject, eventdata, handles)
+% hObject    handle to update (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+web('https://github.com/ZPYin/cloud_evaluation_GUI/releases', '-browser');
+
+% --------------------------------------------------------------------
+function version_Callback(hObject, eventdata, handles)
+% hObject    handle to version (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+progInfo = programInfo();
+h = msgbox({sprintf('Authors: %s', progInfo.Author), sprintf('Version: %s', progInfo.Version), sprintf('%s', progInfo.Description)}, 'About');
+
+
+% --------------------------------------------------------------------
+function convert_mat_2_ascii_Callback(hObject, eventdata, handles)
+% hObject    handle to convert_mat_2_ascii (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+cloudCaseDir = uigetdir(handles.settings.dataDir, 'Choose the cloud case directory...');
+
+if isequal(cloudCaseDir, 0)
+    logPrint(handles.log_tb, 'No directory was selected!');
+else
+    cloudCases = listfile(cloudCaseDir, '\w*.mat');
+
+    if isempty(cloudCases)
+        logPrint(handles.log_tb, 'No cloud cases were found!');
+
+        return;
+    end
+
+    for iCase = 1:length(cloudCases)
+        logPrint(handles.log_tb, sprintf('Finished %6.2f%%: Starting %s', (iCase - 1)/length(cloudCases) * 100, cloudCases{iCase}));
+
+        matFile = cloudCases{iCase};
+        txtFile = [rmext(matFile), '.txt'];
+
+        convert_mat_2_txt(matFile, txtFile);
+    end
+end
+
+% --------------------------------------------------------------------
+function open_cloudcase_Callback(hObject, eventdata, handles)
+% hObject    handle to open_cloudcase (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+[infoFile, infoPath] = uigetfile(fullfile(handles.settings.saveDir, '*.mat'), 'Select info file...');
+handles.infoFile = fullfile(infoPath, infoFile);
+
+if infoFile == 0
+    % invalid info file
+    handles.infoFile_tb.String = '';
+else
+    handles.infoFile_tb.String = sprintf('%s', fullfile(infoPath, infoFile));
+
+    % read infos
+    load(handles.infoFile);
+
+    %% update status
+    handles.setting_tb.String = widgetInfo.settingFile;
+    handles.infoFile_tb.String = widgetInfo.infoFile;
+    handles.starttime_tb.String = widgetInfo.starttime;
+    handles.stoptime_tb.String = widgetInfo.stoptime;
+    handles.H_base_tb.String = widgetInfo.H_base;
+    handles.H_top_tb.String = widgetInfo.H_top;
+    handles.cloud_start_tb.String = widgetInfo.cloud_start;
+    handles.cloud_stop_tb.String = widgetInfo.cloud_stop;
+    handles.cloud_base_tb.String = widgetInfo.cloud_base;
+    handles.cloud_top_tb.String = widgetInfo.cloud_top;
+    handles.meteor_data_pm.Value = find(strcmpi(handles.meteor_data_pm.String, widgetInfo.meteor_data));
+    handles.cloud_phase_pm.Value = find(strcmpi(handles.cloud_phase_pm.String, widgetInfo.cloud_phase));
+    handles.CTT_tb.String = widgetInfo.CTT;
+    handles.gainRatio_tb.String = widgetInfo.gainRatio;
+    handles.cloud_top_signal_2_bg_tb.String = widgetInfo.cloud_top_sig_2_bg;
+    handles.ret_starttime_tb.String = widgetInfo.ret_starttime;
+    handles.ret_stoptime_tb.String = widgetInfo.ret_stoptime;
+    handles.ret_H_bottom_tb.String = widgetInfo.ret_H_bottom;
+    handles.ret_H_top_tb.String = widgetInfo.ret_H_top;
+    handles.ref_H_bottom_tb.String = widgetInfo.ref_H_bottom;
+    handles.ref_H_top_tb.String = widgetInfo.ref_H_top;
+    handles.bsc_bottom_tb.String = widgetInfo.bsc_bottom;
+    handles.bsc_top_tb.String = widgetInfo.bsc_top;
+    handles.ref_value_tb.String = widgetInfo.ref_value;
+    handles.mass_bottom_tb.String = widgetInfo.mass_bottom;
+    handles.mass_top_tb.String = widgetInfo.mass_top;
+    handles.lr_tb.String = widgetInfo.lr;
+    handles.mol_depol_tb.String = widgetInfo.mol_depol;
+    handles.LayerBase_tb.String = widgetInfo.LayerBase;
+    handles.LayerTop_tb.String = widgetInfo.LayerTop;
+    handles.smoothwin_tb.String = widgetInfo.smoothwin;
+    handles.RCS_scale_pm.Value = find(strcmpi(handles.RCS_scale_pm.String, widgetInfo.RCS_scale));
+    handles.RCS_bottom_tb.String = widgetInfo.RCS_bottom;
+    handles.RCS_top_tb.String = widgetInfo.RCS_top;
+    handles.VDR_bottom_tb.String = widgetInfo.VDR_bottom;
+    handles.VDR_top_tb.String = widgetInfo.VDR_top;
+    handles.Temp_bottom_tb.String = widgetInfo.Temp_bottom;
+    handles.Temp_top_tb.String = widgetInfo.Temp_top;
+
+    handles.log_tb.String{end + 1} = sprintf('[%s] load info file successfully!', tNow());
+end
+
+handles.infoFile_tb.String = handles.infoFile;
+
+guidata(hObject, handles);
+
+% --------------------------------------------------------------------
+function save_cloudcase_Callback(hObject, eventdata, handles)
+% hObject    handle to save_cloudcase (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+cloud_starttime = datenum(handles.cloud_start_tb.String, 'yyyy-mm-dd HH:MM:SS');
+cloud_stoptime = datenum(handles.cloud_stop_tb.String, 'yyyy-mm-dd HH:MM:SS');
+
+saveFile = fullfile(handles.settings.saveDir, sprintf('cloud_eval_output_%s-%s_%05d-%05d_sm%04d.mat', datestr(cloud_starttime, 'yyyymmdd_HHMM'), datestr(cloud_stoptime, 'yyyymmdd_HHMM'), int32(str2double(handles.cloud_base_tb.String) * 1000), int32(str2double(handles.cloud_top_tb.String) * 1000), str2double(handles.smoothwin_tb.String)));
+
+save_2_mat(handles, saveFile);
+
+%% update status
+handles.log_tb.String{end + 1} = sprintf('[%s] Results have been saved to %s', tNow, saveFile);
+scrollDownLogBox(handles.log_tb);
+
+guidata(hObject, handles);
+
+% --------------------------------------------------------------------
+function saveas_cloudcase_Callback(hObject, eventdata, handles)
+% hObject    handle to saveas_cloudcase (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+[saveFile, savePath, fileExtIndx] = uiputfile({'*.mat'; '*.txt'}, 'Save the cloud case as ...');
+
+if isequal(saveFile, 0)
+    handles.log_tb.String{end + 1} = 'Cancel saving the cloud case!';
+else
+    handles.log_tb.String{end + 1} = sprintf('Save the cloud case to %s', saveFile);
+end
+scrollDownLogBox(handles.log_tb);
+
+switch fileExtIndx
+case 1   % mat file
+    save_2_mat(handles, fullfile(savePath, saveFile));
+case 2   % txt file
+    save_2_txt(handles, fullfile(savePath, saveFile));
+otherwise
+    % do nothing
+end
+
+guidata(hObject, handles);
+
+% --------------------------------------------------------------------
+function exit_Callback(hObject, eventdata, handles)
+% hObject    handle to exit (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+delete(hObject);
+
+
+% --------------------------------------------------------------------
+function bug_report_Callback(hObject, eventdata, handles)
+% hObject    handle to bug_report (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+web('https://github.com/ZPYin/cloud_evaluation_GUI/issues', '-browser');

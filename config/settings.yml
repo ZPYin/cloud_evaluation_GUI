@@ -1,5 +1,5 @@
 # PLidar data folder
-dataDir: '/Volumes/Disk2/Research-Data/Processed-Data/PLidar532nm'
+dataDir: ''
 
 # version of lidar data
 # 1: glued by old algorithm with 30-m resolution
@@ -7,13 +7,13 @@ dataDir: '/Volumes/Disk2/Research-Data/Processed-Data/PLidar532nm'
 data_version: 1
 
 # GDAS1 data folder
-GDAS1Dir: '/Volumes/Disk2/Research-Data/Raw-Data/Data/GDAS1'
+GDAS1Dir: ''
 
 # radiosonde data folder
-soundingDir: '/Volumes/Disk2/Research-Data/Raw-Data/Data/Radiosonde'
+soundingDir: ''
 
 # ERA-5 data folder
 ERA5Dir: ''
 
 # save folder
-saveDir: '/Users/yinzhenping/Desktop'
+saveDir: ''
