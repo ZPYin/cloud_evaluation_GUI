@@ -59,7 +59,8 @@ addpath(genpath(fullfile(projectDir, 'include')));
 
 % load settings
 settingFile = fullfile(projectDir, 'config', 'settings.yml');
-settings = yaml.ReadYaml(settingFile);
+settingTemplate = fullfile(projectDir, 'lib', 'settings_global.yml');
+settings = load_settings(settingFile, settingTemplate);
 handles.settings = settings;
 handles.setting_tb.String = settingFile;
 handles.log_tb.String{end + 1} = sprintf('[%s] load settings successfully!', tNow());
@@ -81,6 +82,8 @@ handles.RH_Profi = NaN(1, 100);
 handles.retLidarData = struct();
 handles.ret_height = NaN(1, 100);
 handles.ret_RCS_Profi = NaN(1, 100);
+handles.ret_Temp_Profi = NaN(1, 100);
+handles.ret_Pres_Profi = NaN(1, 100);
 handles.ret_mol_RCS_Profi = NaN(1, 100);
 handles.ret_bsc_Profi = NaN(1, 100);
 handles.ret_bsc_std_Profi = NaN(1, 100);
@@ -161,10 +164,12 @@ if settingFile == 0
     % invalid setting file
     handles.setting_tb.String = '';
 else
-    handles.setting_tb.String = sprintf('%s', fullfile(settingPath, settingFile));
+    handles.setting_tb.String = sprintf('%s', handles.settingFile);
 
     % read settings
-    settings = yaml.ReadYaml(fullfile(settingPath, settingFile));
+    settingFile = handles.settingFile;
+    settingTemplate = fullfile(handles.projectDir, 'lib', 'settings_global.yml');
+    settings = load_settings(settingFile, settingTemplate);
     handles.settings = settings;
 
     handles.log_tb.String{end + 1} = sprintf('[%s] load settings successfully!', tNow());
@@ -985,6 +990,7 @@ handles.retLidarData = lidarData;
 handles.retMTime = lidarData.time;
 handles.ret_height = lidarData.height / 1e3;
 handles.ret_Temp_Profi = ret_Temp_Profi;
+handles.ret_Pres_Profi = ret_Pres_Profi;
 handles.ret_RCS_Profi = ret_RCS_Profi;
 handles.ret_mol_RCS_Profi = molRCS .* nanmean(ret_RCS_Profi(flagRefH)) ./ nanmean(molRCS(flagRefH));
 handles.ret_bsc_Profi = ret_bsc_Profi;
@@ -1891,3 +1897,32 @@ function bug_report_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 web('https://github.com/ZPYin/cloud_evaluation_GUI/issues', '-browser');
+
+
+% --------------------------------------------------------------------
+function save_retrieval_Callback(hObject, eventdata, handles)
+% hObject    handle to save_retrieval (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+ret_starttime = datenum(handles.ret_starttime_tb.String, 'yyyy-mm-dd HH:MM:SS');
+ret_stoptime = datenum(handles.ret_stoptime_tb.String, 'yyyy-mm-dd HH:MM:SS');
+
+defaultFilename = fullfile(handles.settings.saveDir, sprintf('averaged_profile_%s-%s_%5d-%5d_sm%04d.h5', datestr(ret_starttime, 'yyyymmdd_HHMM'), datestr(ret_stoptime, 'yyyymmdd_HHMM'), int32(str2double(handles.ret_H_bottom_tb.String) * 1000), int32(str2double(handles.ret_H_top_tb.String) * 1000), str2double(handles.smoothwin_tb.String)));
+[saveFile, savePath, fileExtIndx] = uiputfile({'*.h5';}, 'Save the retrieving results as ...', defaultFilename);
+
+if isequal(saveFile, 0)
+    handles.log_tb.String{end + 1} = 'Cancel saving the retrieving results!';
+else
+    handles.log_tb.String{end + 1} = sprintf('Save the retrieving results to %s', saveFile);
+end
+scrollDownLogBox(handles.log_tb);
+
+switch fileExtIndx
+case 1   % mat file
+    save_retrieval_2_h5(handles, fullfile(savePath, saveFile));
+otherwise
+    % do nothing
+end
+
+guidata(hObject, handles);

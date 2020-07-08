@@ -20,5 +20,12 @@ saveDir: ''
 
 # header info for HDF5 file
 metadata:
-  operator: ''
-  operator_email: ''
+  institute: 'MUA'
+  instrument: 'PLidar'
+  PI: 'Fan Yi'
+  PI_email: 'yf@whu.edu.cn'
+  operator: 'Zhenping Yin'
+  operator_email: 'zp.yin@whu.edu.cn'
+  altitude: 74
+  longitude: 114.37
+  latitude: 30.53
