@@ -1658,10 +1658,10 @@ drawnow;  % Cursor won't change right away unless you do this.
 
 [startPos, endPos, handles.rect_RCS, handles.rect_VDR] = rubberbandbox(handles.RCS_colorplot_axes, handles.VDR_colorplot_axes);
 
-cloud_startT = startPos(1);
-cloud_stopT = endPos(1);
-cloud_baseH = endPos(2);
-cloud_topH = startPos(2);
+cloud_startT = min([startPos(1), endPos(1)]);
+cloud_stopT = max([startPos(1), endPos(1)]);
+cloud_baseH = min([startPos(2), endPos(2)]);
+cloud_topH = max([startPos(2), endPos(2)]);
 
 handles.cloud_start_tb.String = datestr(cloud_startT, 'yyyy-mm-dd HH:MM:SS');
 handles.cloud_stop_tb.String = datestr(cloud_stopT, 'yyyy-mm-dd HH:MM:SS');
