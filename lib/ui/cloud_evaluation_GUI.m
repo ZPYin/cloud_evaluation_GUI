@@ -22,7 +22,7 @@ function varargout = cloud_evaluation_GUI(varargin)
 
 % Edit the above text to modify the response to help cloud_evaluation_GUI
 
-% Last Modified by GUIDE v2.5 29-Jul-2020 16:20:31
+% Last Modified by GUIDE v2.5 03-Aug-2020 15:19:56
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -1957,3 +1957,56 @@ function uipushtool1_ClickedCallback(hObject, eventdata, handles)
 % hObject    handle to uipushtool1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function sliceTool_ClickedCallback(hObject, eventdata, handles)
+% hObject    handle to sliceTool (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+if isfield(handles, 'sliceLine_RCS')
+    delete(handles.sliceLine_RCS);
+end
+
+if isfield(handles, 'sliceLine_VDR')
+    delete(handles.sliceLine_VDR);
+end
+
+% Change mouse pointer (cursor) to an cross.
+set(gcf, 'Pointer', 'hand');
+drawnow;  % Cursor won't change right away unless you do this.
+
+[linePos, handles.sliceLine_RCS, handles.sliceLine_VDR] = draw_slice_line('ax1', handles.RCS_colorplot_axes, 'ax2', handles.VDR_colorplot_axes, 'color', 'r', 'hRange', [str2double(handles.H_base_tb.String), str2double(handles.H_top_tb.String)]);
+
+% Change mouse pointer (cursor) to an arrow.
+set(gcf, 'Pointer', 'arrow');
+drawnow;  % Cursor won't change right away unless you do this.
+
+% draw signal profile
+profiTime = linePos(1);
+[Temp_Profi, Pres_Profi, RH_Profi] = read_meteordata(profiTime - datenum(0, 1, 0, 8, 0, 0), handles.lidarData.altitude, 'meteor_data', handles.meteor_data_pm.String{handles.meteor_data_pm.Value}, 'station', 'wuhan', 'GDAS1Folder', handles.settings.GDAS1Dir, 'RadiosondeFolder', handles.settings.soundingDir, 'ERA5Folder', handles.settings.ERA5Dir);
+
+[minLapse, tIndx] = min(abs(handles.lidarData.time - profiTime));
+if minLapse < datenum(0, 1, 0, 0, 1, 0)
+    profiIndx = tIndx;
+else
+    logPrint(handles.log_tb, sprintf('No profile can be found!'));
+    handles.sliceTool.State = 'off';
+
+    guidata(hObject, handles);
+    return
+end
+
+CH1_Sig_Profi = transpose(handles.lidarData.CH1_PC(:, profiIndx));
+CH1_BG_Profi = handles.lidarData.CH1_BG(profiIndx) * ones(1, length(handles.lidarData.height));
+CH2_Sig_Profi = transpose(handles.lidarData.CH2_PC(:, profiIndx));
+CH2_BG_Profi = handles.lidarData.CH2_BG(profiIndx) * ones(1, length(handles.lidarData.height));
+elSig_Profi = (CH1_Sig_Profi + str2double(handles.gainRatio_tb.String) .* CH2_Sig_Profi) .* handles.lidarData.height .^ 2;
+VDR_Profi = str2double(handles.gainRatio_tb.String) .* CH2_Sig_Profi ./ CH1_Sig_Profi;
+
+display_sliceLine_profile(profiTime, handles.lidarData.height / 1e3, CH1_Sig_Profi, CH1_BG_Profi, CH2_Sig_Profi, CH2_BG_Profi, elSig_Profi, VDR_Profi, Temp_Profi, Pres_Profi, RH_Profi, 'RCSRange', [str2double(handles.RCS_bottom_tb.String), str2double(handles.RCS_top_tb.String)], 'RCS_Scale', handles.RCS_scale_pm.String{handles.RCS_scale_pm.Value}, 'VDR_Range', [str2double(handles.VDR_bottom_tb.String), str2double(handles.VDR_top_tb.String)], 'RH_Range', [0, 100], 'Temp_Range', [str2double(handles.Temp_bottom_tb.String), str2double(handles.Temp_top_tb.String)], 'hRange', [str2double(handles.H_base_tb.String), str2double(handles.H_top_tb.String)]);
+
+handles.sliceTool.State = 'off';
+
+guidata(hObject, handles);
