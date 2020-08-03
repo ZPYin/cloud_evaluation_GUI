@@ -1,4 +1,3 @@
-
 function wbmf %window motion callback function
 
 utemp=get(gcf,'UserData');
