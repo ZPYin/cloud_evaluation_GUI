@@ -1990,6 +1990,8 @@ profiTime = linePos(1);
 [minLapse, tIndx] = min(abs(handles.lidarData.time - profiTime));
 if minLapse < datenum(0, 1, 0, 0, 1, 0)
     profiIndx = tIndx;
+
+    profiTime = handles.lidarData.time(tIndx);
 else
     logPrint(handles.log_tb, sprintf('No profile can be found!'));
     handles.sliceTool.State = 'off';
