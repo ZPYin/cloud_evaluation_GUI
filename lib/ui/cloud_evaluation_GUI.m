@@ -22,7 +22,7 @@ function varargout = cloud_evaluation_GUI(varargin)
 
 % Edit the above text to modify the response to help cloud_evaluation_GUI
 
-% Last Modified by GUIDE v2.5 03-Aug-2020 15:19:56
+% Last Modified by GUIDE v2.5 07-Aug-2020 16:12:04
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -63,7 +63,7 @@ settingTemplate = fullfile(projectDir, 'lib', 'settings_global.yml');
 settings = load_settings(settingFile, settingTemplate);
 handles.settings = settings;
 handles.setting_tb.String = settingFile;
-handles.log_tb.String{end + 1} = sprintf('[%s] load settings successfully!', tNow());
+logPrint(handles.log_tb, sprintf('[%s] load settings successfully!', tNow()));
 
 % Choose default command line output for cloud_evaluation_GUI
 handles.output = hObject;
@@ -100,7 +100,7 @@ handles.ret_mass_nd_std_Profi = NaN(1, 100);
 handles.ret_mass_d_Profi = NaN(1, 100);
 handles.ret_mass_d_std_Profi = NaN(1, 100);
 handles.projectDir = projectDir;
-handles.log_tb.String = {'Enjoy the day'};
+logPrint(handles.log_tb, {'Enjoy the day'});
 
 %% initialize the figures
 % RCS colorplot
@@ -172,11 +172,11 @@ else
     settings = load_settings(settingFile, settingTemplate);
     handles.settings = settings;
 
-    handles.log_tb.String{end + 1} = sprintf('[%s] load settings successfully!', tNow());
+    logPrint(handles.log_tb, sprintf('[%s] load settings successfully!', tNow()));
 
     % validate settings
     if ~ exist(settings.dataDir, 'dir')
-        logPrint(handles.log_tb, sprintf('dataDir does not exist'));
+        logPrint(handles.log_tb, sprintf('[%s] dataDir does not exist', tNow()));
     end
 
 end
@@ -225,6 +225,11 @@ else
     % read infos
     load(handles.infoFile);
 
+    progInfo = programInfo();
+    if ~ strcmp(metadata.processor_version, progInfo.Version)
+        logPrint(handles.log_tb, sprintf('[%s] Incompatible version\nVersion (infoFile): %s;\nVersion (working): %s;\nIssues may happen! Try to download the suitable version at https://github.com/ZPYin/cloud_evaluation_GUI/releases', tNow(), metadata.processor_version, progInfo.Version));
+    end
+
     %% update status
     handles.setting_tb.String = widgetInfo.settingFile;
     handles.infoFile_tb.String = widgetInfo.infoFile;
@@ -240,6 +245,7 @@ else
     handles.cloud_phase_pm.Value = find(strcmpi(handles.cloud_phase_pm.String, widgetInfo.cloud_phase));
     handles.CTT_tb.String = widgetInfo.CTT;
     handles.gainRatio_tb.String = widgetInfo.gainRatio;
+    handles.offset_tb.String = widgetInfo.offset;
     handles.cloud_top_signal_2_bg_tb.String = widgetInfo.cloud_top_sig_2_bg;
     handles.ret_starttime_tb.String = widgetInfo.ret_starttime;
     handles.ret_stoptime_tb.String = widgetInfo.ret_stoptime;
@@ -265,7 +271,7 @@ else
     handles.Temp_bottom_tb.String = widgetInfo.Temp_bottom;
     handles.Temp_top_tb.String = widgetInfo.Temp_top;
 
-    handles.log_tb.String{end + 1} = sprintf('[%s] load info file successfully!', tNow());
+    logPrint(handles.log_tb, sprintf('[%s] load info file successfully!', tNow()));
 end
 
 handles.infoFile_tb.String = handles.infoFile;
@@ -550,16 +556,14 @@ function overview_plot_btn_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 if ~ exist(handles.settings.dataDir, 'dir')
-    handles.log_tb.String{end + 1} = sprintf('[%s] Lidar data does not exist: %s', tNow, handles.setting_tb.String);
-    scrollDownLogBox(handles.log_tb);
+    logPrint(handles.log_tb, sprintf('[%s] Lidar data does not exist: %s', tNow, handles.setting_tb.String));
 end
 
 % read lidar data
 lidarData = PLidar_readdata(handles.settings.dataDir, [datenum(handles.starttime_tb.String, 'yyyy-mm-dd HH:MM:SS'), datenum(handles.stoptime_tb.String, 'yyyy-mm-dd HH:MM:SS')], [str2double(handles.H_base_tb.String) * 1000, str2double(handles.H_top_tb.String) * 1000], handles.settings.data_version);
 
 if isempty(lidarData.time)
-    handles.log_tb.String{end + 1} = sprintf('[%s] No lidar data available.', tNow());
-    scrollDownLogBox(handles.log_tb);
+    logPrint(handles.log_tb, sprintf('[%s] No lidar data available.', tNow()));
     return;
 end
 
@@ -580,10 +584,10 @@ elSig = (lidarData.CH1_PC + str2double(handles.gainRatio_tb.String) .* lidarData
 elBG = (lidarData.CH1_BG + str2double(handles.gainRatio_tb.String) .* lidarData.CH2_BG);
 flagCloud = (lidarData.time >= datenum(handles.cloud_start_tb.String, 'yyyy-mm-dd HH:MM:SS')) & (lidarData.time <= datenum(handles.cloud_stop_tb.String, 'yyyy-mm-dd HH:MM:SS'));
 handles.RCS = elSig .* repmat(lidarData.height', 1, length(lidarData.time)).^2;
-handles.VDR = str2double(handles.gainRatio_tb.String) .* lidarData.CH2_PC ./ lidarData.CH1_PC;
+handles.VDR = str2double(handles.gainRatio_tb.String) .* lidarData.CH2_PC ./ lidarData.CH1_PC - str2double(handles.offset_tb.String);
 handles.Temp = Temp_2D;
 handles.RCS_Profi = transpose(nanmean(elSig(:, flagCloud), 2)) .* lidarData.height .^ 2;
-handles.VDR_Profi = transpose(nanmean(lidarData.CH2_PC(:, flagCloud), 2) ./ nanmean(lidarData.CH1_PC(:, flagCloud), 2)) .* str2double(handles.gainRatio_tb.String);
+handles.VDR_Profi = transpose(nanmean(lidarData.CH2_PC(:, flagCloud), 2) ./ nanmean(lidarData.CH1_PC(:, flagCloud), 2)) .* str2double(handles.gainRatio_tb.String) - str2double(handles.offset_tb.String);
 handles.mol_RCS_Profi = molRCS .* (nanmean(handles.RCS_Profi(flagClH)) ./ nanmean(molRCS(flagClH)));
 handles.Temp_Profi = Temp_Profi;
 handles.CTT = Temp_Profi(find(lidarData.height >= str2double(handles.cloud_top_tb.String) * 1000, 1));
@@ -655,8 +659,7 @@ saveFile = fullfile(handles.settings.saveDir, sprintf('cloud_eval_output_%s-%s_%
 save_2_mat(handles, saveFile);
 
 %% update status
-handles.log_tb.String{end + 1} = sprintf('[%s] Results have been saved to %s', tNow, saveFile);
-scrollDownLogBox(handles.log_tb);
+logPrint(handles.log_tb, sprintf('[%s] Results have been saved to %s', tNow, saveFile));
 
 % Update handles structure
 guidata(hObject, handles);
@@ -674,8 +677,7 @@ saveFile = fullfile(handles.settings.saveDir, sprintf('cloud_eval_output_%s-%s_%
 export_fig(gcf, saveFile, '-r300');
 
 %% update status
-handles.log_tb.String{end + 1} = sprintf('[%s] Snapshot of the figure have been saved to %s', tNow, saveFile);
-scrollDownLogBox(handles.log_tb);
+logPrint(handles.log_tb, sprintf('[%s] Snapshot of the figure have been saved to %s', tNow, saveFile));
 
 % Update handles structure
 guidata(hObject, handles);
@@ -920,8 +922,7 @@ function ret_plot_btn_Callback(hObject, eventdata, handles)
 lidarData = PLidar_readdata(handles.settings.dataDir, [datenum(handles.ret_starttime_tb.String, 'yyyy-mm-dd HH:MM:SS'), datenum(handles.ret_stoptime_tb.String, 'yyyy-mm-dd HH:MM:SS')], [str2double(handles.ret_H_bottom_tb.String) * 1000, str2double(handles.ret_H_top_tb.String) * 1000], handles.settings.data_version);
 
 if isempty(lidarData.time)
-    handles.log_tb.String{end + 1} = sprintf('[%s] No lidar data available.', tNow());
-    scrollDownLogBox(handles.log_tb);
+    logPrint(handles.log_tb, sprintf('[%s] No lidar data available.', tNow()));
     return;
 end
 
@@ -933,8 +934,7 @@ end
 molRCS = molBsc532 .* exp(-2 .* nancumsum([lidarData.height(1), diff(lidarData.height)] .* molExt532));
 
 if isempty(lidarData.height)
-    handles.log_tb.String{end + 1} = sprintf('[%s] no data for aerosol retrievals were found!', tNow);
-    scrollDownLogBox(handles.log_tb);
+    logPrint(handles.log_tb, sprintf('[%s] no data for aerosol retrievals were found!', tNow));
     return;
 end
 
@@ -943,12 +943,11 @@ elSig = (lidarData.CH1_PC + str2double(handles.gainRatio_tb.String) .* lidarData
 elBG = (lidarData.CH1_BG + str2double(handles.gainRatio_tb.String) .* lidarData.CH2_BG);
 sm_win_bins = floor(str2double(handles.smoothwin_tb.String) ./ (lidarData.height(2) - lidarData.height(1)));
 if sm_win_bins <= 0
-    handles.log_tb.String{end + 1} = sprintf('[%s] not enough data bins.', tNow);
-    scrollDownLogBox(handles.log_tb);
+    logPrint(handles.log_tb, sprintf('[%s] not enough data bins.', tNow));
 end
 records = transpose(lidarData.records);
 records(records <= 1e-3) = NaN;
-PCR2PC = 1000 ./ nansum(records) .* 200;
+PCR2PC = 1000 ./ nanmean(records) .* 200;
 CH1_PC = transpose(nansum(lidarData.CH1_PC, 2)) .* PCR2PC;
 CH2_PC = transpose(nansum(lidarData.CH2_PC, 2)) .* PCR2PC;
 CH1_BG = nansum(lidarData.CH1_BG) .* PCR2PC;
@@ -958,8 +957,7 @@ elBGPC = nansum(elBG) .* PCR2PC;
 ret_RCS_Profi = transpose(smooth(transpose(nanmean(elSig, 2)) .* lidarData.height .^ 2, sm_win_bins));
 
 if str2double(handles.ref_H_top_tb.String) >= str2double(handles.ret_H_top_tb.String)
-    handles.log_tb.String{end + 1} = sprintf('[%s] reference top is out of range.', tNow);
-    scrollDownLogBox(handles.log_tb);
+    logPrint(handles.log_tb, sprintf('[%s] reference top is out of range.', tNow));
 
     return;
 end
@@ -968,9 +966,9 @@ end
 [ret_bsc_Profi, ret_bsc_std_Profi] = PLidar_Fernald(lidarData.height, elSigPC, elBGPC, str2double(handles.lr_tb.String), [str2double(handles.ref_H_bottom_tb.String), str2double(handles.ref_H_top_tb.String)] .* 1000, str2double(handles.ref_value_tb.String) * 1e-6, molBsc532, sm_win_bins);
 
 % depol
-ret_VDR_Profi = transpose(smooth(CH2_PC, sm_win_bins) ./ smooth(CH1_PC, sm_win_bins)) .* str2double(handles.gainRatio_tb.String);
+ret_VDR_Profi = transpose(smooth(CH2_PC, sm_win_bins) ./ smooth(CH1_PC, sm_win_bins)) .* str2double(handles.gainRatio_tb.String) - str2double(handles.offset_tb.String);
 ret_VDR_std_Profi = ret_VDR_Profi .* sqrt( 1 ./ PLidar_SNR(CH1_PC, CH1_BG).^2 + 1 ./ PLidar_SNR(CH2_PC, CH2_BG).^2) ./ sqrt(sm_win_bins);
-[ret_PDR_Profi, ret_PDR_std_Profi] = PLidar_parDepol(ret_VDR_Profi, ret_VDR_std_Profi, ret_bsc_Profi, ret_bsc_std_Profi, molBsc532, str2double(handles.mol_depol_tb.String), 0);
+[ret_PDR_Profi, ret_PDR_std_Profi] = PLidar_parDepol(ret_VDR_Profi, ret_VDR_std_Profi, ret_bsc_Profi, ret_bsc_Profi * 0.1, molBsc532, str2double(handles.mol_depol_tb.String), 0.2 * str2double(handles.mol_depol_tb.String));
 
 % dust and nondust
 [dustInfo, nondustInfo] = poliphon_1step(ret_bsc_Profi, ret_bsc_std_Profi, ret_PDR_Profi, ret_PDR_std_Profi, 45);
@@ -1038,10 +1036,9 @@ flagRefH = (lidarData.height >= str2double(handles.ref_H_bottom_tb.String) * 100
 molDepol_meas = str2double(handles.gainRatio_tb.String) .* nansum(CH2_PC(flagRefH)) ./ nansum(CH1_PC(flagRefH));
 molDepol_std_meas =  molDepol_meas .* sqrt( 1 ./ PLidar_SNR(nansum(CH1_PC(flagRefH)), sum(flagRefH) * CH1_BG).^2 + 1 ./ PLidar_SNR(nansum(CH2_PC(flagRefH)), sum(flagRefH) * CH2_BG).^2);
 
-handles.log_tb.String{end + 1} = sprintf('Estimated mol depol: %6.4f+-%6.4f', molDepol_meas, molDepol_std_meas);
-handles.log_tb.String{end + 1} = sprintf('Layer dust conc.    : %6.1f+-%6.1f ug*m-2', massDustTot, massDustTotStd);
-handles.log_tb.String{end + 1} = sprintf('Layer non-dust conc.: %6.1f+-%6.1f ug*m-2', massNonDustTot, massNonDustTotStd);
-scrollDownLogBox(handles.log_tb);
+logPrint(handles.log_tb, sprintf('Estimated mol depol: %6.4f+-%6.4f', molDepol_meas, molDepol_std_meas));
+logPrint(handles.log_tb, sprintf('Layer dust conc.    : %6.1f+-%6.1f ug*m-2', massDustTot, massDustTotStd));
+logPrint(handles.log_tb, sprintf('Layer non-dust conc.: %6.1f+-%6.1f ug*m-2', massNonDustTot, massNonDustTotStd));
 
 % Update handles structure
 guidata(hObject, handles);
@@ -1555,23 +1552,21 @@ function delete_btn_Callback(hObject, eventdata, handles)
 
 choice = questdlg('Delete the case?', ...
     'Delete...', ...
-    'Yes','No','Cancel','No');
+    'Yes','No','Cancel');
 
 % Handle response
 switch choice
-    case 'Yes'
-        delete(handles.infoFile);
+case 'Yes'
+    delete(handles.infoFile);
 
-        handles.log_tb.String{end + 1} = sprintf('Deleted %s', handles.infoFile);
-        scrollDownLogBox(handles.log_tb);
+    logPrint(handles.log_tb, sprintf('[%s] Deleted %s', tNow(), handles.infoFile));
 
-    case 'Cake'
+case 'Cancel'
 
-        handles.log_tb.String{end + 1} = sprintf('Cancelled to delete %s', handles.infoFile);
-        scrollDownLogBox(handles.log_tb);
+    logPrint(handles.log_tb, sprintf('[%s] Cancelled to delete %s', tNow(), handles.infoFile));
 
-    case 'No thank you'
-        % do nothing
+case 'No'
+    % do nothing
 
 end
 
@@ -1592,6 +1587,11 @@ case 'return'
     % read infos
     load(handles.infoFile);
 
+    progInfo = programInfo();
+    if ~ strcmp(metadata.processor_version, progInfo.Version)
+        logPrint(handles.log_tb, sprintf('[%s] Incompatible version\nVersion (infoFile): %s;\nVersion (working): %s;\nIssues may happen! Try to download the suitable version at https://github.com/ZPYin/cloud_evaluation_GUI/releases', tNow(), metadata.processor_version, progInfo.Version));
+    end
+
     %% update status
     handles.setting_tb.String = widgetInfo.settingFile;
     handles.starttime_tb.String = widgetInfo.starttime;
@@ -1606,6 +1606,7 @@ case 'return'
     handles.cloud_phase_pm.Value = find(strcmpi(handles.cloud_phase_pm.String, widgetInfo.cloud_phase));
     handles.CTT_tb.String = widgetInfo.CTT;
     handles.gainRatio_tb.String = widgetInfo.gainRatio;
+    handles.offset_tb.String = widgetInfo.offset;
     handles.cloud_top_signal_2_bg_tb.String = widgetInfo.cloud_top_sig_2_bg;
     handles.ret_starttime_tb.String = widgetInfo.ret_starttime;
     handles.ret_stoptime_tb.String = widgetInfo.ret_stoptime;
@@ -1631,7 +1632,7 @@ case 'return'
     handles.Temp_bottom_tb.String = widgetInfo.Temp_bottom;
     handles.Temp_top_tb.String = widgetInfo.Temp_top;
 
-    handles.log_tb.String{end + 1} = sprintf('[%s] load info file successfully!', tNow());
+    logPrint(handles.log_tb, sprintf('[%s] load info file successfully!', tNow()));
 
 end
 
@@ -1761,12 +1762,12 @@ function convert_mat_2_ascii_Callback(hObject, eventdata, handles)
 cloudCaseDir = uigetdir(handles.settings.dataDir, 'Choose the cloud case directory...');
 
 if isequal(cloudCaseDir, 0)
-    logPrint(handles.log_tb, 'No directory was selected!');
+    logPrint(handles.log_tb, sprintf('[%s] No directory was selected!', tNow()));
 else
     cloudCases = listfile(cloudCaseDir, '\w*.mat');
 
     if isempty(cloudCases)
-        logPrint(handles.log_tb, 'No cloud cases were found!');
+        logPrint(handles.log_tb, sprintf('[%s] No cloud cases were found!', tNow()));
 
         return;
     end
@@ -1814,6 +1815,7 @@ else
     handles.cloud_phase_pm.Value = find(strcmpi(handles.cloud_phase_pm.String, widgetInfo.cloud_phase));
     handles.CTT_tb.String = widgetInfo.CTT;
     handles.gainRatio_tb.String = widgetInfo.gainRatio;
+    handles.offset_tb.String = widgetInfo.offset;
     handles.cloud_top_signal_2_bg_tb.String = widgetInfo.cloud_top_sig_2_bg;
     handles.ret_starttime_tb.String = widgetInfo.ret_starttime;
     handles.ret_stoptime_tb.String = widgetInfo.ret_stoptime;
@@ -1839,7 +1841,7 @@ else
     handles.Temp_bottom_tb.String = widgetInfo.Temp_bottom;
     handles.Temp_top_tb.String = widgetInfo.Temp_top;
 
-    handles.log_tb.String{end + 1} = sprintf('[%s] load info file successfully!', tNow());
+    logPrint(handles.log_tb, sprintf('[%s] load info file successfully!', tNow()));
 end
 
 handles.infoFile_tb.String = handles.infoFile;
@@ -1860,8 +1862,7 @@ saveFile = fullfile(handles.settings.saveDir, sprintf('cloud_eval_output_%s-%s_%
 save_2_mat(handles, saveFile);
 
 %% update status
-handles.log_tb.String{end + 1} = sprintf('[%s] Results have been saved to %s', tNow, saveFile);
-scrollDownLogBox(handles.log_tb);
+logPrint(handles.log_tb, sprintf('[%s] Results have been saved to %s', tNow, saveFile));
 
 guidata(hObject, handles);
 
@@ -1874,11 +1875,10 @@ function saveas_cloudcase_Callback(hObject, eventdata, handles)
 [saveFile, savePath, fileExtIndx] = uiputfile({'*.mat'; '*.txt'}, 'Save the cloud case as ...');
 
 if isequal(saveFile, 0)
-    handles.log_tb.String{end + 1} = 'Cancel saving the cloud case!';
+    logPrint(handles.log_tb, sprintf('[%s] Cancel saving the cloud case!', tNow()));
 else
-    handles.log_tb.String{end + 1} = sprintf('Save the cloud case to %s', saveFile);
+    logPrint(handles.log_tb, sprintf('[%s] Save the cloud case to %s', tNow(), saveFile));
 end
-scrollDownLogBox(handles.log_tb);
 
 switch fileExtIndx
 case 1   % mat file
@@ -1918,15 +1918,14 @@ function save_retrieval_Callback(hObject, eventdata, handles)
 ret_starttime = datenum(handles.ret_starttime_tb.String, 'yyyy-mm-dd HH:MM:SS');
 ret_stoptime = datenum(handles.ret_stoptime_tb.String, 'yyyy-mm-dd HH:MM:SS');
 
-defaultFilename = fullfile(handles.settings.saveDir, sprintf('averaged_profile_%s-%s_%5d-%5d_sm%04d.h5', datestr(ret_starttime, 'yyyymmdd_HHMM'), datestr(ret_stoptime, 'yyyymmdd_HHMM'), int32(str2double(handles.ret_H_bottom_tb.String) * 1000), int32(str2double(handles.ret_H_top_tb.String) * 1000), str2double(handles.smoothwin_tb.String)));
+defaultFilename = fullfile(handles.settings.saveDir, sprintf('averaged_profile_%s-%s_%05d-%05d_sm%04d.h5', datestr(ret_starttime, 'yyyymmdd_HHMM'), datestr(ret_stoptime, 'yyyymmdd_HHMM'), int32(str2double(handles.ret_H_bottom_tb.String) * 1000), int32(str2double(handles.ret_H_top_tb.String) * 1000), str2double(handles.smoothwin_tb.String)));
 [saveFile, savePath, fileExtIndx] = uiputfile({'*.h5';}, 'Save the retrieving results as ...', defaultFilename);
 
 if isequal(saveFile, 0)
-    handles.log_tb.String{end + 1} = 'Cancel saving the retrieving results!';
+    logPrint(handles.log_tb, sprintf('[%s] Cancel saving the retrieving results!', tNow()));
 else
-    handles.log_tb.String{end + 1} = sprintf('Save the retrieving results to %s', saveFile);
+    logPrint(handles.log_tb, sprintf('[%s] Save the retrieving results to %s', tNow(), saveFile));
 end
-scrollDownLogBox(handles.log_tb);
 
 switch fileExtIndx
 case 1   % mat file
@@ -1993,7 +1992,7 @@ if minLapse < datenum(0, 1, 0, 0, 1, 0)
 
     profiTime = handles.lidarData.time(tIndx);
 else
-    logPrint(handles.log_tb, sprintf('No profile can be found!'));
+    logPrint(handles.log_tb, sprintf('[%s] No profile can be found!', tNow()));
     handles.sliceTool.State = 'off';
 
     guidata(hObject, handles);
@@ -2005,10 +2004,33 @@ CH1_BG_Profi = handles.lidarData.CH1_BG(profiIndx) * ones(1, length(handles.lida
 CH2_Sig_Profi = transpose(handles.lidarData.CH2_PC(:, profiIndx));
 CH2_BG_Profi = handles.lidarData.CH2_BG(profiIndx) * ones(1, length(handles.lidarData.height));
 elSig_Profi = (CH1_Sig_Profi + str2double(handles.gainRatio_tb.String) .* CH2_Sig_Profi) .* handles.lidarData.height .^ 2;
-VDR_Profi = str2double(handles.gainRatio_tb.String) .* CH2_Sig_Profi ./ CH1_Sig_Profi;
+VDR_Profi = str2double(handles.gainRatio_tb.String) .* CH2_Sig_Profi ./ CH1_Sig_Profi - str2double(handles.offset_tb.String);
 
 display_sliceLine_profile(profiTime, handles.lidarData.height / 1e3, CH1_Sig_Profi, CH1_BG_Profi, CH2_Sig_Profi, CH2_BG_Profi, elSig_Profi, VDR_Profi, Temp_Profi, Pres_Profi, RH_Profi, 'RCSRange', [str2double(handles.RCS_bottom_tb.String), str2double(handles.RCS_top_tb.String)], 'RCS_Scale', handles.RCS_scale_pm.String{handles.RCS_scale_pm.Value}, 'VDR_Range', [str2double(handles.VDR_bottom_tb.String), str2double(handles.VDR_top_tb.String)], 'RH_Range', [0, 100], 'Temp_Range', [str2double(handles.Temp_bottom_tb.String), str2double(handles.Temp_top_tb.String)], 'hRange', [str2double(handles.H_base_tb.String), str2double(handles.H_top_tb.String)]);
 
 handles.sliceTool.State = 'off';
 
 guidata(hObject, handles);
+
+
+
+function offset_tb_Callback(hObject, eventdata, handles)
+% hObject    handle to offset_tb (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of offset_tb as text
+%        str2double(get(hObject,'String')) returns contents of offset_tb as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function offset_tb_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to offset_tb (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
