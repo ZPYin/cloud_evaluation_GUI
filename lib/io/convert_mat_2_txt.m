@@ -36,6 +36,7 @@ fprintf(fid, 'meteorological data source: %s\n', data.widgetInfo.meteor_data);
 fprintf(fid, 'cloud phase: %s\n', data.widgetInfo.cloud_phase);
 fprintf(fid, 'cloud top temperature (degC): %s\n', data.widgetInfo.CTT);
 fprintf(fid, 'lidar depol gain ratio: %s\n', data.widgetInfo.gainRatio);
+fprintf(fid, 'lidar depol offset: %s\n', data.widgetInfo.offset);
 fprintf(fid, 'cloud top signal/noise ratio: %s\n', data.widgetInfo.cloud_top_sig_2_bg);
 fprintf(fid, 'retrieval start time: %s\n', data.widgetInfo.ret_starttime);
 fprintf(fid, 'retrieval stop time: %s\n', data.widgetInfo.ret_stoptime);
