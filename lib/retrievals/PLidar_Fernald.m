@@ -56,11 +56,6 @@ signal = reshape(signal, 1, []);
 molBSC = reshape(molBSC, 1, []);
 LR_aer = reshape(LR_aer, 1, []);
 
-alt = alt/1e3 ;   % convert the unit to km.
-refAlt = refAlt/1e3;   % convert the unit to km
-molBSC = molBSC * 1e3;   % convert the unit to km^{-1}Sr^{-1}
-refBeta = refBeta * 1e3;   % convert the unit to km^{-1}*Sr^{-1}
-
 % calculate signal noise according to Poisson distribution
 totSig = signal + bg;
 totSig(totSig < 0) = 0;
@@ -70,7 +65,7 @@ dAlt = alt(2) - alt(1);
 nAlt = length(alt);
 % atmospheric molecular radiative parameters
 LR_mol = 8 * pi / 3;
-LR_mol = ones(1, nAlt)*LR_mol;
+LR_mol = ones(1, nAlt) * LR_mol;
 
 % index of the reference altitude 
 if length(refAlt) == 1
@@ -80,8 +75,8 @@ if length(refAlt) == 1
     indRefAlt = find(alt >= refAlt, 1, 'first');
     indRefAlt = ones(1, 2) * indRefAlt;
 elseif length(refAlt) == 2
-    if (refAlt(1) - alt(end)) * (refAlt(1) - alt(1)) <=0 && ...
-        (refAlt(2) - alt(end)) * (refAlt(2) - alt(1)) <=0
+    if (refAlt(1) - alt(end)) * (refAlt(1) - alt(1)) <= 0 && ...
+        (refAlt(2) - alt(end)) * (refAlt(2) - alt(1)) <= 0
         indRefAlt = [floor((refAlt(1) - alt(1)) / dAlt), floor((refAlt(2) - alt(1)) / dAlt)];
     else
         error('refAlt is out of range.');
@@ -141,8 +136,6 @@ for iAlt = indRefMid+1: 1: nAlt
     m2 = (LR_aer(iAlt - 1) * noise(iAlt - 1) * alt(iAlt - 1).^2 + LR_aer(iAlt) * noise(iAlt) * alt(iAlt).^2 * exp(-A)) * abs(alt(iAlt) - alt(iAlt - 1)) / numerator;
     m(iAlt) = m1 - m2;
 end
-
-aerBsc = aerBsc / 1e3;   % convert the unit to m^{-1}*Sr^{-1}
 
 % statistical uncertainty
 aerRelBRStd = abs((1 + noise ./ signal) ./ (1 + m .* (aerBsc + molBSC)) - 1);
