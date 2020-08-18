@@ -32,31 +32,9 @@ git clone https://github.com/ZPYin/cloud_evaluation_GUI.git
 cd cloud_evaluation_GUI
 ```
 
-### 使用
+### 使用方法
 
-**场景1:探测结果快照**
-
-小程序会根据`settings`文件中的路径和配置的开始结束时间搜索数据，并在**信号快照显示区域**进行显示。其中坐标范围可以根据相关的设定选项进行选择。
-
-> 工具栏中的`DataTip`工具可以查看图形中单个点的数值。
-
-<p align='center'>
-<img src='./img/usage_choose_data_fragment.png', width=650, height=400, lat='ql'>
-<br>
-<b>选择结果区间并快速可视化</b>
-
-**场景2:反演设置**
-
-在通过快照确定了无云的范围后，可以进行气溶胶垂直剖面的反演。在小程序中反演设置区可以对反演过程的雷达比、分子退偏比等进行设置，点击`Plot`可以在反演结果显示区中显示垂直剖面。
-
-<p align='center'>
-<img src='./img/usage_retrieval.png', width=600, height=400, lat='retrieval'>
-<br>
-<b>反演结果</b>
-
-**场景3:保存结果**
-
-点击`save`按钮，整个快照和反演结果会保存到[mat][4]格式的info文件中。这个文件可以用于后续的统计分析，并且可以通过`infoFile`按钮直接导入到小程序中。除此之外，小程序的快照可以通过`Export fig`按钮导出。
+> 使用指南请参考[wiki][6]
 
 ## 故障反馈
 
@@ -71,5 +49,6 @@ cd cloud_evaluation_GUI
 [1]: https://www.ready.noaa.gov/gdas1.php
 [2]: http://weather.uwyo.edu/upperair/bufrraob.shtml
 [3]: https://www.ecmwf.int/en/forecasts/datasets/reanalysis-datasets/era5
-[4]:https://www.reviversoft.com/file-extensions/mat
+[4]: https://www.reviversoft.com/file-extensions/mat
 [5]: https://github.com/ZPYin/cloud_evaluation_GUI/issues
+[6]: https://github.com/ZPYin/cloud_evaluation_GUI/wiki/%E5%89%8D%E8%A8%80
