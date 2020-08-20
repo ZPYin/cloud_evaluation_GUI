@@ -216,10 +216,7 @@ function infoFile_btn_Callback(hObject, eventdata, handles)
 [infoFile, infoPath] = uigetfile(fullfile(handles.settings.saveDir, '*.mat'), 'Select info file...');
 handles.infoFile = fullfile(infoPath, infoFile);
 
-if infoFile == 0
-    % invalid info file
-    handles.infoFile_tb.String = '';
-else
+if infoFile ~= 0
     handles.infoFile_tb.String = sprintf('%s', fullfile(infoPath, infoFile));
 
     % read infos
@@ -272,9 +269,10 @@ else
     handles.Temp_top_tb.String = widgetInfo.Temp_top;
 
     logPrint(handles.log_tb, sprintf('[%s] load info file successfully!', tNow()));
+
+    handles.infoFile_tb.String = handles.infoFile;
 end
 
-handles.infoFile_tb.String = handles.infoFile;
 
 guidata(hObject, handles);
 
@@ -1585,7 +1583,12 @@ case 'return'
     handles.infoFile = handles.infoFile_tb.String;
 
     % read infos
-    load(handles.infoFile);
+    try
+        load(handles.infoFile);
+    catch
+        logPrint(handles.log_tb, sprintf('error in loading infoFile: %s', handles.infoFile_tb.String));
+        return;
+    end
 
     progInfo = programInfo();
     if ~ strcmp(metadata.processor_version, progInfo.Version)
