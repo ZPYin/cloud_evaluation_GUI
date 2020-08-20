@@ -30,7 +30,7 @@ case 'chiljet'
 
 otherwise
 
-    cMaps = colormap(cMapName)
+    cMaps = colormap(cMapName);
 
 end
 

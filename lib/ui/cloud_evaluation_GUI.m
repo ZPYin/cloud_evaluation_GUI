@@ -261,7 +261,7 @@ if infoFile ~= 0
     handles.LayerTop_tb.String = widgetInfo.LayerTop;
     handles.smoothwin_tb.String = widgetInfo.smoothwin;
     handles.RCS_scale_pm.Value = find(strcmpi(handles.RCS_scale_pm.String, widgetInfo.RCS_scale));
-    handles.cmap_pm.Vaule = find(strcmpi(handles.cmap_pm.String, widgetInfo.cmap));
+    handles.cmap_pm.Value = find(strcmpi(handles.cmap_pm.String, widgetInfo.cmap));
     handles.RCS_bottom_tb.String = widgetInfo.RCS_bottom;
     handles.RCS_top_tb.String = widgetInfo.RCS_top;
     handles.VDR_bottom_tb.String = widgetInfo.VDR_bottom;
@@ -1531,13 +1531,13 @@ choice = questdlg('Delete the case?', ...
 % Handle response
 switch choice
 case 'Yes'
-    delete(handles.infoFile);
+    delete(handles.infoFile_tb.String);
 
-    logPrint(handles.log_tb, sprintf('[%s] Deleted %s', tNow(), handles.infoFile));
+    logPrint(handles.log_tb, sprintf('[%s] Deleted %s', tNow(), handles.infoFile_tb.String));
 
 case 'Cancel'
 
-    logPrint(handles.log_tb, sprintf('[%s] Cancelled to delete %s', tNow(), handles.infoFile));
+    logPrint(handles.log_tb, sprintf('[%s] Cancelled to delete %s', tNow(), handles.infoFile_tb.String));
 
 case 'No'
     % do nothing
