@@ -88,6 +88,7 @@ widgetInfo.mol_depol = handles.mol_depol_tb.String;
 widgetInfo.LayerBase = handles.LayerBase_tb.String;
 widgetInfo.LayerTop = handles.LayerTop_tb.String;
 widgetInfo.smoothwin = handles.smoothwin_tb.String;
+widgetInfo.cmap = handles.cmap_pm.String{handles.cmap_pm.Value};
 widgetInfo.RCS_scale = handles.RCS_scale_pm.String{handles.RCS_scale_pm.Value};
 widgetInfo.RCS_bottom = handles.RCS_bottom_tb.String;
 widgetInfo.RCS_top = handles.RCS_top_tb.String;

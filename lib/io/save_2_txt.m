@@ -46,6 +46,7 @@ fprintf(fid, 'molecular depolarization ratio: %s\n', handles.mol_depol_tb.String
 fprintf(fid, 'aerosol layer base (km): %s\n', handles.LayerBase_tb.String);
 fprintf(fid, 'aerosol layer top (km): %s\n', handles.LayerTop_tb.String);
 fprintf(fid, 'smooth window (m): %s\n', handles.smoothwin_tb.String);
+fprintf(fid, 'colormap: %s\n', handles.cmap_pm.String{handles.cmap_pm.Value});
 fprintf(fid, 'range corrected signal scale: %s\n', handles.RCS_scale_pm.String{handles.RCS_scale_pm.Value});
 fprintf(fid, 'min range corrected signal (a.u.): %s\n', handles.RCS_bottom_tb.String);
 fprintf(fid, 'max range corrected signal (a.u.): %s\n', handles.RCS_top_tb.String);

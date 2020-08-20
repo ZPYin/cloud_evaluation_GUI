@@ -38,6 +38,8 @@ function [fh] = display_VDR_colorplot(ax, mTime, height, VDR, varargin)
 %       bottom of the averaged region. (km)
 %   ret_top: numeric
 %       top of the averaged region. (km)
+%   cmap: char
+%       colormap (default: myjet).
 %Outputs:
 %   fh: figure
 %       figure handle.
@@ -66,6 +68,7 @@ addParameter(p, 'ret_starttime', NaN, @isnumeric);
 addParameter(p, 'ret_stoptime', NaN, @isnumeric);
 addParameter(p, 'ret_bottom', NaN, @isnumeric);
 addParameter(p, 'ret_top', NaN, @isnumeric);
+addParameter(p, 'cmap', 'myjet', @ischar);
 
 
 parse(p, ax, mTime, height, VDR, varargin{:});
@@ -106,8 +109,7 @@ title('volume depolarization ratio @ 532 nm');
 xlim(p.Results.tRange);
 ylim(p.Results.hRange);
 
-load('myjet_colormap.mat');
-colormap(myjet);
+colormap(load_colormap(p.Results.cmap));
 
 set(gca, 'XMinorTick', 'on', ...
     'XTick', linspace(p.Results.tRange(1), p.Results.tRange(end), 5), ...
