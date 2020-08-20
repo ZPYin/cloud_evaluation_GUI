@@ -109,7 +109,7 @@ title('volume depolarization ratio @ 532 nm');
 xlim(p.Results.tRange);
 ylim(p.Results.hRange);
 
-colormap(load_colormap(p.Results.cmap));
+colormap(gca, load_colormap(p.Results.cmap));
 
 set(gca, 'XMinorTick', 'on', ...
     'XTick', linspace(p.Results.tRange(1), p.Results.tRange(end), 5), ...
