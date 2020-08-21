@@ -242,7 +242,11 @@ if infoFile ~= 0
     handles.cloud_phase_pm.Value = find(strcmpi(handles.cloud_phase_pm.String, widgetInfo.cloud_phase));
     handles.CTT_tb.String = widgetInfo.CTT;
     handles.gainRatio_tb.String = widgetInfo.gainRatio;
-    handles.offset_tb.String = widgetInfo.offset;
+    if ~ isfield(widgetInfo, 'offset')
+        handles.offset_tb.String = '0.000';
+    else
+        handles.offset_tb.String = widgetInfo.offset;
+    end
     handles.cloud_top_signal_2_bg_tb.String = widgetInfo.cloud_top_sig_2_bg;
     handles.ret_starttime_tb.String = widgetInfo.ret_starttime;
     handles.ret_stoptime_tb.String = widgetInfo.ret_stoptime;
@@ -260,8 +264,12 @@ if infoFile ~= 0
     handles.LayerBase_tb.String = widgetInfo.LayerBase;
     handles.LayerTop_tb.String = widgetInfo.LayerTop;
     handles.smoothwin_tb.String = widgetInfo.smoothwin;
+    if ~ isfield(widgetInfo, 'cmap')
+        handles.cmap_pm.Value = 1;
+    else
+        handles.cmap_pm.Value = find(strcmpi(handles.cmap_pm.String, widgetInfo.cmap));
+    end
     handles.RCS_scale_pm.Value = find(strcmpi(handles.RCS_scale_pm.String, widgetInfo.RCS_scale));
-    handles.cmap_pm.Value = find(strcmpi(handles.cmap_pm.String, widgetInfo.cmap));
     handles.RCS_bottom_tb.String = widgetInfo.RCS_bottom;
     handles.RCS_top_tb.String = widgetInfo.RCS_top;
     handles.VDR_bottom_tb.String = widgetInfo.VDR_bottom;
@@ -1573,6 +1581,7 @@ case 'return'
 
     %% update status
     handles.setting_tb.String = widgetInfo.settingFile;
+    handles.infoFile_tb.String = widgetInfo.infoFile;
     handles.starttime_tb.String = widgetInfo.starttime;
     handles.stoptime_tb.String = widgetInfo.stoptime;
     handles.H_base_tb.String = widgetInfo.H_base;
@@ -1585,7 +1594,11 @@ case 'return'
     handles.cloud_phase_pm.Value = find(strcmpi(handles.cloud_phase_pm.String, widgetInfo.cloud_phase));
     handles.CTT_tb.String = widgetInfo.CTT;
     handles.gainRatio_tb.String = widgetInfo.gainRatio;
-    handles.offset_tb.String = widgetInfo.offset;
+    if ~ isfield(widgetInfo, 'offset')
+        handles.offset_tb.String = '0.000';
+    else
+        handles.offset_tb.String = widgetInfo.offset;
+    end
     handles.cloud_top_signal_2_bg_tb.String = widgetInfo.cloud_top_sig_2_bg;
     handles.ret_starttime_tb.String = widgetInfo.ret_starttime;
     handles.ret_stoptime_tb.String = widgetInfo.ret_stoptime;
@@ -1603,7 +1616,11 @@ case 'return'
     handles.LayerBase_tb.String = widgetInfo.LayerBase;
     handles.LayerTop_tb.String = widgetInfo.LayerTop;
     handles.smoothwin_tb.String = widgetInfo.smoothwin;
-    handles.cmap_pm.Value = find(strcmpi(handles.cmap_pm.String, widgetInfo.cmap));
+    if ~ isfield(widgetInfo, 'cmap')
+        handles.cmap_pm.Value = 1;
+    else
+        handles.cmap_pm.Value = find(strcmpi(handles.cmap_pm.String, widgetInfo.cmap));
+    end
     handles.RCS_scale_pm.Value = find(strcmpi(handles.RCS_scale_pm.String, widgetInfo.RCS_scale));
     handles.RCS_bottom_tb.String = widgetInfo.RCS_bottom;
     handles.RCS_top_tb.String = widgetInfo.RCS_top;
@@ -1797,7 +1814,11 @@ if infoFile ~= 0
     handles.cloud_phase_pm.Value = find(strcmpi(handles.cloud_phase_pm.String, widgetInfo.cloud_phase));
     handles.CTT_tb.String = widgetInfo.CTT;
     handles.gainRatio_tb.String = widgetInfo.gainRatio;
-    handles.offset_tb.String = widgetInfo.offset;
+    if ~ isfield(widgetInfo, 'offset')
+        handles.offset_tb.String = '0.000';
+    else
+        handles.offset_tb.String = widgetInfo.offset;
+    end
     handles.cloud_top_signal_2_bg_tb.String = widgetInfo.cloud_top_sig_2_bg;
     handles.ret_starttime_tb.String = widgetInfo.ret_starttime;
     handles.ret_stoptime_tb.String = widgetInfo.ret_stoptime;
@@ -1815,7 +1836,11 @@ if infoFile ~= 0
     handles.LayerBase_tb.String = widgetInfo.LayerBase;
     handles.LayerTop_tb.String = widgetInfo.LayerTop;
     handles.smoothwin_tb.String = widgetInfo.smoothwin;
-    handles.cmap_pm.Value = find(strcmpi(handles.cmap_pm.String, widgetInfo.cmap));
+    if ~ isfield(widgetInfo, 'cmap')
+        handles.cmap_pm.Value = 1;
+    else
+        handles.cmap_pm.Value = find(strcmpi(handles.cmap_pm.String, widgetInfo.cmap));
+    end
     handles.RCS_scale_pm.Value = find(strcmpi(handles.RCS_scale_pm.String, widgetInfo.RCS_scale));
     handles.RCS_bottom_tb.String = widgetInfo.RCS_bottom;
     handles.RCS_top_tb.String = widgetInfo.RCS_top;
