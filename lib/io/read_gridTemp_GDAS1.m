@@ -23,6 +23,10 @@ function temp2D = read_gridTemp_GDAS1(mTime, altitude, ...
 %Contact:
 %   zhenping@tropos.de
 
+if ~ exist('gdas1site', 'var')
+    gdas1site = 'wuhan';
+end
+
 temp2D = NaN(numel(altitude), numel(mTime));
 
 if isempty(mTime) || isempty(altitude)

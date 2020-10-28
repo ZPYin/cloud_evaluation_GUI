@@ -62,8 +62,7 @@ case 'radiosonde'
 
 case 'era-5'
 
-    % temp2D = read_gridTemp_ERA5(mTime, altitude, p.Results.station, p.Results.ERA5Folder, datenum(0, 1, 0, 7, 0, 0));
-    warning('Not implemented yet.')
+    temp2D = read_gridTemp_ERA5(mTime, altitude, p.Results.ERA5Folder, p.Results.station, datenum(0, 1, 0, 7, 0, 0));
     return;
 
 case 'standard_atmosphere'
