@@ -110,8 +110,19 @@ case 'radiosonde'
 
 case 'era-5'
 
-    warning('Not implemented');
-    return;
+    % ERA5 profile
+    [ERA5_alt, ERA5_temp, ERA5_pres, ERA5_relh, ERA5_file] = read_ERA5(measTime, ...
+        p.Results.station, p.Results.ERA5Folder);
+
+    if isempty(ERA5_alt) || (~ (sum(~ isnan(ERA5_temp)) >= 2))
+        % no data or not enough numeric data
+        return;
+    end
+
+    meteor_time = ERA5FileTimestamp(basename(ERA5_file));
+    temp = interp1(ERA5_alt, ERA5_temp, altitude);
+    pres = interp1(ERA5_alt, ERA5_pres, altitude);
+    relh = interp1(ERA5_alt, ERA5_relh, altitude);
 
 case 'standard_atmosphere'
 
