@@ -22,8 +22,18 @@ if exist(settingTemplate, 'file') ~= 2
     error('template setting file does not exist.\n%s', settingTemplate);
 end
 
-configTemplate = yaml.ReadYaml(settingTemplate);
-configActive = yaml.ReadYaml(settingFile);
+try
+    configTemplate = yaml.ReadYaml(settingTemplate);
+catch
+    error('Failed to read %s\nCheck the default setting file first.', ...
+          settingTemplate);
+end
+
+try
+    configActive = yaml.ReadYaml(settingFile);
+catch
+    error('Failed to read %s\nCheck the setting file first.', settingFile);
+end
 
 config = fillStruct(configActive, configTemplate);
 
