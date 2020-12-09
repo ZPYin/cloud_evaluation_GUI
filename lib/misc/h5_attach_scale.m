@@ -23,8 +23,8 @@ fid = H5F.open(file, 'H5F_ACC_RDWR', plist);
 src_ds_id = H5D.open(fid, src_ds_name, plist);
 dim_ds_id = H5D.open(fid, dim_ds_name, plist);
 
-split_res = split(dim_ds_name, '/');
-H5DS.set_scale(dim_ds_id, char(split_res(end)));
+split_res = regexp(dim_ds_name, '/', 'split');
+H5DS.set_scale(dim_ds_id, split_res{end});
 H5DS.attach_scale(src_ds_id, dim_ds_id, dimension);
 
 H5D.close(src_ds_id);
