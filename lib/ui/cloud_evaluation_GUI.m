@@ -579,7 +579,7 @@ end
 Temp_2D = read_gridTemp(lidarData.time - datenum(0, 1, 0, 8, 0, 0), lidarData.altitude, 'meteor_data', handles.meteor_data_pm.String{handles.meteor_data_pm.Value}, 'station', 'wuhan', 'GDAS1Folder', handles.settings.GDAS1Dir, 'RadiosondeFolder', handles.settings.soundingDir, 'ERA5Folder', handles.settings.ERA5Dir);
 
 %% Rayleigh scattering
-[molExt532, molBsc532] = rayleigh_scattering(532, Pres_Profi, Temp_Profi + 273.14, 360, 80);
+[molBsc532, molExt532] = rayleigh_scattering(532, Pres_Profi, Temp_Profi + 273.14, 360, 80);
 molRCS = molBsc532 .* exp(-2 .* nancumsum([lidarData.height(1), diff(lidarData.height)] .* molExt532));
 
 flagClH = (lidarData.height >= str2double(handles.cloud_base_tb.String) * 1000) & (lidarData.height <= str2double(handles.cloud_top_tb.String) * 1000);
