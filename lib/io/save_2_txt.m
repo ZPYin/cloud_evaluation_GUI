@@ -1,5 +1,5 @@
 function save_2_txt(handles, saveFile)
-%SAVE_2_TXT save cloud case data to MAT.
+%SAVE_2_TXT save configurations to ASCII file.
 %Inputs:
 %   handles: struct
 %   saveFile: char

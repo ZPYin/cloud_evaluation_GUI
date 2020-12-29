@@ -1,5 +1,5 @@
 function save_retrieval_2_h5(handles, h5Filepath)
-%SAVE_RETRIEVAL_2_H5 save cloud case data to MAT.
+%SAVE_RETRIEVAL_2_H5 save retrieving results to HDF5 file.
 %Inputs:
 %   handles: struct
 %   saveFile: char
