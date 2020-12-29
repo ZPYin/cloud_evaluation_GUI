@@ -41,7 +41,7 @@ ERA5Files = cell(0);
 ERA5Times = [];
 for iDate = 1:length(dates)
     thisDate = dates(iDate);
-    filesInDay = listfile(fullfile(folder, ...
+    filesInDay = listfile(fullfile(folder, ERA5site, ...
         datestr(thisDate, 'yyyy'), datestr(thisDate, 'mm')), ...
         sprintf('.*ERA5_.*_%s.nc', datestr(thisDate, 'yyyymmdd')));
 
@@ -66,7 +66,7 @@ relh = [];
 time = [];
 geopot = [];
 latIndx = 1;   % latitude index
-lonIndx = 2;   % longitude index
+lonIndx = 1;   % longitude index
 for iFile = 1:length(ERA5FilesSorted)
     
     % read ERA5 profile (MATLAB has incorporated scale transformation)

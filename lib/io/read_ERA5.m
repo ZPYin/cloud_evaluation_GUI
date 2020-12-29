@@ -28,7 +28,7 @@ function [alt, temp, pres, relh, ERA5file] = read_ERA5(measTime, ERA5site, ...
 %   zp.yin@whu.edu.cn
 
 [thisyear, thismonth, thisday, ~, ~, ~] = datevec(measTime);
-dirInfo = dir(fullfile(folder, sprintf('%04d', thisyear), ...
+dirInfo = dir(fullfile(folder, ERA5site, sprintf('%04d', thisyear), ...
                        sprintf('%02d', thismonth), ...
                        sprintf('*ERA5_*_%04d%02d%02d.nc', ...
                        thisyear, thismonth, thisday)));
@@ -71,7 +71,7 @@ time_raw = ncread(ERA5file, 'time');
 % conversion
 time = (double(time_raw) / 24 + datenum(1900, 1, 1, 0, 0, 0));
 [~, tIndx] = min(abs(time - measTime));
-lonIndx = 2;   % hard-code indexing
+lonIndx = 1;   % hard-code indexing
 latIndx = 1;
 g = 9.80665;   % gravatational acceleration. [m*s^-2]
 alt = reshape(geopot_raw(lonIndx, latIndx, :, tIndx) / g, 1, []);
