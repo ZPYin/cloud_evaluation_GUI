@@ -1,17 +1,17 @@
 function [datetime, location] = ERA5FileTimestamp(gdas1File)
-%ERA5FILETIMESTAMP extract the timestamp from the gdas1File name.
-%Example:
-%   [datetime] = ERA5FileTimestamp(gdas1File)
-%Inputs:
-%   gdas1File: char
-%       gdas1 data file.
-%Outputs:
-%   datetime: float
-%       datenum.
-%History:
-%   2019-01-04. First Edition by Zhenping
-%Contact:
-%   zhenping@tropos.de
+% ERA5FILETIMESTAMP extract the timestamp from the gdas1File name.
+% Example:
+%    [datetime] = ERA5FileTimestamp(gdas1File)
+% Inputs:
+%    gdas1File: char
+%        gdas1 data file.
+% Outputs:
+%    datetime: float
+%        datenum.
+% History:
+%    2019-01-04. First Edition by Zhenping
+% Contact:
+%    zhenping@tropos.de
 
 data = regexp(gdas1File, ...
              'ERA5_(?<location>.*)_(?<date>\d{8})\w*', 'names');

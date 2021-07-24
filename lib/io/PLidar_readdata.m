@@ -1,55 +1,54 @@
-function data = PLidar_readdata(folder, tRange, hRange, dVersion)
-%PLIDAR_READDATA read PLidar data in the given temporal and spatial range.
-%
-%Examples:
-%   data = PLidar_readdata('/data/PLidar', ...
-%                  [datenum(2011, 1, 1), datenum(2011, 1, 2, 12, 0, 0)], ...
-%                  [300, 5000]);
-%Inputs:
-%   folder: char
-%       base directory of the PLidar data.
-%   tRange: 2-element array
-%       start and stop time of the data that you want to load.
-%   hRange: 2-element array
-%       bottom and top height of the data that you want to load. [m]
-%   dVersion: integer
-%       data version (default: 2).
-%       1: glued by old algorithm with 30-m resolution
-%       2: glued by new algorithm with 3.75-m resolution (default)
-%Returns:
-%   data: struct
-%       time: (datenum) array
-%           measurement time of each data profile.
-%       height: array
-%           height above ground of each range bin. [m]
-%       altitude: array
-%           altitude of each range bin. [m]
-%       records: array
-%           accumulated shots for single profile.
-%       CH1_PC: matrix (height x time)
-%           photon count rate signal at channel 1 (parallel). [MHz]
-%       CH2_PC: matrix (height x time)
-%           photon count rate signal at channel 2 (vertical). [MHz]
-%       CH1_BG: array
-%           background signal for each profile at channel 1. [MHz]
-%       CH2_BG: array
-%           background signal for each profile at channel 2. [MHz]
-%       CH1_overflow: array
-%           overflow flag for each bin at channel 1, in which 1 stands for
-%           'overflowed'.
-%       CH2_overflow: array
-%           overflow flag for each bin at channel 2, in which 1 stands for
-%           'overflowed'.
-%History:
-%   2020-03-03 First version by Zhenping
+function data = PLidar_readdata(folder, tRange, hRange, varargin)
+% PLIDAR_READDATA read PLidar data in the given temporal and spatial range.
+% Examples:
+%    data = PLidar_readdata('/data/PLidar', ...
+%                   [datenum(2011, 1, 1), datenum(2011, 1, 2, 12, 0, 0)], ...
+%                   [300, 5000]);
+% Inputs:
+%    folder: char
+%        base directory of the PLidar data.
+%    tRange: 2-element array
+%        start and stop time of the data that you want to load.
+%    hRange: 2-element array
+%        bottom and top height of the data that you want to load. [m]
+% Keywords:
+%    dVersion: integer
+%        data version (default: 2).
+%        1: glued by old algorithm with 30-m resolution
+%        2: glued by new algorithm with 3.75-m resolution (default)
+%        3: CMA polarization lidar
+% Returns:
+%    data: struct
+%        time: (datenum) array
+%            measurement time of each data profile.
+%        height: array
+%            height above ground of each range bin. [m]
+%        altitude: array
+%            altitude of each range bin. [m]
+%        records: array
+%            accumulated shots for single profile.
+%        sigCH1: matrix (height x time)
+%            photon count rate signal at channel 1 (parallel). [MHz]
+%            or analog data (parallel).
+%        sigCH2: matrix (height x time)
+%            photon count rate signal at channel 2 (vertical). [MHz]
+%            or analog data (vertical).
+%        BGCH1: array
+%            background signal for each profile at channel 1.
+%        BGCH2: array
+%            background signal for each profile at channel 2.
+% History:
+%    2020-03-03 First version by Zhenping
 
-if nargin < 3
-    error('No enough inputs.')
-end
+p = inputParser;
+p.KeepUnmatched = true;
 
-if ~ exist('dVersion', 'var')
-    dVersion = 2;
-end
+addRequired(p, 'folder', @ischar);
+addRequired(p, 'tRange', @isnumeric);
+addRequired(p, 'hRange', @isnumeric);
+addParameter(p, 'dVersion', 2, @isnumeric);
+
+parse(p, folder, tRange, hRange, varargin{:});
 
 mDateArr = floor(tRange(1)):floor(tRange(2));
 data = struct();
@@ -57,29 +56,25 @@ data.time = [];
 data.height = [];
 data.altitude = [];
 data.records = [];
-data.CH1_PC = [];
-data.CH2_PC = [];
-data.CH1_BG = [];
-data.CH2_BG = [];
-data.CH1_overflow = [];
-data.CH2_overflow = [];
+data.sigCH1 = [];
+data.sigCH2 = [];
+data.BGCH1 = [];
+data.BGCH2 = [];
 
 for iDate = 1:length(mDateArr)
     mDate = mDateArr(iDate);
 
-    subdata = PLidar_read_data(mDate, folder, dVersion, hRange, tRange);
+    subdata = PLidar_read_data(mDate, folder, p.Results.dVersion, hRange, tRange);
 
     if isfield(subdata, 'height')
         data.height = subdata.height;
         data.altitude = subdata.altitude;
         data.time = cat(2, data.time, subdata.time);
         data.records = cat(1, data.records, subdata.records);
-        data.CH1_PC = cat(2, data.CH1_PC, subdata.CH1_PC);
-        data.CH2_PC = cat(2, data.CH2_PC, subdata.CH2_PC);
-        data.CH1_BG = cat(2, data.CH1_BG, subdata.CH1_BG);
-        data.CH2_BG = cat(2, data.CH2_BG, subdata.CH2_BG);
-        data.CH1_overflow = cat(2, data.CH1_overflow, subdata.CH1_overflow);
-        data.CH2_overflow = cat(2, data.CH2_overflow, subdata.CH2_overflow);
+        data.sigCH1 = cat(2, data.sigCH1, subdata.sigCH1);
+        data.sigCH2 = cat(2, data.sigCH2, subdata.sigCH2);
+        data.BGCH1 = cat(2, data.BGCH1, subdata.BGCH1);
+        data.BGCH2 = cat(2, data.BGCH2, subdata.BGCH2);
     end
 end
 

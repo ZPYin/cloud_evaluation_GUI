@@ -1,31 +1,34 @@
-function [alt, temp, pres, relh, ERA5file] = read_ERA5(measTime, ERA5site, ...
-                                                         folder)
-%READ_ERA5 read the ERA5 file
-%Example:
-%   [alt, temp, pres, relh] = read_ERA5(measTime, ERA5site, folder)
-%Inputs:
-%   measTime: datenum
-%       measurement time. 
-%   ERA5site: char
-%       the location for ERA5 site.
-%Outputs:
-%   alt: array
-%       altitute for each range bin. [m]
-%   temp: array
-%       temperature for each range bin. If no valid data, NaN will be 
-%       filled. [C]
-%   pres: array
-%       pressure for each range bin. If no valid data, NaN will be filled. 
-%       [hPa]
-%   rh: array
-%       relative humidity for each range bin. If no valid data, NaN will be 
-%       filled. [%]
-%   ERA5file: char
-%       filename of ERA5 file. 
-%History:
-%   2020-10-26. First Edition by Zhenping
-%Contact:
-%   zp.yin@whu.edu.cn
+function [alt, temp, pres, relh, ERA5file, wind, wins] = read_ERA5(measTime, ERA5site, folder)
+% READ_ERA5 read the ERA5 file
+% Example:
+%    [alt, temp, pres, relh] = read_ERA5(measTime, ERA5site, folder)
+% Inputs:
+%    measTime: datenum
+%        measurement time. 
+%    ERA5site: char
+%        the location for ERA5 site.
+% Outputs:
+%    alt: array
+%        altitute for each range bin. [m]
+%    temp: array
+%        temperature for each range bin. If no valid data, NaN will be 
+%        filled. [C]
+%    pres: array
+%        pressure for each range bin. If no valid data, NaN will be filled. 
+%        [hPa]
+%    rh: array
+%        relative humidity for each range bin. If no valid data, NaN will be 
+%        filled. [% ]
+%    ERA5file: char
+%        filename of ERA5 file.
+%    wind: array
+%        wind direction. [degree]
+%    wins: array
+%        wind speed. [m/s]
+% History:
+%    2020-10-26. First Edition by Zhenping
+% Contact:
+%    zp.yin@whu.edu.cn
 
 [thisyear, thismonth, thisday, ~, ~, ~] = datevec(measTime);
 dirInfo = dir(fullfile(folder, ERA5site, sprintf('%04d', thisyear), ...
@@ -56,6 +59,8 @@ alt = [];
 temp = [];
 pres = [];
 relh = [];
+wind = [];
+wins = [];
 
 if isempty(ERA5file)
     return;
@@ -67,6 +72,8 @@ temp_raw = ncread(ERA5file, 't');   % temperature: K
 pres_raw = ncread(ERA5file, 'level');   % pressure: hPa
 relh_raw = ncread(ERA5file, 'r');   % relative humidity: %
 time_raw = ncread(ERA5file, 'time');
+u_wind_raw = ncread(ERA5file, 'u');   % eastward wind: m*s^-1
+v_wind_raw = ncread(ERA5file, 'v');   % northward wind: m*s^-1
 
 % conversion
 time = (double(time_raw) / 24 + datenum(1900, 1, 1, 0, 0, 0));
@@ -78,5 +85,9 @@ alt = reshape(geopot_raw(lonIndx, latIndx, :, tIndx) / g, 1, []);
 temp = reshape(temp_raw(lonIndx, latIndx, :, tIndx), 1, []) - 273.17;
 pres = reshape(double(pres_raw), 1, []);
 relh = reshape(relh_raw(lonIndx, latIndx, :, tIndx), 1, []);
+u_wind = reshape(u_wind_raw(lonIndx, latIndx, :, tIndx), 1, []);
+v_wind = reshape(v_wind_raw(lonIndx, latIndx, :, tIndx), 1, []);
+wins = sqrt(u_wind.^2 + v_wind.^2);
+wind = 180 + 180 / pi * atan2(u_wind, v_wind);
 
 end

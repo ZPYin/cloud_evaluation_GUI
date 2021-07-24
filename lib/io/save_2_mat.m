@@ -1,13 +1,13 @@
 function save_2_mat(handles, saveFile)
-%SAVE_2_MAT save cloud case data to MAT.
-%Inputs:
-%   handles: struct
-%   saveFile: char
-%       absolute path of the MAT file.
-%History:
-%   2020-07-06. First edition by Zhenping
-%Contact:
-%   zp.yin@whu.edu.cn
+% SAVE_2_MAT save cloud case data to MAT.
+% Inputs:
+%    handles: struct
+%    saveFile: char
+%        absolute path of the MAT file.
+% History:
+%    2020-07-06. First edition by Zhenping
+% Contact:
+%    zp.yin@whu.edu.cn
 
 %% extract handles information
 overviewInfo.lidarData = handles.lidarData;

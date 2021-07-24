@@ -1,27 +1,26 @@
-function temp2D = read_gridTemp_ERA5(mTime, altitude, ...
-                                    folder, ERA5site, deltaTime)
-%read_gridTemp_ERA5 read gridded ERA5 data
-%Example:
-%   temp2D = read_gridTemp_ERA5(mTime, altitude, folder, ERA5site, deltaTime)
-%Inputs:
-%   mTime: array
-%       measurement time. (UTC)
-%   altitude: array
-%       height above mean sea level. (m)
-%   folder: char
-%       ERA5 data folder.
-%   ERA5site: char
-%       ERA5 site (default: 'wuhan').
-%   deltaTime: numeric
-%       delta time for profile searching.
-%Outputs:
-%   temp: matrix (altitude * time)
-%       temperature for each range bin. If no valid data, NaN will be 
-%       filled. [C]
-%History:
-%   2020-10-26. First Edition by Zhenping
-%Contact:
-%   zp.yin@whu.edu.cn
+function temp2D = read_gridTemp_ERA5(mTime, altitude, folder, ERA5site, deltaTime)
+% READ_GRIDTEMP_ERA5 read gridded ERA5 data
+% Example:
+%    temp2D = read_gridTemp_ERA5(mTime, altitude, folder, ERA5site, deltaTime)
+% Inputs:
+%    mTime: array
+%        measurement time. (UTC)
+%    altitude: array
+%        height above mean sea level. (m)
+%    folder: char
+%        ERA5 data folder.
+%    ERA5site: char
+%        ERA5 site (default: 'wuhan').
+%    deltaTime: numeric
+%        delta time for profile searching.
+% Outputs:
+%    temp: matrix (altitude * time)
+%        temperature for each range bin. If no valid data, NaN will be 
+%        filled. [C]
+% History:
+%    2020-10-26. First Edition by Zhenping
+% Contact:
+%    zp.yin@whu.edu.cn
 
 if ~ exist('ERA5site', 'var')
     ERA5site = 'wuhan';
@@ -68,19 +67,19 @@ geopot = [];
 latIndx = 1;   % latitude index
 lonIndx = 1;   % longitude index
 for iFile = 1:length(ERA5FilesSorted)
-    
+
     % read ERA5 profile (MATLAB has incorporated scale transformation)
     geopot_raw = ncread(ERA5Files{iFile}, 'z');   % geopotential: m^2*s^-2
     temp_raw = ncread(ERA5Files{iFile}, 't');   % temperature: K
     pres_raw = ncread(ERA5Files{iFile}, 'level');   % pressure: hPa
     relh_raw = ncread(ERA5Files{iFile}, 'r');   % relative humidity: %
     time_raw = ncread(ERA5Files{iFile}, 'time');
-    
+
     % squeeze data array
     geopot_raw = squeeze(geopot_raw(lonIndx, latIndx, :, :));
     temp_raw = squeeze(temp_raw(lonIndx, latIndx, :, :));
     relh_raw = squeeze(relh_raw(lonIndx, latIndx, :, :));
-    
+
     % concatenate the array
     geopot = cat(2, geopot, geopot_raw);
     pres = cat(2, pres, repmat(double(pres_raw), 1, size(geopot_raw, 2)));

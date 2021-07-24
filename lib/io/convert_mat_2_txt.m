@@ -1,14 +1,14 @@
 function convert_mat_2_txt(matFile, txtFile)
-%CONVERT_MAT_2_TXT convert mat file to txt file.
-%Inputs:
-%   matFile: char
-%       absolute path of the MAT file.
-%   txtFile: char
-%       absolute path of the TXT file.
-%History:
-%   2020-07-06. First edition by Zhenping
-%Contact:
-%   zp.yin@whu.edu.cn
+% CONVERT_MAT_2_TXT convert mat file to txt file.
+% Inputs:
+%    matFile: char
+%        absolute path of the MAT file.
+%    txtFile: char
+%        absolute path of the TXT file.
+% History:
+%    2020-07-06. First edition by Zhenping
+% Contact:
+%    zp.yin@whu.edu.cn
 
 if exist(matFile, 'file') ~= 2
     return;

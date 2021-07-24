@@ -1,32 +1,32 @@
 function [fh] = display_depol_profi(ax, height, VDR, PDR, varargin)
-%display_depol_profi display particle backscatter profile.
-%Example:
-%   [fh] = display_depol_profi(ax, height, VDR, PDR, varargin)
-%Inputs:
-%   ax: axes
-%       axes handle.
-%   height: array
-%       height above ground. (km)
-%   VDR: array
-%       volume depolarization ratio.
-%   PDR: array
-%       particle depolarization ratio.
-%Keywords:
-%   hRange: 2-element array
-%       spatial range. (km)
-%   DepolRange: 2-element array
-%       depolarization range.
-%   LBH: numeric
-%       layer base height. (km)
-%   LTH: numeric
-%       layer top height. (km)
-%Outputs:
-%   fh: figure
-%       figure handle.
-%History:
-%   2020-05-28. First Edition by Zhenping
-%Contact:
-%   zp.yin@whu.edu.cn
+% DISPLAY_DEPOL_PROFI display particle backscatter profile.
+% Example:
+%    [fh] = display_depol_profi(ax, height, VDR, PDR, varargin)
+% Inputs:
+%    ax: axes
+%        axes handle.
+%    height: array
+%        height above ground. (km)
+%    VDR: array
+%        volume depolarization ratio.
+%    PDR: array
+%        particle depolarization ratio.
+% Keywords:
+%    hRange: 2-element array
+%        spatial range. (km)
+%    DepolRange: 2-element array
+%        depolarization range.
+%    LBH: numeric
+%        layer base height. (km)
+%    LTH: numeric
+%        layer top height. (km)
+% Outputs:
+%    fh: figure
+%        figure handle.
+% History:
+%    2020-05-28. First Edition by Zhenping
+% Contact:
+%    zp.yin@whu.edu.cn
 
 p = inputParser;
 p.KeepUnmatched = true;
@@ -73,6 +73,6 @@ set(gca, 'XMinorTick', 'on', ...
     'YMinorTick', 'on', ...
     'YTick', linspace(p.Results.hRange(1), p.Results.hRange(end), 5), ...
     'YTickLabel', '', 'Box', 'on', 'LineWidth', 2, 'TickDir', 'in', ...
-    'TickLength', [0.02, 0.02]);
+    'TickLength', [0.02, 0.02], 'layer', 'top');
 
 end

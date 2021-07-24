@@ -1,34 +1,34 @@
 function [fh] = display_bsc_profi(ax, height, aerBsc, varargin)
-%display_bsc_profi display particle backscatter profile.
-%Example:
-%   [fh] = display_bsc_profi(ax, height, aerBsc, varargin)
-%Inputs:
-%   ax: axes
-%       axes handle.
-%   height: array
-%       height above ground. (km)
-%   aerBsc: array
-%       particle backscatter. (Mm-1sr-1)
-%Keywords:
-%   hRange: 2-element array
-%       spatial range. (km)
-%   aerBscRange: 2-element array
-%       particle backscatter range. (Mm-1sr-1)
-%   LBH: numeric
-%       layer base height. (km)
-%   LTH: numeric
-%       layer top height. (km)
-%   dustBsc: array
-%       dust backscatter. (Mm-1sr-1)
-%   nondustBsc: array
-%       non-dust backscatter. (Mm-1sr-1)
-%Outputs:
-%   fh: figure
-%       figure handle.
-%History:
-%   2020-05-28. First Edition by Zhenping
-%Contact:
-%   zp.yin@whu.edu.cn
+% DISPLAY_BSC_PROFI display particle backscatter profile.
+% Example:
+%    [fh] = display_bsc_profi(ax, height, aerBsc, varargin)
+% Inputs:
+%    ax: axes
+%        axes handle.
+%    height: array
+%        height above ground. (km)
+%    aerBsc: array
+%        particle backscatter. (Mm-1sr-1)
+% Keywords:
+%    hRange: 2-element array
+%        spatial range. (km)
+%    aerBscRange: 2-element array
+%        particle backscatter range. (Mm-1sr-1)
+%    LBH: numeric
+%        layer base height. (km)
+%    LTH: numeric
+%        layer top height. (km)
+%    dustBsc: array
+%        dust backscatter. (Mm-1sr-1)
+%    nondustBsc: array
+%        non-dust backscatter. (Mm-1sr-1)
+% Outputs:
+%    fh: figure
+%        figure handle.
+% History:
+%    2020-05-28. First Edition by Zhenping
+% Contact:
+%    zp.yin@whu.edu.cn
 
 p = inputParser;
 p.KeepUnmatched = true;
@@ -78,6 +78,6 @@ set(gca, 'XMinorTick', 'on', ...
     'YMinorTick', 'on', ...
     'YTick', linspace(p.Results.hRange(1), p.Results.hRange(end), 5), ...
     'YTickLabel', '', 'Box', 'on', 'LineWidth', 2, 'TickDir', 'in', ...
-    'TickLength', [0.02, 0.02]);
+    'TickLength', [0.02, 0.02], 'layer', 'top');
 
 end

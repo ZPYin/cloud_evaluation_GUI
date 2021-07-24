@@ -1,32 +1,32 @@
 function [fh] = display_mass_profi(ax, height, mass_nd, mass_d, varargin)
-%display_mass_profi display mass concentration profile.
-%Example:
-%   [fh] = display_mass_profi(ax, height, mass_nd, mass_d, varargin)
-%Inputs:
-%   ax: axes
-%       axes handle.
-%   height: array
-%       height above ground. (km)
-%   mass_nd: array
-%       non-dust mass conc. (ug*m-3)
-%   mass_d: array
-%       dust mass conc. (ug*m-3)
-%Keywords:
-%   hRange: 2-element array
-%       spatial range. (km)
-%   massRange: 2-element array
-%       range for mass concentration. (ug*m-3)
-%   LBH: numeric
-%       layer base height. (km)
-%   LTH: numeric
-%       layer top height. (km)
-%Outputs:
-%   fh: figure
-%       figure handle.
-%History:
-%   2020-05-28. First Edition by Zhenping
-%Contact:
-%   zp.yin@whu.edu.cn
+% DISPLAY_MASS_PROFI display mass concentration profile.
+% Example:
+%    [fh] = display_mass_profi(ax, height, mass_nd, mass_d, varargin)
+% Inputs:
+%    ax: axes
+%        axes handle.
+%    height: array
+%        height above ground. (km)
+%    mass_nd: array
+%        non-dust mass conc. (ug*m-3)
+%    mass_d: array
+%        dust mass conc. (ug*m-3)
+% Keywords:
+%    hRange: 2-element array
+%        spatial range. (km)
+%    massRange: 2-element array
+%        range for mass concentration. (ug*m-3)
+%    LBH: numeric
+%        layer base height. (km)
+%    LTH: numeric
+%        layer top height. (km)
+% Outputs:
+%    fh: figure
+%        figure handle.
+% History:
+%    2020-05-28. First Edition by Zhenping
+% Contact:
+%    zp.yin@whu.edu.cn
 
 p = inputParser;
 p.KeepUnmatched = true;
@@ -73,6 +73,6 @@ set(gca, 'XMinorTick', 'on', ...
     'YTick', linspace(p.Results.hRange(1), p.Results.hRange(end), 5), ...
     'YTickLabel', '', ...
     'Box', 'on', 'LineWidth', 2, 'TickDir', 'in', ...
-    'TickLength', [0.02, 0.02]);
+    'TickLength', [0.02, 0.02], 'layer', 'top');
 
 end

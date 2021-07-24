@@ -1,13 +1,13 @@
 function save_retrieval_2_h5(handles, h5Filepath)
-%SAVE_RETRIEVAL_2_H5 save retrieving results to HDF5 file.
-%Inputs:
-%   handles: struct
-%   saveFile: char
-%       absolute path of the MAT file.
-%History:
-%   2020-07-06. First edition by Zhenping
-%Contact:
-%   zp.yin@whu.edu.cn
+% SAVE_RETRIEVAL_2_H5 save retrieving results to HDF5 file.
+% Inputs:
+%    handles: struct
+%    saveFile: char
+%        absolute path of the MAT file.
+% History:
+%    2020-07-06. First edition by Zhenping
+% Contact:
+%    zp.yin@whu.edu.cn
 
 h5init(h5Filepath);
 

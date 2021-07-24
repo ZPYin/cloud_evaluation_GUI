@@ -567,7 +567,7 @@ if ~ exist(handles.settings.dataDir, 'dir')
 end
 
 % read lidar data
-lidarData = PLidar_readdata(handles.settings.dataDir, [datenum(handles.starttime_tb.String, 'yyyy-mm-dd HH:MM:SS'), datenum(handles.stoptime_tb.String, 'yyyy-mm-dd HH:MM:SS')], [str2double(handles.H_base_tb.String) * 1000, str2double(handles.H_top_tb.String) * 1000], handles.settings.data_version);
+lidarData = PLidar_readdata(handles.settings.dataDir, [datenum(handles.starttime_tb.String, 'yyyy-mm-dd HH:MM:SS'), datenum(handles.stoptime_tb.String, 'yyyy-mm-dd HH:MM:SS')], [str2double(handles.H_base_tb.String) * 1000, str2double(handles.H_top_tb.String) * 1000], 'dVersion', handles.settings.data_version);
 
 if isempty(lidarData.time)
     logPrint(handles.log_tb, sprintf('[%s] No lidar data available.', tNow()));
@@ -575,8 +575,8 @@ if isempty(lidarData.time)
 end
 
 % read meteorological data
-[Temp_Profi, Pres_Profi, RH_Profi] = read_meteordata(mean([datenum(handles.cloud_start_tb.String, 'yyyy-mm-dd HH:MM:SS'), datenum(handles.cloud_stop_tb.String, 'yyyy-mm-dd HH:MM:SS')]) - datenum(0, 1, 0, 8, 0, 0), lidarData.altitude, 'meteor_data', handles.meteor_data_pm.String{handles.meteor_data_pm.Value}, 'station', 'wuhan', 'GDAS1Folder', handles.settings.GDAS1Dir, 'RadiosondeFolder', handles.settings.soundingDir, 'ERA5Folder', handles.settings.ERA5Dir);
-Temp_2D = read_gridTemp(lidarData.time - datenum(0, 1, 0, 8, 0, 0), lidarData.altitude, 'meteor_data', handles.meteor_data_pm.String{handles.meteor_data_pm.Value}, 'station', 'wuhan', 'GDAS1Folder', handles.settings.GDAS1Dir, 'RadiosondeFolder', handles.settings.soundingDir, 'ERA5Folder', handles.settings.ERA5Dir);
+[Temp_Profi, Pres_Profi, RH_Profi] = read_meteordata(mean([datenum(handles.cloud_start_tb.String, 'yyyy-mm-dd HH:MM:SS'), datenum(handles.cloud_stop_tb.String, 'yyyy-mm-dd HH:MM:SS')]) - datenum(0, 1, 0, 8, 0, 0), lidarData.altitude, 'meteor_data', handles.meteor_data_pm.String{handles.meteor_data_pm.Value}, 'station', handles.settings.station, 'GDAS1Folder', handles.settings.GDAS1Dir, 'RadiosondeFolder', handles.settings.soundingDir, 'ERA5Folder', handles.settings.ERA5Dir);
+Temp_2D = read_gridTemp(lidarData.time - datenum(0, 1, 0, 8, 0, 0), lidarData.altitude, 'meteor_data', handles.meteor_data_pm.String{handles.meteor_data_pm.Value}, 'station', handles.settings.station, 'GDAS1Folder', handles.settings.GDAS1Dir, 'RadiosondeFolder', handles.settings.soundingDir, 'ERA5Folder', handles.settings.ERA5Dir);
 
 %% Rayleigh scattering
 [molBsc532, molExt532] = rayleigh_scattering(532, Pres_Profi, Temp_Profi + 273.14, 360, 80);
@@ -587,14 +587,14 @@ flagClH = (lidarData.height >= str2double(handles.cloud_base_tb.String) * 1000) 
 handles.lidarData = lidarData;
 handles.mTime = lidarData.time;
 handles.height = lidarData.height / 1e3;
-elSig = (lidarData.CH1_PC + str2double(handles.gainRatio_tb.String) .* lidarData.CH2_PC);
-elBG = (lidarData.CH1_BG + str2double(handles.gainRatio_tb.String) .* lidarData.CH2_BG);
+elSig = (lidarData.sigCH1 + str2double(handles.gainRatio_tb.String) .* lidarData.sigCH2);
+elBG = (lidarData.BGCH1 + str2double(handles.gainRatio_tb.String) .* lidarData.BGCH2);
 flagCloud = (lidarData.time >= datenum(handles.cloud_start_tb.String, 'yyyy-mm-dd HH:MM:SS')) & (lidarData.time <= datenum(handles.cloud_stop_tb.String, 'yyyy-mm-dd HH:MM:SS'));
 handles.RCS = elSig .* repmat(lidarData.height', 1, length(lidarData.time)).^2;
-handles.VDR = str2double(handles.gainRatio_tb.String) .* lidarData.CH2_PC ./ lidarData.CH1_PC - str2double(handles.offset_tb.String);
+handles.VDR = str2double(handles.gainRatio_tb.String) .* lidarData.sigCH2 ./ lidarData.sigCH1 - str2double(handles.offset_tb.String);
 handles.Temp = Temp_2D;
 handles.RCS_Profi = transpose(nanmean(elSig(:, flagCloud), 2)) .* lidarData.height .^ 2;
-handles.VDR_Profi = transpose(nanmean(lidarData.CH2_PC(:, flagCloud), 2) ./ nanmean(lidarData.CH1_PC(:, flagCloud), 2)) .* str2double(handles.gainRatio_tb.String) - str2double(handles.offset_tb.String);
+handles.VDR_Profi = transpose(nanmean(lidarData.sigCH2(:, flagCloud), 2) ./ nanmean(lidarData.sigCH1(:, flagCloud), 2)) .* str2double(handles.gainRatio_tb.String) - str2double(handles.offset_tb.String);
 handles.mol_RCS_Profi = molRCS .* (nanmean(handles.RCS_Profi(flagClH)) ./ nanmean(molRCS(flagClH)));
 handles.Temp_Profi = Temp_Profi;
 handles.CTT = Temp_Profi(find(lidarData.height >= str2double(handles.cloud_top_tb.String) * 1000, 1));
@@ -901,7 +901,7 @@ function ret_plot_btn_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % read lidar data
-lidarData = PLidar_readdata(handles.settings.dataDir, [datenum(handles.ret_starttime_tb.String, 'yyyy-mm-dd HH:MM:SS'), datenum(handles.ret_stoptime_tb.String, 'yyyy-mm-dd HH:MM:SS')], [str2double(handles.ret_H_bottom_tb.String) * 1000, str2double(handles.ret_H_top_tb.String) * 1000], handles.settings.data_version);
+lidarData = PLidar_readdata(handles.settings.dataDir, [datenum(handles.ret_starttime_tb.String, 'yyyy-mm-dd HH:MM:SS'), datenum(handles.ret_stoptime_tb.String, 'yyyy-mm-dd HH:MM:SS')], [str2double(handles.ret_H_bottom_tb.String) * 1000, str2double(handles.ret_H_top_tb.String) * 1000], 'dVersion', handles.settings.data_version);
 
 if isempty(lidarData.time)
     logPrint(handles.log_tb, sprintf('[%s] No lidar data available.', tNow()));
@@ -909,7 +909,7 @@ if isempty(lidarData.time)
 end
 
 % read meteorological data
-[ret_Temp_Profi, ret_Pres_Profi, ~] = read_meteordata(mean([datenum(handles.ret_starttime_tb.String, 'yyyy-mm-dd HH:MM:SS'), datenum(handles.ret_stoptime_tb.String, 'yyyy-mm-dd HH:MM:SS')]) - datenum(0, 1, 0, 8, 0, 0), lidarData.altitude, 'meteor_data', handles.meteor_data_pm.String{handles.meteor_data_pm.Value}, 'station', 'wuhan', 'GDAS1Folder', handles.settings.GDAS1Dir, 'RadiosondeFolder', handles.settings.soundingDir, 'ERA5Folder', handles.settings.ERA5Dir);
+[ret_Temp_Profi, ret_Pres_Profi, ~] = read_meteordata(mean([datenum(handles.ret_starttime_tb.String, 'yyyy-mm-dd HH:MM:SS'), datenum(handles.ret_stoptime_tb.String, 'yyyy-mm-dd HH:MM:SS')]) - datenum(0, 1, 0, 8, 0, 0), lidarData.altitude, 'meteor_data', handles.meteor_data_pm.String{handles.meteor_data_pm.Value}, 'station', handles.settings.station, 'GDAS1Folder', handles.settings.GDAS1Dir, 'RadiosondeFolder', handles.settings.soundingDir, 'ERA5Folder', handles.settings.ERA5Dir);
 
 %% Rayleigh scattering
 [molBsc532, molExt532] = rayleigh_scattering(532, ret_Pres_Profi, ret_Temp_Profi + 273.14, 360, 80);
@@ -921,21 +921,18 @@ if isempty(lidarData.height)
 end
 
 %% aerosol retrievals
-elSig = (lidarData.CH1_PC + str2double(handles.gainRatio_tb.String) .* lidarData.CH2_PC);
-elBG = (lidarData.CH1_BG + str2double(handles.gainRatio_tb.String) .* lidarData.CH2_BG);
+elSig = (lidarData.sigCH1 + str2double(handles.gainRatio_tb.String) .* lidarData.sigCH2);
+elBG = (lidarData.BGCH1 + str2double(handles.gainRatio_tb.String) .* lidarData.BGCH2);
 sm_win_bins = floor(str2double(handles.smoothwin_tb.String) ./ (lidarData.height(2) - lidarData.height(1)));
 if sm_win_bins <= 0
     logPrint(handles.log_tb, sprintf('[%s] not enough data bins.', tNow));
 end
-records = transpose(lidarData.records);
-records(records <= 1e-3) = NaN;
-PCR2PC = 1000 ./ nanmean(records) .* 200;
-CH1_PC = transpose(nansum(lidarData.CH1_PC, 2)) .* PCR2PC;
-CH2_PC = transpose(nansum(lidarData.CH2_PC, 2)) .* PCR2PC;
-CH1_BG = nansum(lidarData.CH1_BG) .* PCR2PC;
-CH2_BG = nansum(lidarData.CH2_BG) .* PCR2PC;
-elSigPC = transpose(nansum(elSig, 2)) .* PCR2PC;
-elBGPC = nansum(elBG) .* PCR2PC;
+sigCH1 = transpose(nansum(lidarData.sigCH1, 2));
+sigCH2 = transpose(nansum(lidarData.sigCH2, 2));
+BGCH1 = nansum(lidarData.BGCH1);
+BGCH2 = nansum(lidarData.BGCH2);
+elSigSum = transpose(nansum(elSig, 2));
+elBG = nansum(elBG);
 ret_RCS_Profi = transpose(smooth(transpose(nanmean(elSig, 2)) .* lidarData.height .^ 2, sm_win_bins));
 
 if str2double(handles.ref_H_top_tb.String) >= str2double(handles.ret_H_top_tb.String)
@@ -945,11 +942,11 @@ if str2double(handles.ref_H_top_tb.String) >= str2double(handles.ret_H_top_tb.St
 end
 
 % backscatter
-[ret_bsc_Profi, ret_bsc_std_Profi] = PLidar_Fernald(lidarData.height, elSigPC, elBGPC, str2double(handles.lr_tb.String), [str2double(handles.ref_H_bottom_tb.String), str2double(handles.ref_H_top_tb.String)] .* 1000, str2double(handles.ref_value_tb.String) * 1e-6, molBsc532, sm_win_bins);
+[ret_bsc_Profi, ret_bsc_std_Profi] = PLidar_Fernald(lidarData.height, elSigSum, elBG, str2double(handles.lr_tb.String), [str2double(handles.ref_H_bottom_tb.String), str2double(handles.ref_H_top_tb.String)] .* 1000, str2double(handles.ref_value_tb.String) * 1e-6, molBsc532, 'window_size', sm_win_bins, 'detectMode', handles.settings.detect_mode);
 
 % depol
-ret_VDR_Profi = transpose(smooth(CH2_PC, sm_win_bins) ./ smooth(CH1_PC, sm_win_bins)) .* str2double(handles.gainRatio_tb.String) - str2double(handles.offset_tb.String);
-ret_VDR_std_Profi = ret_VDR_Profi .* sqrt( 1 ./ PLidar_SNR(CH1_PC, CH1_BG).^2 + 1 ./ PLidar_SNR(CH2_PC, CH2_BG).^2) ./ sqrt(sm_win_bins);
+ret_VDR_Profi = transpose(smooth(sigCH2, sm_win_bins) ./ smooth(sigCH1, sm_win_bins)) .* str2double(handles.gainRatio_tb.String) - str2double(handles.offset_tb.String);
+ret_VDR_std_Profi = ret_VDR_Profi .* sqrt( 1 ./ PLidar_SNR(sigCH1, BGCH1, 'detectMode', handles.settings.detect_mode).^2 + 1 ./ PLidar_SNR(sigCH2, BGCH2, 'detectMode', handles.settings.detect_mode).^2) ./ sqrt(sm_win_bins);
 [ret_PDR_Profi, ret_PDR_std_Profi] = PLidar_parDepol(ret_VDR_Profi, ret_VDR_std_Profi, ret_bsc_Profi, ret_bsc_Profi * 0.1, molBsc532, str2double(handles.mol_depol_tb.String), 0.2 * str2double(handles.mol_depol_tb.String));
 
 % dust and nondust
@@ -1015,8 +1012,8 @@ massNonDustTot = nansum(handles.ret_mass_nd_Profi(flagLayer) .* (lidarData.heigh
 massNonDustTotStd = sqrt(nansum((handles.ret_mass_nd_std_Profi(flagLayer) .* (lidarData.height(2) - lidarData.height(1))).^2)) * 1e9;
 
 flagRefH = (lidarData.height >= str2double(handles.ref_H_bottom_tb.String) * 1000) & (lidarData.height <= str2double(handles.ref_H_top_tb.String) * 1000);
-molDepol_meas = str2double(handles.gainRatio_tb.String) .* nansum(CH2_PC(flagRefH)) ./ nansum(CH1_PC(flagRefH));
-molDepol_std_meas =  molDepol_meas .* sqrt( 1 ./ PLidar_SNR(nansum(CH1_PC(flagRefH)), sum(flagRefH) * CH1_BG).^2 + 1 ./ PLidar_SNR(nansum(CH2_PC(flagRefH)), sum(flagRefH) * CH2_BG).^2);
+molDepol_meas = str2double(handles.gainRatio_tb.String) .* nansum(sigCH2(flagRefH)) ./ nansum(sigCH1(flagRefH));
+molDepol_std_meas =  molDepol_meas .* sqrt( 1 ./ PLidar_SNR(nansum(sigCH1(flagRefH)), sum(flagRefH) * BGCH1, 'detectMode', handles.settings.detect_mode).^2 + 1 ./ PLidar_SNR(nansum(sigCH2(flagRefH)), sum(flagRefH) * BGCH2, 'detectMode', handles.settings.detect_mode).^2);
 
 logPrint(handles.log_tb, sprintf('Estimated mol depol: %6.4f+-%6.4f', molDepol_meas, molDepol_std_meas));
 logPrint(handles.log_tb, sprintf('Layer dust conc.    : %6.1f+-%6.1f ug*m-2', massDustTot, massDustTotStd));
@@ -1992,7 +1989,7 @@ drawnow;  % Cursor won't change right away unless you do this.
 
 % draw signal profile
 profiTime = linePos(1);
-[Temp_Profi, Pres_Profi, RH_Profi] = read_meteordata(profiTime - datenum(0, 1, 0, 8, 0, 0), handles.lidarData.altitude, 'meteor_data', handles.meteor_data_pm.String{handles.meteor_data_pm.Value}, 'station', 'wuhan', 'GDAS1Folder', handles.settings.GDAS1Dir, 'RadiosondeFolder', handles.settings.soundingDir, 'ERA5Folder', handles.settings.ERA5Dir);
+[Temp_Profi, Pres_Profi, RH_Profi] = read_meteordata(profiTime - datenum(0, 1, 0, 8, 0, 0), handles.lidarData.altitude, 'meteor_data', handles.meteor_data_pm.String{handles.meteor_data_pm.Value}, 'station', handles.settings.station, 'GDAS1Folder', handles.settings.GDAS1Dir, 'RadiosondeFolder', handles.settings.soundingDir, 'ERA5Folder', handles.settings.ERA5Dir);
 
 [minLapse, tIndx] = min(abs(handles.lidarData.time - profiTime));
 if minLapse < datenum(0, 1, 0, 0, 1, 0)
@@ -2007,14 +2004,14 @@ else
     return
 end
 
-CH1_Sig_Profi = transpose(handles.lidarData.CH1_PC(:, profiIndx));
-CH1_BG_Profi = handles.lidarData.CH1_BG(profiIndx) * ones(1, length(handles.lidarData.height));
-CH2_Sig_Profi = transpose(handles.lidarData.CH2_PC(:, profiIndx));
-CH2_BG_Profi = handles.lidarData.CH2_BG(profiIndx) * ones(1, length(handles.lidarData.height));
+CH1_Sig_Profi = transpose(handles.lidarData.sigCH1(:, profiIndx));
+CH1_BG_Profi = handles.BGCH1(profiIndx) * ones(1, length(handles.lidarData.height));
+CH2_Sig_Profi = transpose(handles.lidarData.sigCH2(:, profiIndx));
+BGCH2_Profi = handles.lidarData.BGCH2(profiIndx) * ones(1, length(handles.lidarData.height));
 elSig_Profi = (CH1_Sig_Profi + str2double(handles.gainRatio_tb.String) .* CH2_Sig_Profi) .* handles.lidarData.height .^ 2;
 VDR_Profi = str2double(handles.gainRatio_tb.String) .* CH2_Sig_Profi ./ CH1_Sig_Profi - str2double(handles.offset_tb.String);
 
-display_sliceLine_profile(profiTime, handles.lidarData.height / 1e3, CH1_Sig_Profi, CH1_BG_Profi, CH2_Sig_Profi, CH2_BG_Profi, elSig_Profi, VDR_Profi, Temp_Profi, Pres_Profi, RH_Profi, 'RCSRange', [str2double(handles.RCS_bottom_tb.String), str2double(handles.RCS_top_tb.String)], 'RCS_Scale', handles.RCS_scale_pm.String{handles.RCS_scale_pm.Value}, 'VDR_Range', [str2double(handles.VDR_bottom_tb.String), str2double(handles.VDR_top_tb.String)], 'RH_Range', [0, 100], 'Temp_Range', [str2double(handles.Temp_bottom_tb.String), str2double(handles.Temp_top_tb.String)], 'hRange', [str2double(handles.H_base_tb.String), str2double(handles.H_top_tb.String)]);
+display_sliceLine_profile(profiTime, handles.lidarData.height / 1e3, CH1_Sig_Profi, CH1_BG_Profi, CH2_Sig_Profi, BGCH2_Profi, elSig_Profi, VDR_Profi, Temp_Profi, Pres_Profi, RH_Profi, 'RCSRange', [str2double(handles.RCS_bottom_tb.String), str2double(handles.RCS_top_tb.String)], 'RCS_Scale', handles.RCS_scale_pm.String{handles.RCS_scale_pm.Value}, 'VDR_Range', [str2double(handles.VDR_bottom_tb.String), str2double(handles.VDR_top_tb.String)], 'RH_Range', [0, 100], 'Temp_Range', [str2double(handles.Temp_bottom_tb.String), str2double(handles.Temp_top_tb.String)], 'hRange', [str2double(handles.H_base_tb.String), str2double(handles.H_top_tb.String)]);
 
 handles.sliceTool.State = 'off';
 

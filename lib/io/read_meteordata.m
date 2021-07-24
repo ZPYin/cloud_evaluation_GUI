@@ -1,47 +1,47 @@
 function [temp, pres, relh, meteor_time] = read_meteordata(measTime, altitude, varargin)
-%read_meteordata Read the meteorological data according to the input 
-%meteorological data type.
-%Example:
-%   % Usecase 1: read GDAS1 data
-%   [temp, pres, relh] = read_meteordata(measTime, altitude, 'meteor_data', 'GDAS1', 'station', 'wuhan', 'GDAS1Folder', '/GDAS1');
-%   % Usecase 2: read Radiosonde data
-%   [temp, pres, relh] = read_meteordata(measTime, altitude, 'meteor_data', 'Radiosonde', 'RadiosondeFolder', '/Radiosonde', 'station', 'wuhan');
-%   % Usecase 3: read ERA-5 data.
-%   [temp, pres, relh] = read_meteordata(measTime, altitude, 'meteor_data', 'ERA-5', 'ERA5Folder', '/ERA-5', 'station', 'wuhan');
-%Inputs:
-%   measTime: datenum
-%       the measurement time. (UTC)
-%   altitude: array
-%       height above the mean sea level. [m]
-%Keywords:
-%   meteor_data: char
-%       meteorological data source. 
-%       'GDAS1' (default), 'Radiosonde', or 'ERA-5'
-%   station: char
-%       station label. (default: 'wuhan')
-%   GDAS1Folder: char
-%       GDAS1 data folder.
-%   RadiosondeFolder: char
-%       Radiosonde data folder.
-%   RadiosondeType: integer
-%       file type of the radiosonde file.
-%       - 1: radiosonde file for MOSAiC
-%       - 2: radiosonde file for MUA (default)
-%   ERA5Folder: char
-%       ERA-5 data folder.
-%Outputs:
-%   temp: array
-%       temperature for each range bin. [??C]
-%   pres: array
-%       pressure for each range bin. [hPa]
-%   relh: array
-%       relative humidity for each range bin. [%]
-%   meteor_time: numeric
-%       timestamp for meteorological data. (datenum)
-%History:
-%   2020-05-28. First Edition by Zhenping
-%Contact:
-%   zhenping@tropos.de
+% READ_METEORDATA Read the meteorological data according to the input 
+% meteorological data type.
+% Example:
+%    %  Usecase 1: read GDAS1 data
+%    [temp, pres, relh] = read_meteordata(measTime, altitude, 'meteor_data', 'GDAS1', 'station', 'wuhan', 'GDAS1Folder', '/GDAS1');
+%    %  Usecase 2: read Radiosonde data
+%    [temp, pres, relh] = read_meteordata(measTime, altitude, 'meteor_data', 'Radiosonde', 'RadiosondeFolder', '/Radiosonde', 'station', 'wuhan');
+%    %  Usecase 3: read ERA-5 data.
+%    [temp, pres, relh] = read_meteordata(measTime, altitude, 'meteor_data', 'ERA-5', 'ERA5Folder', '/ERA-5', 'station', 'wuhan');
+% Inputs:
+%    measTime: datenum
+%        the measurement time. (UTC)
+%    altitude: array
+%        height above the mean sea level. [m]
+% Keywords:
+%    meteor_data: char
+%        meteorological data source. 
+%        'GDAS1' (default), 'Radiosonde', or 'ERA-5'
+%    station: char
+%        station label. (default: 'wuhan')
+%    GDAS1Folder: char
+%        GDAS1 data folder.
+%    RadiosondeFolder: char
+%        Radiosonde data folder.
+%    RadiosondeType: integer
+%        file type of the radiosonde file.
+%        - 1: radiosonde file for MOSAiC
+%        - 2: radiosonde file for MUA (default)
+%    ERA5Folder: char
+%        ERA-5 data folder.
+% Outputs:
+%    temp: array
+%        temperature for each range bin. [??C]
+%    pres: array
+%        pressure for each range bin. [hPa]
+%    relh: array
+%        relative humidity for each range bin. [%]
+%    meteor_time: numeric
+%        timestamp for meteorological data. (datenum)
+% History:
+%    2020-05-28. First Edition by Zhenping
+% Contact:
+%    zhenping@tropos.de
 
 p = inputParser;
 p.KeepUnmatched = true;
@@ -60,7 +60,7 @@ parse(p, measTime, altitude, varargin{:});
 temp = NaN(size(altitude));
 pres = NaN(size(altitude));
 relh = NaN(size(altitude));
-meteor_time = NaN(size(altitude));
+meteor_time = NaN(1);
 
 switch lower(p.Results.meteor_data)
 
@@ -84,7 +84,7 @@ case 'radiosonde'
 
     % Radiosonde profile
     sondeFile = radiosonde_search(fullfile(p.Results.RadiosondeFolder, p.Results.station), measTime, p.Results.RadiosondeType);
-    [rs_alt, rs_temp, rs_pres, rs_relh, meteor_time] = ...
+    [rs_alt, rs_temp, rs_pres, rs_relh, rs_time] = ...
         read_radiosonde(sondeFile, p.Results.RadiosondeType);
 
     if isempty(rs_alt) || (~ (sum(~ isnan(rs_temp)) >= 2))
@@ -104,6 +104,7 @@ case 'radiosonde'
     rs_pres = rs_pres(iUniq);
     rs_relh = rs_relh(iUniq);
 
+    meteor_time = rs_time;
     temp = interp1(rs_alt, rs_temp, altitude);
     pres = interp1(rs_alt, rs_pres, altitude);
     relh = interp1(rs_alt, rs_relh, altitude);
