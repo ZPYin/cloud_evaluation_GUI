@@ -1,54 +1,54 @@
 function [fh] = display_RCS_colorplot(ax, mTime, height, RCS, varargin)
-%display_RCS_colorplot display range corrected signal colorplot.
-%Example:
-%   [fh] = display_RCS_colorplot(ax, mTime, height, RCS, varargin)
-%Inputs:
-%   ax: axes
-%       axes handle.
-%   mTime: array
-%       measurement time.
-%   height: array
-%       height above ground. (km)
-%   RCS: matrix (height * time)
-%       range corrected signal.
-%Keywords:
-%   scale: char
-%       'linear' or 'log'
-%   tRange: 2-element array
-%       temporal range.
-%   hRange: 2-element array
-%       spatial range. (km)
-%   cRange: 2-element array
-%       color range for range corrected signal.
-%   Temp: matrix (height * time)
-%       temperature data. (celsius)
-%   CBH: numeric
-%       cloud base height. (km)
-%   CTH: numeric
-%       cloud top height. (km)
-%   CTT: numeric
-%       cloud top temperature. (celsius)
-%   cloud_starttime: numeric
-%       start time of the cloud contaminated profile.
-%   cloud_stoptime: numeric
-%       stop time of the cloud contaminated profile.
-%   ret_starttime: numeric
-%       start time of the averaged region.
-%   ret_stoptime: numeric
-%       stop time of the averaged region.
-%   ret_bottom: numeric
-%       bottom of the averaged region. (km)
-%   ret_top: numeric
-%       top of the averaged region. (km)
-%   cmap: char
-%       colormap.
-%Outputs:
-%   fh: figure
-%       figure handle.
-%History:
-%   2020-05-28. First Edition by Zhenping
-%Contact:
-%   zp.yin@whu.edu.cn
+% DISPLAY_RCS_COLORPLOT display range corrected signal colorplot.
+% Example:
+%    [fh] = display_RCS_colorplot(ax, mTime, height, RCS, varargin)
+% Inputs:
+%    ax: axes
+%        axes handle.
+%    mTime: array
+%        measurement time.
+%    height: array
+%        height above ground. (km)
+%    RCS: matrix (height * time)
+%        range corrected signal.
+% Keywords:
+%    scale: char
+%        'linear' or 'log'
+%    tRange: 2-element array
+%        temporal range.
+%    hRange: 2-element array
+%        spatial range. (km)
+%    cRange: 2-element array
+%        color range for range corrected signal.
+%    Temp: matrix (height * time)
+%        temperature data. (celsius)
+%    CBH: numeric
+%        cloud base height. (km)
+%    CTH: numeric
+%        cloud top height. (km)
+%    CTT: numeric
+%        cloud top temperature. (celsius)
+%    cloud_starttime: numeric
+%        start time of the cloud contaminated profile.
+%    cloud_stoptime: numeric
+%        stop time of the cloud contaminated profile.
+%    ret_starttime: numeric
+%        start time of the averaged region.
+%    ret_stoptime: numeric
+%        stop time of the averaged region.
+%    ret_bottom: numeric
+%        bottom of the averaged region. (km)
+%    ret_top: numeric
+%        top of the averaged region. (km)
+%    cmap: char
+%        colormap.
+% Outputs:
+%    fh: figure
+%        figure handle.
+% History:
+%    2020-05-28. First Edition by Zhenping
+% Contact:
+%    zp.yin@whu.edu.cn
 
 p = inputParser;
 p.KeepUnmatched = true;
@@ -131,7 +131,7 @@ set(gca, 'XMinorTick', 'on', ...
     'YMinorTick', 'on', ...
     'YTick', linspace(p.Results.hRange(1), p.Results.hRange(end), 5), ...
     'Box', 'on', 'LineWidth', 2, 'TickDir', 'out', ...
-    'TickLength', [0.015, 0.015]);
+    'TickLength', [0.015, 0.015], 'layer', 'top');
 ax.XAxis.MinorTickValues = linspace(p.Results.tRange(1), p.Results.tRange(end), 25);
 
 datetick(gca, 'x', 'HH:MM', 'KeepTicks', 'KeepLimits');

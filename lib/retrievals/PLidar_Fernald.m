@@ -1,55 +1,65 @@
-function [aerBsc, aerBscStd, aerBR, aerBRStd] = PLidar_Fernald(alt, signal, ...
-                                            bg, LR_aer, ...
-                                            refAlt, refBeta, molBSC, window_size)
-%PLidar_Fernald retrieve the aerosol backscattering coefficient with Fernald 
-%method. 
-%Example:
-%   [aerBsc, aerBscStd, aerBR, aerBRStd] = PLidar_Fernald(alt, signal, bg, ...
-%                       LR_aer, refAlt, refBeta, molBSC, window_size)
-%Inputs:
-%   alt: array
-%       height. [m]
-%   signal: array
-%       elastic signal without background. [Photon Count]
-%   bg: array
-%       background. [Photon Count]
-%   LR_aer: float or array
-%       aerosol lidar ratio. [Sr]
-%   refAlt: float or 2-element array
-%       reference altitude or region. [m]
-%   refBeta: float
-%       aerosol backscatter coefficient at the reference region. 
-%       [m^{-1}Sr^{-1}]       
-%   molBSC: array
-%       molecular backscattering coefficient. Unit: m^{-1}*Sr^{-1}
-%   window_size: int32
-%       Bins of the smoothing window for the signal. [default, 40 bins]
-%Returns:
-%   aerBsc: array
-%       aerosol backscatter coefficient. [m^{-1}*Sr^{-1}]
-%   aerBscStd: array
-%       statistical uncertainty of aerosol backscatter. [m^{-1}*Sr^{-1}]
-%   aerBR: array
-%       aerosol backscatter ratio.l backscatter ratio.
-%   aerBRStd: array
-%       statistical uncertainty of aerosol backscatter ratio.
-%References:
-%   1. Fernald, Frederick G. "Analysis of Atmospheric Lidar Observations $
-%     - Some Comments." Applied optics 23, no. 5 (1984): 652-653.
-%   2. Prof. Yi's PPT: A brief introduction to atmospheric lidars
-%History:
-%   2018-01-04. First Edition by ZP.Yin
-%   2020-04-07. Add uncertainty analysis.
-%Contact:
-%   zhenping@tropos.de
+function [aerBsc, aerBscStd, aerBR, aerBRStd] = PLidar_Fernald(alt, signal, bg, LR_aer, refAlt, refBeta, molBSC, varargin)
+% PLIDAR_FERNALD retrieve the aerosol backscattering coefficient with Fernald 
+% method. 
+% Example:
+%    [aerBsc, aerBscStd, aerBR, aerBRStd] = PLidar_Fernald(alt, signal, bg, ...
+%                        LR_aer, refAlt, refBeta, molBSC, window_size)
+% Inputs:
+%    alt: array
+%        height. [m]
+%    signal: array
+%        elastic signal without background. [Photon Count]
+%    bg: array
+%        background. [Photon Count]
+%    LR_aer: float or array
+%        aerosol lidar ratio. [Sr]
+%    refAlt: float or 2-element array
+%        reference altitude or region. [m]
+%    refBeta: float
+%        aerosol backscatter coefficient at the reference region. 
+%        [m^{-1}Sr^{-1}]       
+%    molBSC: array
+%        molecular backscattering coefficient. Unit: m^{-1}*Sr^{-1}
+% Keywords:
+%    window_size: int32
+%        Bins of the smoothing window for the signal. [default, 40 bins]
+%    detectMode: char
+%        detection mode.
+%        - pc: photon counting mode
+%        - ad: analogue-digiter convertor
+% Returns:
+%    aerBsc: array
+%        aerosol backscatter coefficient. [m^{-1}*Sr^{-1}]
+%    aerBscStd: array
+%        statistical uncertainty of aerosol backscatter. [m^{-1}*Sr^{-1}]
+%    aerBR: array
+%        aerosol backscatter ratio.l backscatter ratio.
+%    aerBRStd: array
+%        statistical uncertainty of aerosol backscatter ratio.
+% References:
+%    1. Fernald, Frederick G. "Analysis of Atmospheric Lidar Observations $
+%      - Some Comments." Applied optics 23, no. 5 (1984): 652-653.
+%    2. Prof. Yi's PPT: A brief introduction to atmospheric lidars
+% History:
+%    2018-01-04. First Edition by ZP.Yin
+%    2020-04-07. Add uncertainty analysis.
+% Contact:
+%    zhenping@tropos.de
 
-if nargin < 6
-    error('Not enough inputs.');
-end
+p = inputParser;
+p.KeepUnmatched = true;
 
-if ~ exist('window_size', 'var')
-    window_size = 40;
-end
+addRequired(p, 'alt', @isnumeric);
+addRequired(p, 'signal', @isnumeric);
+addRequired(p, 'bg', @isnumeric);
+addRequired(p, 'LR_aer', @isnumeric);
+addRequired(p, 'refAlt', @isnumeric);
+addRequired(p, 'refBeta', @isnumeric);
+addRequired(p, 'molBSC', @isnumeric);
+addParameter(p, 'window_size', 40, @isnumeric);
+addParameter(p, 'detectMode', 'PC', @ischar);
+
+parse(p, alt, signal, bg, LR_aer, refAlt, refBeta, molBSC, varargin{:});
 
 alt = reshape(alt, 1, []);
 signal = reshape(signal, 1, []);
@@ -59,7 +69,7 @@ LR_aer = reshape(LR_aer, 1, []);
 % calculate signal noise according to Poisson distribution
 totSig = signal + bg;
 totSig(totSig < 0) = 0;
-noise = sqrt(totSig);
+noise = sigStd(totSig, varargin{:});
 
 dAlt = alt(2) - alt(1);
 nAlt = length(alt);
@@ -93,7 +103,7 @@ RCS = reshape(signal, 1, numel(signal)) .* reshape(alt, 1, numel(alt)).^2;
 
 indRefMid = int32(mean(indRefAlt));
 % smooth the signal at the reference height region
-RCS = smooth(RCS, window_size, 'moving');
+RCS = smooth(RCS, p.Results.window_size, 'moving');
 RCS(indRefMid) = mean(RCS(indRefAlt(1):indRefAlt(2)));
 
 % intialize some parameters and set the value at the reference altitude.

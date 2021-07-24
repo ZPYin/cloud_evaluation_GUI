@@ -1,22 +1,22 @@
 function hdf5writedata(filename, location, data, dataAttr, deflate)
-%hdf5writedata Write data and data attributes to HDF5 file.
-%   Example:
-%       hdf5writedata(filename, location, data, dataAttr, deflate)
-%   Inputs:
-%       filename: char
-%           HDF5 filename. (with absolute path)
-%       location: char
-%           location of the dataset.
-%       data: array
-%           exported data.
-%       dataAttr: struct
-%           dataset attributes.
-%       deflate: integer
-%           compression level.
-%   History:
-%       2019-11-11. First Edition by Zhenping
-%   Contact:
-%       zp.yin@whu.edu.cn
+% HDF5WRITEDATA Write data and data attributes to HDF5 file.
+% Example:
+%    hdf5writedata(filename, location, data, dataAttr, deflate)
+% Inputs:
+%    filename: char
+%        HDF5 filename. (with absolute path)
+%    location: char
+%        location of the dataset.
+%    data: array
+%        exported data.
+%    dataAttr: struct
+%        dataset attributes.
+%    deflate: integer
+%        compression level.
+% History:
+%    2019-11-11. First Edition by Zhenping
+% Contact:
+%    zp.yin@whu.edu.cn
 
 if ~ exist('deflate', 'var')
     deflate = 6;
@@ -54,7 +54,7 @@ elseif isnumeric(data)
     end
     h5create(filename, location, data_size, 'Deflate', deflate, 'Chunksize', chunksize);
     h5write(filename, location, data);
-    
+
     keys = fieldnames(dataAttr);
     for iKey = 1:length(keys)
         attName = keys{iKey};

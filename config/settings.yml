@@ -4,7 +4,16 @@ dataDir: ''
 # version of lidar data
 # 1: glued by old algorithm with 30-m resolution
 # 2: glued by new algorithm with 3.75-m resolution (default)
+# 3: CMA data
 data_version: 1
+
+# detection mode
+# PC: photon counting
+# AD: analog detection
+detect_mode: 'PC'
+
+# measurement station
+station: ''
 
 # GDAS1 data folder
 GDAS1Dir: ''

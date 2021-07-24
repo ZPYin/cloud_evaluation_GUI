@@ -1,49 +1,49 @@
 function [dustInfo, nondustInfo] = poliphon_1step(parBsc, parBscStd, parDepol, parDepolStd, lrd)
-%poliphon_1step Separate dust and nondust with POLIPHON 1-step method.
-%Example:
-%   [dustInfo, nondustInfo] = poliphon_1step(parBsc, parBscStd, parDepol, parDepolStd)
-%Inputs:
-%   parBsc: matrix (height * time)
-%       particle backscatter coefficient. (m^-1sr^-1)
-%   parBscStd: matrix (height * time)
-%       uncertainty of particle backscatter coefficient. (m^-1sr^-1)
-%   parDepol: matrix (height * time)
-%       particle depolarization ratio.
-%   parDepolStd: matrix (height * time)
-%       uncertainty of particle depolarization ratio.
-%   lrd: float
-%       dust lidar ratio (default: 51). (sr)
-%Outputs:
-%   dustInfo: struct
-%       parBsc: matrix (height * time)
-%           particle backscatter coefficient. (m^-1sr^-1)
-%       parBscStd: matrix (height * time)
-%           uncertainty of particle backscatter coefficient. (m^-1sr^-1)
-%       parExt: matrix (height * time)
-%           particle extinction coefficient. (m^-1)
-%       parExtStd: matrix (height * time)
-%           uncertainty of particle extinction coefficient. (m^-1)
-%       massConc: matrix (height * time)
-%           particle mass. (kgm^-3)
-%       massConcStd: matrix (height * time)
-%           uncertainty of particle mass. (kgm^-3)
-%   nondustInfo: struct
-%       (as above)
-%References:
-%   1. Mamouri, R., and A. Ansmann (2014), Fine and coarse dust separation with
-%      polarization lidar, Atmospheric Measurement Techniques, 7(11), 3717-3735.
-%   2. Mamouri, R.-E., and A. Ansmann (2017), Potential of polarization/Raman
-%      lidar to separate fine dust, coarse dust, maritime, and anthropogenic
-%      aerosol profiles, Atmospheric Measurement Techniques, 10(9), 3403-3427.
-%   3. Ansmann, A., R. E. Mamouri, J. Hofer, H. Baars, D. Althausen, and
-%      S. F. Abdullaev (2019), Dust mass, cloud condensation nuclei, and
-%      ice-nucleating particle profiling with polarization lidar: updated
-%      POLIPHON conversion factors from global AERONET analysis, Atmos. Meas.
-%      Tech., 12(9), 4849-4865, doi:10.5194/amt-12-4849-2019.
-%History:
-%   2020-04-08. First Edition by Zhenping
-%Contact:
-%   zp.yin@whu.edu.cn
+% POLIPHON_1STEP Separate dust and nondust with POLIPHON 1-step method.
+% Example:
+%    [dustInfo, nondustInfo] = poliphon_1step(parBsc, parBscStd, parDepol, parDepolStd)
+% Inputs:
+%    parBsc: matrix (height * time)
+%        particle backscatter coefficient. (m^-1sr^-1)
+%    parBscStd: matrix (height * time)
+%        uncertainty of particle backscatter coefficient. (m^-1sr^-1)
+%    parDepol: matrix (height * time)
+%        particle depolarization ratio.
+%    parDepolStd: matrix (height * time)
+%        uncertainty of particle depolarization ratio.
+%    lrd: float
+%        dust lidar ratio (default: 51). (sr)
+% Outputs:
+%    dustInfo: struct
+%        parBsc: matrix (height * time)
+%            particle backscatter coefficient. (m^-1sr^-1)
+%        parBscStd: matrix (height * time)
+%            uncertainty of particle backscatter coefficient. (m^-1sr^-1)
+%        parExt: matrix (height * time)
+%            particle extinction coefficient. (m^-1)
+%        parExtStd: matrix (height * time)
+%            uncertainty of particle extinction coefficient. (m^-1)
+%        massConc: matrix (height * time)
+%            particle mass. (kgm^-3)
+%        massConcStd: matrix (height * time)
+%            uncertainty of particle mass. (kgm^-3)
+%    nondustInfo: struct
+%        (as above)
+% References:
+%    1. Mamouri, R., and A. Ansmann (2014), Fine and coarse dust separation with
+%       polarization lidar, Atmospheric Measurement Techniques, 7(11), 3717-3735.
+%    2. Mamouri, R.-E., and A. Ansmann (2017), Potential of polarization/Raman
+%       lidar to separate fine dust, coarse dust, maritime, and anthropogenic
+%       aerosol profiles, Atmospheric Measurement Techniques, 10(9), 3403-3427.
+%    3. Ansmann, A., R. E. Mamouri, J. Hofer, H. Baars, D. Althausen, and
+%       S. F. Abdullaev (2019), Dust mass, cloud condensation nuclei, and
+%       ice-nucleating particle profiling with polarization lidar: updated
+%       POLIPHON conversion factors from global AERONET analysis, Atmos. Meas.
+%       Tech., 12(9), 4849-4865, doi:10.5194/amt-12-4849-2019.
+% History:
+%    2020-04-08. First Edition by Zhenping
+% Contact:
+%    zp.yin@whu.edu.cn
 
 if ~ exist('lrd', 'var')
     lrd = 51;   % lidar ratio of dust (sr)

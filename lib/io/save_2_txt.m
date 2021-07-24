@@ -1,13 +1,13 @@
 function save_2_txt(handles, saveFile)
-%SAVE_2_TXT save configurations to ASCII file.
-%Inputs:
-%   handles: struct
-%   saveFile: char
-%       absolute path of the MAT file.
-%History:
-%   2020-07-06. First edition by Zhenping
-%Contact:
-%   zp.yin@whu.edu.cn
+% SAVE_2_TXT save configurations to ASCII file.
+% Inputs:
+%    handles: struct
+%    saveFile: char
+%        absolute path of the MAT file.
+% History:
+%    2020-07-06. First edition by Zhenping
+% Contact:
+%    zp.yin@whu.edu.cn
 
 fid = fopen(saveFile, 'w');
 

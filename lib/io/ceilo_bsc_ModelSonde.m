@@ -1,4 +1,4 @@
-function [ pressure, altitude, temperature, relh ] = ceilo_bsc_ModelSonde( filename )
+function [ pressure, altitude, temperature, relh ] = ceilo_bsc_ModelSonde(filename)
 %Reads pressure, altitude and temperature arrays from gdas model sounding
 %   
 %   This function reads pressure, altitude and temperature arrays from gdas

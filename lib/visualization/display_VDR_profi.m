@@ -1,34 +1,34 @@
 function [fh] = display_VDR_profi(ax, height, VDR, mol_VDR, varargin)
-%display_VDR_profi display volume depolarization ratio profile.
-%Example:
-%   [fh] = display_VDR_profi(ax, height, VDR, mol_VDR, varargin)
-%Inputs:
-%   ax: axes
-%       axes handle.
-%   height: array
-%       height above ground. (km)
-%   VDR: array
-%       volume depolarization ratio.
-%   mol_VDR: array
-%       molecular volume depolarization ratio
-%Keywords:
-%   hRange: 2-element array
-%       spatial range. (km)
-%   VDRRange: 2-element array
-%       range for volume depolarization ratio.
-%   CBH: numeric
-%       cloud base height. (km)
-%   CTH: numeric
-%       cloud top height. (km)
-%   CTT: numeric
-%       cloud top temperature. (celsius)
-%Outputs:
-%   fh: figure
-%       figure handle.
-%History:
-%   2020-05-28. First Edition by Zhenping
-%Contact:
-%   zp.yin@whu.edu.cn
+% DISPLAY_VDR_PROFI display volume depolarization ratio profile.
+% Example:
+%    [fh] = display_VDR_profi(ax, height, VDR, mol_VDR, varargin)
+% Inputs:
+%    ax: axes
+%        axes handle.
+%    height: array
+%        height above ground. (km)
+%    VDR: array
+%        volume depolarization ratio.
+%    mol_VDR: array
+%        molecular volume depolarization ratio
+% Keywords:
+%    hRange: 2-element array
+%        spatial range. (km)
+%    VDRRange: 2-element array
+%        range for volume depolarization ratio.
+%    CBH: numeric
+%        cloud base height. (km)
+%    CTH: numeric
+%        cloud top height. (km)
+%    CTT: numeric
+%        cloud top temperature. (celsius)
+% Outputs:
+%    fh: figure
+%        figure handle.
+% History:
+%    2020-05-28. First Edition by Zhenping
+% Contact:
+%    zp.yin@whu.edu.cn
 
 p = inputParser;
 p.KeepUnmatched = true;
@@ -78,6 +78,6 @@ set(gca, 'XMinorTick', 'on', ...
     'YMinorTick', 'on', ...
     'YTick', linspace(p.Results.hRange(1), p.Results.hRange(end), 5), ...
     'Box', 'on', 'LineWidth', 2, 'TickDir', 'in', ...
-    'TickLength', [0.02, 0.02]);
+    'TickLength', [0.02, 0.02], 'layer', 'top');
 
 end

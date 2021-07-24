@@ -1,16 +1,16 @@
 function [] = h5init(filename)
-%h5init Create an empty HDF5 file with specified mode.
-%   Example:
-%       [] = h5init(filename)
-%   Inputs:
-%       filename: char
-%           absolute filepath of the HDF5 file.
-%   Outputs:
-%       
-%   History:
-%       2019-12-18. First Edition by Zhenping
-%   Contact:
-%       zp.yin@whu.edu.cn
+%H5INIT Create an empty HDF5 file with specified mode.
+% Example:
+%    [] = h5init(filename)
+% Inputs:
+%    filename: char
+%        absolute filepath of the HDF5 file.
+% Outputs:
+%    
+% History:
+%    2019-12-18. First Edition by Zhenping
+% Contact:
+%    zp.yin@whu.edu.cn
 
 [~, ~, fileExt] = fileparts(filename);
 
