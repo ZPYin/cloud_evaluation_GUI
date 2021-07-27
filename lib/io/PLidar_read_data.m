@@ -147,7 +147,7 @@ case 2
 
 case 3
     % CMA polarization data
-    CMAData = loadLidarData(folder, '54511', tRange, 'hRange', hRange, 'channelIndex', 1:2);
+    CMAData = loadLidarData(folder, '54511', tRange, 'hRange', [0, 60000], 'channelIndex', 1:2);
 
     pRawSig = squeeze(CMAData.rawSig(1, :, :));
     pBg = mean(pRawSig((end - 500):end, :), 1);
@@ -157,16 +157,18 @@ case 3
     cBg = mean(cRawSig((end - 500):end, :), 1);
     cSig = cRawSig - repmat(cBg, size(cRawSig, 1), 1);
 
+    hInd = (CMAData.height >= hRange(1)) & (CMAData.height <= hRange(2));
+
     data.time = CMAData.mTime;
-    data.height = transpose(CMAData.height);
-    data.altitude = CMAData.altitude + transpose(CMAData.height);
+    data.height = transpose(CMAData.height(hInd));
+    data.altitude = CMAData.altitude + transpose(CMAData.height(hInd));
     data.records = ones(size(CMAData.mTime));
-    data.sigCH1 = pSig;
-    data.sigCH2 = cSig;
+    data.sigCH1 = pSig(hInd, :);
+    data.sigCH2 = cSig(hInd, :);
     data.BGCH1 = pBg;
     data.BGCH2 = cBg;
-    data.overflowCH1 = zeros(size(pSig));
-    data.overflowCH2 = zeros(size(cSig));
+    data.overflowCH1 = zeros(size(pSig(hInd, :)));
+    data.overflowCH2 = zeros(size(cSig(hInd, :)));
 
 otherwise
     error('Unknown dVersion %d', dVersion);

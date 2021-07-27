@@ -2005,7 +2005,7 @@ else
 end
 
 CH1_Sig_Profi = transpose(handles.lidarData.sigCH1(:, profiIndx));
-CH1_BG_Profi = handles.BGCH1(profiIndx) * ones(1, length(handles.lidarData.height));
+CH1_BG_Profi = handles.lidarData.BGCH1(profiIndx) * ones(1, length(handles.lidarData.height));
 CH2_Sig_Profi = transpose(handles.lidarData.sigCH2(:, profiIndx));
 BGCH2_Profi = handles.lidarData.BGCH2(profiIndx) * ones(1, length(handles.lidarData.height));
 elSig_Profi = (CH1_Sig_Profi + str2double(handles.gainRatio_tb.String) .* CH2_Sig_Profi) .* handles.lidarData.height .^ 2;

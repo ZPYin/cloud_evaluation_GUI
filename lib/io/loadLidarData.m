@@ -72,10 +72,10 @@ for iDay = 1:daysNo
 end
 
 %% grid data
-nPrfs = floor((tRange(2) - tRange(1)) / datenum(0, 1, 0, 0, 1, 0));
+nPrfs = floor((tRange(2) - tRange(1)) / datenum(0, 1, 0, 0, 1, 0)) + 1;
 rawSigGrid = NaN(size(rawSig, 1), sum(hInd), nPrfs);
 mTimeGrid = tRange(1) + datenum(0, 1, 0, 0, 0:(nPrfs - 1), 0);
-[startY, startM, startD, startH, startMin, ~] = datevec(tRange(1));
+% [startY, startM, startD, startH, startMin, ~] = datevec(tRange(1));
 for iPrf = 1:length(mTime)
     tInd = floor((mTime(iPrf) - tRange(1)) / datenum(0, 1, 0, 0, 1, 0));
 
