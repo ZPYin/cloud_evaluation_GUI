@@ -94,8 +94,8 @@ case 1
     % subset of data
     data.BGCH1 = double(BGCH1(tIndx)) .* PCR2PC(1, :);
     data.BGCH2 = double(BGCH2(tIndx)) .* PCR2PC(1, :);
-    data.sigCH1 = (double(sigCH1(hIndx, tIndx)) - repmat(data.BGCH1, sum(hIndx), 1)) .* PCR2PC;
-    data.sigCH2 = (double(sigCH2(hIndx, tIndx)) - repmat(data.BGCH2, sum(hIndx), 1)) .* PCR2PC;
+    data.sigCH1 = (double(sigCH1(hIndx, tIndx)) .* PCR2PC - repmat(data.BGCH1, sum(hIndx), 1));
+    data.sigCH2 = (double(sigCH2(hIndx, tIndx)) .* PCR2PC - repmat(data.BGCH2, sum(hIndx), 1));
     data.overflowCH1 = overflowCH1(hIndx, tIndx);
     data.overflowCH2 = overflowCH2(hIndx, tIndx);
     data.records = records;
@@ -140,8 +140,8 @@ case 2
     sigCH2 = transpose(h5read(h5File, '/CH2/gluedPC_Data', startIndx, len));
     data.BGCH1 = h5read(h5File, '/CH1/background', [1, startIndx(1)], [1, len(1)]) .* PCR2PC(1, :);
     data.BGCH2 = h5read(h5File, '/CH2/background', [1, startIndx(1)], [1, len(1)]) .* PCR2PC(1, :);
-    data.sigCH1 = (sigCH1 - repmat(data.BGCH1, len(2), 1)) .* PCR2PC;
-    data.sigCH2 = (sigCH2 - repmat(data.BGCH2, len(2), 1)) .* PCR2PC;
+    data.sigCH1 = (sigCH1 .* PCR2PC - repmat(data.BGCH1, len(2), 1));
+    data.sigCH2 = (sigCH2 .* PCR2PC - repmat(data.BGCH2, len(2), 1));
     data.overflowCH1 = transpose(h5read(h5File, '/CH1/overflow', startIndx, len));
     data.overflowCH2 = transpose(h5read(h5File, '/CH2/overflow', startIndx, len));
 
