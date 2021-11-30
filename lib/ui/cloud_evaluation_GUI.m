@@ -233,16 +233,6 @@ end
 guidata(hObject, handles);
 
 
-
-function setting_tb_Callback(hObject, eventdata, handles)
-% hObject    handle to setting_tb (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of setting_tb as text
-%        str2double(get(hObject,'String')) returns contents of setting_tb as a double
-
-
 % --- Executes during object creation, after setting all properties.
 function setting_tb_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to setting_tb (see GCBO)
