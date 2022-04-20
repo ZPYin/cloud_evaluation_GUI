@@ -134,7 +134,7 @@ case 2
 
     % photon count rate to photon count
     records(records <= 1e-3) = NaN;
-    PCR2PC = 1000 ./ repmat(transpose(records), length(data.height), 1) .* 200;
+    PCR2PC = 1000 ./ repmat(records, length(data.height), 1) .* 200;
 
     sigCH1 = transpose(h5read(h5File, '/CH1/gluedPC_Data', startIndx, len));
     sigCH2 = transpose(h5read(h5File, '/CH2/gluedPC_Data', startIndx, len));
