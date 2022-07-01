@@ -1,5 +1,5 @@
 function [data] = PLidar_read_data(mDate, folder, dVersion, hRange, tRange)
-% PLidar_read_data read Polarization lidar data.
+% PLIDAR_READ_DATA read Polarization lidar data.
 % Example:
 %    [data] = PLidar_read_data(mDate, folder, dVersion, hRange)
 % Inputs:
@@ -12,6 +12,7 @@ function [data] = PLidar_read_data(mDate, folder, dVersion, hRange, tRange)
 %            1: 30 m resolution data
 %            2: 3.75 m resolution data
 %            3: CMA polarization data
+%            4: APD 1064 (Chen Qianyuan)
 %    hRange: 2-element array
 %        bottom and top of the range you want to load. (m)
 %    tRange: 2-element array

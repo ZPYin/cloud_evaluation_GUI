@@ -54,6 +54,7 @@ fprintf(fid, 'molecular depolarization ratio: %s\n', data.widgetInfo.mol_depol);
 fprintf(fid, 'aerosol layer base (km): %s\n', data.widgetInfo.LayerBase);
 fprintf(fid, 'aerosol layer top (km): %s\n', data.widgetInfo.LayerTop);
 fprintf(fid, 'smooth window (m): %s\n', data.widgetInfo.smoothwin);
+fprintf(fid, 'wavelength (nm): %s\n', data.widgetInfo.wavelength);
 fprintf(fid, 'range corrected signal scale: %s\n', data.widgetInfo.RCS_scale);
 fprintf(fid, 'min range corrected signal (a.u.): %s\n', data.widgetInfo.RCS_bottom);
 fprintf(fid, 'max range corrected signal (a.u.): %s\n', data.widgetInfo.RCS_top);

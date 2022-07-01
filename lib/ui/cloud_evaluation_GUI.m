@@ -22,7 +22,7 @@ function varargout = cloud_evaluation_GUI(varargin)
 
 % Edit the above text to modify the response to help cloud_evaluation_GUI
 
-% Last Modified by GUIDE v2.5 20-Aug-2020 13:03:27
+% Last Modified by GUIDE v2.5 01-Jul-2022 17:11:33
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -640,8 +640,8 @@ Temp_2D = read_gridTemp(lidarData.time - datenum(0, 1, 0, 8, 0, 0), ...
     'ERA5Folder', handles.settings.ERA5Dir);
 
 %% Rayleigh scattering
-[molBsc532, molExt532] = rayleigh_scattering(532, Pres_Profi, Temp_Profi + 273.14, 360, 80);
-molRCS = molBsc532 .* exp(-2 .* nancumsum([lidarData.height(1), diff(lidarData.height)] .* molExt532));
+[molBsc, molExt] = rayleigh_scattering(str2double(handles.wavelength_tb.String), Pres_Profi, Temp_Profi + 273.14, 360, 80);
+molRCS = molBsc .* exp(-2 .* nancumsum([lidarData.height(1), diff(lidarData.height)] .* molExt));
 
 flagClH = (lidarData.height >= str2double(handles.cloud_base_tb.String) * 1000) & ...
           (lidarData.height <= str2double(handles.cloud_top_tb.String) * 1000);
@@ -1064,8 +1064,8 @@ end
     'ERA5Folder', handles.settings.ERA5Dir);
 
 %% Rayleigh scattering
-[molBsc532, molExt532] = rayleigh_scattering(532, ret_Pres_Profi, ret_Temp_Profi + 273.14, 360, 80);
-molRCS = molBsc532 .* exp(-2 .* nancumsum([lidarData.height(1), diff(lidarData.height)] .* molExt532));
+[molBsc, molExt] = rayleigh_scattering(str2double(handles.wavelength_tb.String), ret_Pres_Profi, ret_Temp_Profi + 273.14, 360, 80);
+molRCS = molBsc .* exp(-2 .* nancumsum([lidarData.height(1), diff(lidarData.height)] .* molExt));
 
 if isempty(lidarData.height)
     logPrint(handles.log_tb, sprintf('[%s] no data for aerosol retrievals were found!', tNow));
@@ -1098,7 +1098,7 @@ end
     elSigSum, elBG, str2double(handles.lr_tb.String), ...
     [str2double(handles.ref_H_bottom_tb.String), str2double(handles.ref_H_top_tb.String)] .* 1000, ...
     str2double(handles.ref_value_tb.String) * 1e-6, ...
-    molBsc532, ...
+    molBsc, ...
     'window_size', sm_win_bins, ...
     'detectMode', handles.settings.detect_mode);
 
@@ -1111,7 +1111,7 @@ ret_VDR_std_Profi = ret_VDR_Profi .* ...
     ret_VDR_std_Profi, ...
     ret_bsc_Profi, ...
     ret_bsc_Profi * 0.1, ...
-    molBsc532, ...
+    molBsc, ...
     str2double(handles.mol_depol_tb.String), ...
     0.2 * str2double(handles.mol_depol_tb.String));
 
@@ -2467,6 +2467,29 @@ function offset_tb_Callback(hObject, eventdata, handles)
 % --- Executes during object creation, after setting all properties.
 function offset_tb_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to offset_tb (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function wavelength_tb_Callback(hObject, eventdata, handles)
+% hObject    handle to wavelength_tb (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of wavelength_tb as text
+%        str2double(get(hObject,'String')) returns contents of wavelength_tb as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function wavelength_tb_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to wavelength_tb (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
