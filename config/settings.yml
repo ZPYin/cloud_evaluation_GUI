@@ -20,6 +20,10 @@ GDAS1Dir: ''
 
 # radiosonde data folder
 soundingDir: ''
+# 1: radiosonde file for MOSAiC (default)
+# 2: radiosonde file for MUA
+# 3: CMA radiosonde file
+RadiosondeType: 1
 
 # ERA-5 data folder
 ERA5Dir: ''
