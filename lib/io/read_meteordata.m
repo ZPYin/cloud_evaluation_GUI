@@ -105,6 +105,15 @@ case 'radiosonde'
     rs_relh = rs_relh(iUniq);
 
     meteor_time = rs_time;
+
+    % remove NaN
+    tempNan = isnan(rs_temp);
+    presNan = isnan(rs_pres);
+    rs_alt = rs_alt((~ tempNan) & (~ presNan));
+    rs_temp = rs_temp((~ tempNan) & (~ presNan));
+    rs_pres = rs_pres((~ tempNan) & (~ presNan));
+    rs_relh = rs_relh((~ tempNan) & (~ presNan));
+
     temp = interp1(rs_alt, rs_temp, altitude);
     pres = interp1(rs_alt, rs_pres, altitude);
     relh = interp1(rs_alt, rs_relh, altitude);

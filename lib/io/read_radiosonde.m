@@ -105,6 +105,17 @@ case 2   % MUA radiosonde standard file
     pres = ncread(file, 'pressure'); 
     relh = ncread(file, 'relative_humidity');
 
+case 3   % CMA radiosonde file
+
+    thisFilename = basename(file);
+    datetime = datenum(thisFilename((end - 13):(end - 4)), 'yyyymmddHH');
+
+    thisData = read_sonde(file);
+    alt = thisData.height;
+    temp = thisData.temperature;
+    pres = thisData.pressure;
+    relh = thisData.relative_humidity;
+
 otherwise
     error('Unknown fileType %d', fileType);
 end

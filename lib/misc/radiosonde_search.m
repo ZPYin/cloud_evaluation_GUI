@@ -12,6 +12,7 @@ function [sondeFile] = radiosonde_search(sondeFolder, measurementTime, fileType)
 %        file type of the radiosonde file.
 %        - 1: radiosonde file for MOSAiC (default)
 %        - 2: radiosonde file for MUA
+%        - 3: CMA radiosonde file
 % Outputs:
 %    sondeFile: str
 %        the filename of the searched sonding file. If no file was found, an 
@@ -80,6 +81,36 @@ case 2   % MUA radiosonde standard file
     for iFile = 1:length(sondeFileList)
         filenameISondeFile = basename(sondeFileList{iFile});
         sondeTime(iFile) = datenum(filenameISondeFile(end-15:end-3), 'yyyymmdd_HHMM');
+    end
+
+    %% search the sonding file which is closest to the measurement time
+    deltaTime = abs(sondeTime - measurementTime);
+    [minDeltaTime, indxSondeFile] = min(deltaTime);
+    % determine whether the time lapse is out of range (max T diff: 1 day)
+    if minDeltaTime < datenum(0, 1, 1, 0, 0, 0)
+        sondeFile = sondeFileList{indxSondeFile};
+    else
+        warning(['There was no sonde launching within 1 day.\n' ...
+                'The measurement time: %s\nThe closest time of sonding: %s'], ...
+                datestr(measurementTime, 'yyyymmdd HH:MM:SS'), ...
+                datestr(sondeTime(indxSondeFile), 'yyyymmdd HH:MM:SS'));
+    end
+
+case 3   % CMA radiosonde file
+
+    %% list all files
+    sondeFileList = listfile(fullfile(sondeFolder, datestr(measurementTime, 'yyyy')), 'UPAR_WEA_CHN_MUL_FTM_SEC.*\w*.txt');
+    if isempty(sondeFileList)
+        warning(['No required radiosonde files was found in the sonde folder. ' ...
+                'Please go to the folder below to have a look.\n%s'], sondeFolder);
+        return;
+    end
+
+    %% parse the radiosonde time
+    sondeTime = NaN(size(sondeFileList));
+    for iFile = 1:length(sondeFileList)
+        filenameISondeFile = basename(sondeFileList{iFile});
+        sondeTime(iFile) = datenum(filenameISondeFile((end - 13):(end - 4)), 'yyyymmddHH');
     end
 
     %% search the sonding file which is closest to the measurement time
