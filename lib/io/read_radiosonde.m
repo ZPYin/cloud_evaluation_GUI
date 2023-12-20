@@ -1,7 +1,8 @@
 function [alt, temp, pres, relh, datetime] = read_radiosonde(file, ...
     fileType, missingValue)
 % READ_RADIOSONDE read the radiosonde data from netCDF file.
-% Example:
+%
+% USAGE:
 %     [alt, temp, pres, relh, datetime] = read_radiosonde(file, fileType)
 % Inputs:
 %     file: str
@@ -9,10 +10,13 @@ function [alt, temp, pres, relh, datetime] = read_radiosonde(file, ...
 %     fileType: integer
 %         file type of the radiosonde file.
 %         - 1: radiosonde file for MOSAiC (default)
-%         - 2: radiosonde file for MUA
+%        - 2: radiosonde file for MUA (netCDF4)
+%        - 3: CMA radiosonde file
+%        - 4: radiosonde file for MUA (HDF5)
 %     missingValue: double
 %         missing value for filling the empty bins. These values need to be 
 %         replaced with NaN to be compatible with the processing program.
+%
 % Outputs:
 %     alt: array
 %         altitute for each range bin. [m]
@@ -27,7 +31,9 @@ function [alt, temp, pres, relh, datetime] = read_radiosonde(file, ...
 %         filled. [%]
 %     datetime: datenum
 %         datetime for the radiosonde data.
+%
 % Note:
+%    Radiosonde Type 2:
 %     The radiosonde file should be in netCDF and must contain the variable of 
 %     'altitude', 'temperature', 'pressure' and 'RH'. Below is the description 
 %     of each variable. (detailed information please see example in 
@@ -53,10 +59,12 @@ function [alt, temp, pres, relh, datetime] = read_radiosonde(file, ...
 %           :long_name = "relative humidity";
 %           :standard_name = "RH";
 %           :_FillValue = -999.0; // double
+%
 % History:
 %     2019-07-19. First Edition by Zhenping
 %     2019-07-28. Add the criteria for empty file.
 %     2019-12-18. Add `fileType` to specify the type of the radiosonde file.
+%
 % Contact:
 %     zhenping@tropos.de
 
@@ -95,10 +103,10 @@ case 1   % MOSAiC
     pres(abs(pres - missingValue) < 1e-5) = NaN;
     relh(abs(relh - missingValue) < 1e-5) = NaN;
 
-case 2   % MUA radiosonde standard file
+case 2   % MUA radiosonde standard file (netCDF4)
 
     thisFilename = basename(file);
-    datetime = datenum(thisFilename(end-15:end-3), 'yyyymmdd_HHMM');
+    datetime = datenum(thisFilename((end - 15):(end - 3)), 'yyyymmdd_HHMM');
 
     alt = ncread(file, 'altitude'); 
     temp = ncread(file, 'temperature');
@@ -115,6 +123,17 @@ case 3   % CMA radiosonde file
     temp = thisData.temperature;
     pres = thisData.pressure;
     relh = thisData.relative_humidity;
+
+case 4   % MUA radiosonde standard file (HDF5)
+
+    thisFilename = basename(file);
+    datetime = datenum(thisFilename((end - 15):(end - 6)), 'yyyymmddHH');
+
+    rsData = h5read(file, '/RadioSonde');
+    alt = rsData(2, :); 
+    temp = rsData(3, :);
+    pres = rsData(1, :); 
+    relh = rsData(4, :);
 
 otherwise
     error('Unknown fileType %d', fileType);

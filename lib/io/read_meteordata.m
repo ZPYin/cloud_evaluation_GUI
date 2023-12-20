@@ -1,18 +1,21 @@
 function [temp, pres, relh, meteor_time] = read_meteordata(measTime, altitude, varargin)
 % READ_METEORDATA Read the meteorological data according to the input 
 % meteorological data type.
-% Example:
+%
+% Usecase:
 %    %  Usecase 1: read GDAS1 data
 %    [temp, pres, relh] = read_meteordata(measTime, altitude, 'meteor_data', 'GDAS1', 'station', 'wuhan', 'GDAS1Folder', '/GDAS1');
 %    %  Usecase 2: read Radiosonde data
 %    [temp, pres, relh] = read_meteordata(measTime, altitude, 'meteor_data', 'Radiosonde', 'RadiosondeFolder', '/Radiosonde', 'station', 'wuhan');
 %    %  Usecase 3: read ERA-5 data.
 %    [temp, pres, relh] = read_meteordata(measTime, altitude, 'meteor_data', 'ERA-5', 'ERA5Folder', '/ERA-5', 'station', 'wuhan');
+%
 % Inputs:
 %    measTime: datenum
 %        the measurement time. (UTC)
 %    altitude: array
 %        height above the mean sea level. [m]
+%
 % Keywords:
 %    meteor_data: char
 %        meteorological data source. 
@@ -26,9 +29,12 @@ function [temp, pres, relh, meteor_time] = read_meteordata(measTime, altitude, v
 %    RadiosondeType: integer
 %        file type of the radiosonde file.
 %        - 1: radiosonde file for MOSAiC
-%        - 2: radiosonde file for MUA (default)
+%        - 2: radiosonde file for MUA (default, netCDF4)
+%        - 3: radiosonde file for MOSAiC
+%        - 4: radiosonde file for MUA (HDF5)
 %    ERA5Folder: char
 %        ERA-5 data folder.
+%
 % Outputs:
 %    temp: array
 %        temperature for each range bin. [??C]
@@ -38,8 +44,10 @@ function [temp, pres, relh, meteor_time] = read_meteordata(measTime, altitude, v
 %        relative humidity for each range bin. [%]
 %    meteor_time: numeric
 %        timestamp for meteorological data. (datenum)
+%
 % History:
 %    2020-05-28. First Edition by Zhenping
+%
 % Contact:
 %    zhenping@tropos.de
 
@@ -109,10 +117,11 @@ case 'radiosonde'
     % remove NaN
     tempNan = isnan(rs_temp);
     presNan = isnan(rs_pres);
-    rs_alt = rs_alt((~ tempNan) & (~ presNan));
-    rs_temp = rs_temp((~ tempNan) & (~ presNan));
-    rs_pres = rs_pres((~ tempNan) & (~ presNan));
-    rs_relh = rs_relh((~ tempNan) & (~ presNan));
+    altNan = isnan(rs_alt);
+    rs_alt = rs_alt((~ tempNan) & (~ presNan) & (~ altNan));
+    rs_temp = rs_temp((~ tempNan) & (~ presNan) & (~ altNan));
+    rs_pres = rs_pres((~ tempNan) & (~ presNan) & (~ altNan));
+    rs_relh = rs_relh((~ tempNan) & (~ presNan) & (~ altNan));
 
     temp = interp1(rs_alt, rs_temp, altitude);
     pres = interp1(rs_alt, rs_pres, altitude);
