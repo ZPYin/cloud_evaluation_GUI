@@ -800,7 +800,12 @@ saveFile = fullfile(handles.settings.saveDir, ...
                         int32(str2double(handles.cloud_top_tb.String) * 1000), ...
                         str2double(handles.smoothwin_tb.String)));
 
-save_2_mat(handles, saveFile);
+if isfield(handles, 'cloud_top_sig_2_bg')
+    save_2_mat(handles, saveFile);
+else
+    msgbox('No data was loaded!', 'Warning');
+    return;
+end
 
 %% update status
 logPrint(handles.log_tb, sprintf('[%s] Results have been saved to %s', tNow, saveFile));
@@ -2278,7 +2283,12 @@ saveFile = fullfile(handles.settings.saveDir, ...
         int32(str2double(handles.cloud_top_tb.String) * 1000), ...
         str2double(handles.smoothwin_tb.String)));
 
-save_2_mat(handles, saveFile);
+if isfield(handles, 'cloud_top_sig_2_bg')
+    save_2_mat(handles, saveFile);
+else
+    msgbox('No data was loaded!', 'Warning');
+    return;
+end
 
 %% update status
 logPrint(handles.log_tb, sprintf('[%s] Results have been saved to %s', tNow, saveFile));
@@ -2299,13 +2309,18 @@ else
     logPrint(handles.log_tb, sprintf('[%s] Save the cloud case to %s', tNow(), saveFile));
 end
 
-switch fileExtIndx
-case 1   % mat file
-    save_2_mat(handles, fullfile(savePath, saveFile));
-case 2   % txt file
-    save_2_txt(handles, fullfile(savePath, saveFile));
-otherwise
-    % do nothing
+if isfield(handles, 'cloud_top_sig_2_bg')
+    switch fileExtIndx
+    case 1   % mat file
+        save_2_mat(handles, fullfile(savePath, saveFile));
+    case 2   % txt file
+        save_2_txt(handles, fullfile(savePath, saveFile));
+    otherwise
+        % do nothing
+    end
+else
+    msgbox('No data was loaded!', 'Warning');
+    return;
 end
 
 guidata(hObject, handles);
