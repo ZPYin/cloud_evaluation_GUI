@@ -5,6 +5,7 @@ dataDir: ''
 # 1: glued by old algorithm with 30-m resolution
 # 2: glued by new algorithm with 3.75-m resolution (default)
 # 3: CMA data
+# 4: WHU-1030 vis lidar data
 data_version: 1
 
 # detection mode

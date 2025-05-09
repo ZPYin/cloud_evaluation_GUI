@@ -240,7 +240,7 @@ else
 
     % read settings
     settingFile = handles.settingFile;
-    settingTemplate = fullfile(handles.projectDir, 'lib', 'settings_global.yml');
+    settingTemplate = fullfile(handles.projectDir, 'lib', 'config', 'default_setting.yml');
     settings = load_settings(settingFile, settingTemplate);
     handles.settings = settings;
 

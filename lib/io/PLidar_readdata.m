@@ -17,6 +17,7 @@ function data = PLidar_readdata(folder, tRange, hRange, varargin)
 %        1: glued by old algorithm with 30-m resolution
 %        2: glued by new algorithm with 3.75-m resolution (default)
 %        3: CMA polarization lidar
+%        4: WHU 1030 vis lidar
 % Returns:
 %    data: struct
 %        time: (datenum) array

@@ -12,7 +12,7 @@ function [data] = PLidar_read_data(mDate, folder, dVersion, hRange, tRange)
 %            1: 30 m resolution data
 %            2: 3.75 m resolution data
 %            3: CMA polarization data
-%            4: APD 1064 (Chen Qianyuan)
+%            4: WHU 1030 vis lidar
 %    hRange: 2-element array
 %        bottom and top of the range you want to load. (m)
 %    tRange: 2-element array
@@ -41,6 +41,8 @@ function [data] = PLidar_read_data(mDate, folder, dVersion, hRange, tRange)
 %            overflow flag for CH2. ('1' means overflowed)
 % History:
 %    2020-03-15. First Edition by Zhenping
+%    2022-05-20. Add CMA polarization data by Zhenping
+%    2025-05-09. Add WHU 1030 vis lidar data by Zhenping
 % Contact:
 %    zp.yin@whu.edu.cn
 
@@ -150,6 +152,11 @@ case 3
     % CMA polarization data
     CMAData = loadLidarData(folder, '54511', tRange, 'hRange', [0, 60000], 'channelIndex', 1:2);
 
+    if isempty(CMAData.mTime)
+        warning('Empty CMA data!\n');
+        return;
+    end
+
     pRawSig = squeeze(CMAData.rawSig(1, :, :));
     pBg = mean(pRawSig((end - 500):end, :), 1);
     pSig = pRawSig - repmat(pBg, size(pRawSig, 1), 1);
@@ -164,6 +171,36 @@ case 3
     data.height = transpose(CMAData.height(hInd));
     data.altitude = CMAData.altitude + transpose(CMAData.height(hInd));
     data.records = ones(size(CMAData.mTime));
+    data.sigCH1 = pSig(hInd, :);
+    data.sigCH2 = cSig(hInd, :);
+    data.BGCH1 = pBg;
+    data.BGCH2 = cBg;
+    data.overflowCH1 = zeros(size(pSig(hInd, :)));
+    data.overflowCH2 = zeros(size(cSig(hInd, :)));
+
+case 4
+    % 4: WHU 1030 vis lidar
+    whuData = loadALADats(folder, tRange, 'nMaxBin', 1900);
+
+    if isempty(whuData.mTime)
+        warning('Empty ALA data!\n');
+        return;
+    end
+
+    pRawSig = squeeze(whuData.rawSig(:, :));
+    pBg = mean(pRawSig((end - 70):end, :), 1);
+    pSig = pRawSig - repmat(pBg, size(pRawSig, 1), 1);
+
+    cRawSig = zeros(size(pRawSig));
+    cBg = mean(cRawSig((end - 70):end, :), 1);
+    cSig = cRawSig - repmat(cBg, size(cRawSig, 1), 1);
+
+    hInd = (whuData.height >= hRange(1)) & (whuData.height <= hRange(2));
+
+    data.time = whuData.mTime;
+    data.height = whuData.height(hInd);
+    data.altitude = whuData.altitude + transpose(whuData.height(hInd));
+    data.records = ones(size(whuData.mTime));
     data.sigCH1 = pSig(hInd, :);
     data.sigCH2 = cSig(hInd, :);
     data.BGCH1 = pBg;
