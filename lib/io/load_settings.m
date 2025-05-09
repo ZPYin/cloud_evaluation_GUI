@@ -51,6 +51,6 @@ for fn = fieldnames(inStruct)'
     elseif isfield(tempStruct, fn{1})
         config.(fn{1}) = inStruct.(fn{1});
     else
-        error('Unknown setings: %s', fn{1});
+        error('Unknown seting(s): %s', fn{1});
     end
 end

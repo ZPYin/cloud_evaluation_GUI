@@ -59,7 +59,7 @@ addpath(genpath(fullfile(projectDir, 'include')));
 
 % load settings
 settingFile = fullfile(projectDir, 'config', 'settings.yml');
-settingTemplate = fullfile(projectDir, 'lib', 'settings_global.yml');
+settingTemplate = fullfile(projectDir, 'lib', 'config', 'default_setting.yml');
 settings = load_settings(settingFile, settingTemplate);
 handles.settings = settings;
 handles.setting_tb.String = settingFile;
@@ -181,6 +181,29 @@ display_mass_profi(handles.ret_mass_lineplot_axes, ...
                    handles.ret_mass_d_Profi, ...
                    'hRange', [str2double(handles.ret_H_bottom_tb.String), str2double(handles.ret_H_top_tb.String)], ...
                    'massRange', [str2double(handles.mass_bottom_tb.String), str2double(handles.mass_top_tb.String)]);
+
+%% Initialize widgets
+uiInitVals = yaml.ReadYaml(fullfile(projectDir, 'lib', 'config', 'ui_init_values.yml'));
+handles.starttime_tb.String = uiInitVals.QLStartTime;
+handles.stoptime_tb.String = uiInitVals.QLStopTime;
+handles.H_base_tb.String = uiInitVals.QLHBase;
+handles.H_top_tb.String = uiInitVals.QLHTop;
+handles.cloud_start_tb.String = uiInitVals.QLCloudStartTime;
+handles.cloud_stop_tb.String = uiInitVals.QLCloudStopTime;
+handles.cloud_base_tb.String = uiInitVals.CloudHBase;
+handles.cloud_top_tb.String = uiInitVals.CloudHTop;
+handles.gainRatio_tb.String = uiInitVals.GainRatio;
+handles.offset_tb.String = uiInitVals.HOffset;
+handles.ret_starttime_tb.String = uiInitVals.RetrievalStartTime;
+handles.ret_stoptime_tb.String = uiInitVals.RetrievalStopTime;
+handles.ret_H_bottom_tb.String = uiInitVals.RetrievalHBase;
+handles.ret_H_top_tb.String = uiInitVals.RetrievalHTop;
+handles.ref_H_bottom_tb.String = uiInitVals.RefHBase;
+handles.ref_H_top_tb.String = uiInitVals.RefHTop;
+handles.ref_value_tb.String = uiInitVals.RefVal;
+handles.lr_tb.String = uiInitVals.LidarRatio;
+handles.smoothwin_tb.String = uiInitVals.SmoothWin;
+handles.wavelength_tb.String = uiInitVals.Wavelength;
 
 % Update handles structure
 guidata(hObject, handles);
