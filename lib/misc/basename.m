@@ -1,17 +1,20 @@
 function [basename] = basename(fileFullpath)
 % BASENAME cut the basename from the file fullpath. 
-% Example:
+%
+% USAGE:
 %    [basename] = basename(fileFullpath)
-% Inputs:
+%
+% INPUTS:
 %    fileFullpath: char
 %        fullpath.
-% Outputs:
+% OUTPUTS:
 %    basename: char
 %        basename of the file
-% History:
+%
+% HISTORY:
 %    2018-08-22. First edition by Zhenping
-% Contact:
-%    zhenping@tropos.de
+%
+% .. Authors: - zhenping@tropos.de
 
 if ~ ischar(fileFullpath)
     error('Input filename should be a char array');

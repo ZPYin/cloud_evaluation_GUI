@@ -1,24 +1,26 @@
 function data = PLidar_readdata(folder, tRange, hRange, varargin)
 % PLIDAR_READDATA read PLidar data in the given temporal and spatial range.
-% Examples:
-%    data = PLidar_readdata('/data/PLidar', ...
-%                   [datenum(2011, 1, 1), datenum(2011, 1, 2, 12, 0, 0)], ...
-%                   [300, 5000]);
-% Inputs:
+%
+% USAGE:
+%    data = PLidar_readdata(folder, tRange, hRange)
+%
+% INPUTS:
 %    folder: char
 %        base directory of the PLidar data.
 %    tRange: 2-element array
 %        start and stop time of the data that you want to load.
 %    hRange: 2-element array
 %        bottom and top height of the data that you want to load. [m]
-% Keywords:
+%
+% KEYWORDS:
 %    dVersion: integer
 %        data version (default: 2).
 %        1: glued by old algorithm with 30-m resolution
 %        2: glued by new algorithm with 3.75-m resolution (default)
 %        3: CMA polarization lidar
 %        4: WHU 1030 vis lidar
-% Returns:
+%
+% OUTPUTS:
 %    data: struct
 %        time: (datenum) array
 %            measurement time of each data profile.
@@ -38,8 +40,10 @@ function data = PLidar_readdata(folder, tRange, hRange, varargin)
 %            background signal for each profile at channel 1.
 %        BGCH2: array
 %            background signal for each profile at channel 2.
-% History:
-%    2020-03-03 First version by Zhenping
+%
+% HISTORY:
+%    2020-03-03: first edition by Zhenping
+% .. Authors: - zp.yin@whu.edu.cn
 
 p = inputParser;
 p.KeepUnmatched = true;

@@ -1,8 +1,10 @@
 function [fh] = display_VDR_colorplot(ax, mTime, height, VDR, varargin)
 % DISPLAY_VDR_COLORPLOT display volume depolarization ratio colorplot.
-% Example:
+%
+% USAGE:
 %    [fh] = display_VDR_colorplot(ax, mTime, height, VDR, varargin)
-% Inputs:
+%
+% INPUTS:
 %    ax: axes
 %        axes handle.
 %    mTime: array
@@ -11,7 +13,8 @@ function [fh] = display_VDR_colorplot(ax, mTime, height, VDR, varargin)
 %        height above ground. (km)
 %    VDR: matrix (height * time)
 %        volume depolarization ratio.
-% Keywords:
+%
+% KEYWORDS:
 %    tRange: 2-element array
 %        temporal range.
 %    hRange: 2-element array
@@ -40,13 +43,16 @@ function [fh] = display_VDR_colorplot(ax, mTime, height, VDR, varargin)
 %        top of the averaged region. (km)
 %    cmap: char
 %        colormap (default: myjet).
-% Outputs:
+%
+% OUTPUTS:
 %    fh: figure
 %        figure handle.
-% History:
-%    2020-05-28. First Edition by Zhenping
-% Contact:
-%    zp.yin@whu.edu.cn
+%
+% EXAMPLE:
+%
+% HISTORY:
+%    2020-05-28: first edition by Zhenping
+% .. Authors: - zp.yin@whu.edu.cn
 
 p = inputParser;
 p.KeepUnmatched = true;

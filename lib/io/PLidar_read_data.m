@@ -1,8 +1,10 @@
 function [data] = PLidar_read_data(mDate, folder, dVersion, hRange, tRange)
 % PLIDAR_READ_DATA read Polarization lidar data.
-% Example:
-%    [data] = PLidar_read_data(mDate, folder, dVersion, hRange)
-% Inputs:
+%
+% USAGE:
+%    [data] = PLidar_read_data(mDate, folder, dVersion, hRange, tRange)
+%
+% INPUTS:
 %    mDate: datenum
 %        measurement date.
 %    folder: char
@@ -17,7 +19,8 @@ function [data] = PLidar_read_data(mDate, folder, dVersion, hRange, tRange)
 %        bottom and top of the range you want to load. (m)
 %    tRange: 2-element array
 %        temporal range for data profiles.
-% Outputs:
+%
+% OUTPUTS:
 %    data: struct
 %        height: array
 %            height of each bin above ground. (m)
@@ -39,12 +42,14 @@ function [data] = PLidar_read_data(mDate, folder, dVersion, hRange, tRange)
 %            overflow flag for CH1. ('1' means overflowed)
 %        overflowCH2: matrix (height * time)
 %            overflow flag for CH2. ('1' means overflowed)
-% History:
-%    2020-03-15. First Edition by Zhenping
-%    2022-05-20. Add CMA polarization data by Zhenping
-%    2025-05-09. Add WHU 1030 vis lidar data by Zhenping
-% Contact:
-%    zp.yin@whu.edu.cn
+%
+% EXAMPLE:
+%
+% HISTORY:
+%    2020-03-15: First Edition by Zhenping
+%    2022-05-20: Add CMA polarization data by Zhenping
+%    2025-05-09: Add WHU 1030 vis lidar data by Zhenping
+% .. Authors: - zp.yin@whu.edu.cn
 
 if nargin < 4
     error('Not enough inputs');

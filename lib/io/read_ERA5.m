@@ -1,13 +1,16 @@
 function [alt, temp, pres, relh, ERA5file, wind, wins] = read_ERA5(measTime, ERA5site, folder)
 % READ_ERA5 read the ERA5 file
-% Example:
-%    [alt, temp, pres, relh] = read_ERA5(measTime, ERA5site, folder)
-% Inputs:
+%
+% USAGE:
+%    [alt, temp, pres, relh, ERA5file, wind, wins] = read_ERA5(measTime, ERA5site, folder)
+%
+% INPUTS:
 %    measTime: datenum
 %        measurement time. 
 %    ERA5site: char
 %        the location for ERA5 site.
-% Outputs:
+%
+% OUTPUTS:
 %    alt: array
 %        altitute for each range bin. [m]
 %    temp: array
@@ -25,10 +28,12 @@ function [alt, temp, pres, relh, ERA5file, wind, wins] = read_ERA5(measTime, ERA
 %        wind direction. [degree]
 %    wins: array
 %        wind speed. [m/s]
-% History:
-%    2020-10-26. First Edition by Zhenping
-% Contact:
-%    zp.yin@whu.edu.cn
+%
+% EXAMPLE:
+%
+% HISTORY:
+%    2020-10-26: first edition by Zhenping
+% .. Authors: - zp.yin@whu.edu.cn
 
 [thisyear, thismonth, thisday, ~, ~, ~] = datevec(measTime);
 dirInfo = dir(fullfile(folder, ERA5site, sprintf('%04d', thisyear), ...

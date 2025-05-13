@@ -1,8 +1,7 @@
 function [temp, pres, relh, meteor_time] = read_meteordata(measTime, altitude, varargin)
 % READ_METEORDATA Read the meteorological data according to the input 
-% meteorological data type.
 %
-% Usecase:
+% USAGE:
 %    %  Usecase 1: read GDAS1 data
 %    [temp, pres, relh] = read_meteordata(measTime, altitude, 'meteor_data', 'GDAS1', 'station', 'wuhan', 'GDAS1Folder', '/GDAS1');
 %    %  Usecase 2: read Radiosonde data
@@ -10,13 +9,13 @@ function [temp, pres, relh, meteor_time] = read_meteordata(measTime, altitude, v
 %    %  Usecase 3: read ERA-5 data.
 %    [temp, pres, relh] = read_meteordata(measTime, altitude, 'meteor_data', 'ERA-5', 'ERA5Folder', '/ERA-5', 'station', 'wuhan');
 %
-% Inputs:
+% INPUTS:
 %    measTime: datenum
 %        the measurement time. (UTC)
 %    altitude: array
 %        height above the mean sea level. [m]
 %
-% Keywords:
+% KEYWORDS:
 %    meteor_data: char
 %        meteorological data source. 
 %        'GDAS1' (default), 'Radiosonde', or 'ERA-5'
@@ -35,7 +34,7 @@ function [temp, pres, relh, meteor_time] = read_meteordata(measTime, altitude, v
 %    ERA5Folder: char
 %        ERA-5 data folder.
 %
-% Outputs:
+% OUTPUTS:
 %    temp: array
 %        temperature for each range bin. [??C]
 %    pres: array
@@ -45,11 +44,9 @@ function [temp, pres, relh, meteor_time] = read_meteordata(measTime, altitude, v
 %    meteor_time: numeric
 %        timestamp for meteorological data. (datenum)
 %
-% History:
-%    2020-05-28. First Edition by Zhenping
-%
-% Contact:
-%    zhenping@tropos.de
+% HISTORY:
+%    2020-05-28: First Edition by Zhenping
+% .. Authors: - zp.yin@whu.edu.cn
 
 p = inputParser;
 p.KeepUnmatched = true;

@@ -1,7 +1,9 @@
 function [data] = loadLidarData(lidarFolder, stationID, tRange, varargin)
 % LOADLIDARDATA load lidar data.
+%
 % USAGE:
-%    [data] = loadLidarData(lidarFolder, stationID, tRange, varargin)
+%    [data] = loadLidarData(lidarFolder, stationID, tRange)
+%
 % INPUTS:
 %    lidarFolder: char
 %        folder of lidar data.
@@ -11,19 +13,21 @@ function [data] = loadLidarData(lidarFolder, stationID, tRange, varargin)
 %        start/stop time of lidar data request.
 %    channelIndex: array
 %        channel index.
+%
 % KEYWORDS:
 %    hRange: 2-element array
 %        vertical range of lidar data request (default: [0, 15000]). (m)
+%
 % OUTPUTS:
 %    data: struct
 %        altitude: numeric
 %        height: array
 %        mTime: array
 %        rawSig: matrix (height x time)
-% EXAMPLE:
+%
 % HISTORY:
 %    2021-07-21: first edition by Zhenping
-% .. Authors: - zhenping@tropos.de
+% .. Authors: - zp.yin@whu.edu.cn
 
 p = inputParser;
 p.KeepUnmatched = true;

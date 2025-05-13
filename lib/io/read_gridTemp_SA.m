@@ -1,20 +1,23 @@
 function temp2D = read_gridTemp_SA(mTime, altitude)
-% READ_GRIDTEMP_SA read gridded meteorological data based on US standard atmosphere
-% Example:
+% READ_GRIDTEMP_SA read gridded meteorological data based on US standard atmosphere.
+%
+% USAGE:
 %    temp2D = read_gridTemp_SA(mTime, altitude)
-% Inputs:
+%
+% INPUTS:
 %    mTime: array
 %        measurement time. (UTC)
 %    altitude: array
 %        height above mean sea level. (m)
-% Outputs:
+%
+% OUTPUTS:
 %    temp: matrix (altitude * time)
 %        temperature for each range bin. If no valid data, NaN will be 
 %        filled. [C]
-% History:
-%    2020-06-01. First Edition by Zhenping
-% Contact:
-%    zhenping@tropos.de
+%
+% HISTORY:
+%    2020-06-01: First Edition by Zhenping
+% .. Authors: - zp.yin@whu.edu.cn
 
 temp2D = NaN(numel(altitude), numel(mTime));
 

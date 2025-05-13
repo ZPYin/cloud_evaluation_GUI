@@ -1,8 +1,10 @@
 function [fh] = display_RCS_profi(ax, height, RCS, mol_RCS, varargin)
 % DISPLAY_RCS_PROFI display range corrected signal profile.
-% Example:
+%
+% USAGE:
 %    [fh] = display_RCS_profi(ax, height, RCS, mol_RCS, varargin)
-% Inputs:
+%
+% INPUTS:
 %    ax: axes
 %        axes handle.
 %    height: array
@@ -10,8 +12,9 @@ function [fh] = display_RCS_profi(ax, height, RCS, mol_RCS, varargin)
 %    RCS: array
 %        range corrected signal.
 %    mol_RCS: array
-%        molecular range corrected signal
-% Keywords:
+%        molecular range corrected signal.
+%
+% KEYWORDS:
 %    scale: char
 %        'linear' or 'log'
 %    hRange: 2-element array
@@ -24,13 +27,14 @@ function [fh] = display_RCS_profi(ax, height, RCS, mol_RCS, varargin)
 %        cloud top height. (km)
 %    CTT: numeric
 %        cloud top temperature. (celsius)
-% Outputs:
+%
+% OUTPUTS:
 %    fh: figure
 %        figure handle.
-% History:
-%    2020-05-28. First Edition by Zhenping
-% Contact:
-%    zp.yin@whu.edu.cn
+%
+% HISTORY:
+%    2020-05-28: first edition by Zhenping
+% .. Authors: - zp.yin@whu.edu.cn
 
 p = inputParser;
 p.KeepUnmatched = true;

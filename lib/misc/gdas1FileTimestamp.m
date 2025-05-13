@@ -1,17 +1,21 @@
 function [datetime, location] = gdas1FileTimestamp(gdas1File)
-% GDAS1FILETIMESTAMP extract the timestamp from the gdas1File name.
-% Example:
+% GDAS1FILETIMESTAMP extract timestamp from the gdas1File name.
+%
+% USAGE:
 %    [datetime] = gdas1FileTimestamp(gdas1File)
-% Inputs:
+%
+% INPUTS:
 %    gdas1File: char
 %        gdas1 data file.
-% Outputs:
+%
+% OUTPUTS:
 %    datetime: float
 %        datenum.
-% History:
-%    2019-01-04. First Edition by Zhenping
-% Contact:
-%    zhenping@tropos.de
+%
+% HISTORY:
+%    - 2021-08-03: first edition by Zhenping
+%
+% .. Authors: - zhenping@tropos.de
 
 data = regexp(gdas1File, ...
              '(?<location>.*)_(?<date>\d{8})_(?<hour>\d{2})\w*', 'names');

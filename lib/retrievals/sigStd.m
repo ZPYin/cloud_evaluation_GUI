@@ -1,22 +1,24 @@
 function [uncertainty] = sigStd(signal, varargin)
 % SIGSTD calculate signal uncertainty.
+%
 % USAGE:
 %    [uncertainty] = sigStd(signal, varargin)
+%
 % INPUTS:
 %    signal: array
 %        lidar signal.
-% KEWYRORDS:
+%
+% OUTPUTS:
 %    detectMode: char
 %        detection mode.
 %        - pc: photon counting mode
 %        - ad: analogue-digiter convertor
-% OUTPUTS:
-%    uncertainty: array
-%        signal uncertainty.
+%
 % EXAMPLE:
+%
 % HISTORY:
 %    2021-07-24: first edition by Zhenping
-% .. Authors: - zhenping@tropos.de
+% .. Authors: - zp.yin@whu.edu.cn
 
 p = inputParser;
 p.KeepUnmatched = true;

@@ -1,8 +1,10 @@
 function [fh] = display_RCS_colorplot(ax, mTime, height, RCS, varargin)
 % DISPLAY_RCS_COLORPLOT display range corrected signal colorplot.
-% Example:
+%
+% USAGE:
 %    [fh] = display_RCS_colorplot(ax, mTime, height, RCS, varargin)
-% Inputs:
+%
+% INPUTS:
 %    ax: axes
 %        axes handle.
 %    mTime: array
@@ -11,7 +13,8 @@ function [fh] = display_RCS_colorplot(ax, mTime, height, RCS, varargin)
 %        height above ground. (km)
 %    RCS: matrix (height * time)
 %        range corrected signal.
-% Keywords:
+%
+% KEYWORDS:
 %    scale: char
 %        'linear' or 'log'
 %    tRange: 2-element array
@@ -42,13 +45,14 @@ function [fh] = display_RCS_colorplot(ax, mTime, height, RCS, varargin)
 %        top of the averaged region. (km)
 %    cmap: char
 %        colormap.
-% Outputs:
+%
+% OUTPUTS:
 %    fh: figure
 %        figure handle.
-% History:
-%    2020-05-28. First Edition by Zhenping
-% Contact:
-%    zp.yin@whu.edu.cn
+%
+% HISTORY:
+%    2020-05-28: first edition by Zhenping
+% .. Authors: - zp.yin@whu.edu.cn
 
 p = inputParser;
 p.KeepUnmatched = true;

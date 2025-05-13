@@ -1,8 +1,10 @@
 function temp2D = read_gridTemp_RS(mTime, altitude, folder, station, deltaTime)
 % READ_GRIDTEMP_RS read gridded radiosonde data
-% Example:
+%
+% USAGE:
 %    temp2D = read_gridTemp_RS(mTime, altitude, folder, station, deltaTime)
-% Inputs:
+%
+% INPUTS:
 %    mTime: array
 %        measurement time. (UTC)
 %    altitude: array
@@ -13,14 +15,15 @@ function temp2D = read_gridTemp_RS(mTime, altitude, folder, station, deltaTime)
 %        radiosonde station (default: 'wuhan').
 %    deltaTime: numeric
 %        delta time for profile searching.
-% Outputs:
+%
+% OUTPUTS:
 %    temp: matrix (altitude * time)
 %        temperature for each range bin. If no valid data, NaN will be 
 %        filled. [C]
-% History:
-%    2020-06-01. First Edition by Zhenping
-% Contact:
-%    zhenping@tropos.de
+%
+% HISTORY:
+%    2020-06-01: First Edition by Zhenping
+% .. Authors: - zp.yin@whu.edu.cn
 
 temp2D = NaN(numel(altitude), numel(mTime));
 

@@ -1,8 +1,10 @@
 function [fh] = display_depol_profi(ax, height, VDR, PDR, varargin)
 % DISPLAY_DEPOL_PROFI display particle backscatter profile.
-% Example:
+%
+% USAGE:
 %    [fh] = display_depol_profi(ax, height, VDR, PDR, varargin)
-% Inputs:
+%
+% INPUTS:
 %    ax: axes
 %        axes handle.
 %    height: array
@@ -11,7 +13,8 @@ function [fh] = display_depol_profi(ax, height, VDR, PDR, varargin)
 %        volume depolarization ratio.
 %    PDR: array
 %        particle depolarization ratio.
-% Keywords:
+%
+% KEYWORDS:
 %    hRange: 2-element array
 %        spatial range. (km)
 %    DepolRange: 2-element array
@@ -20,13 +23,14 @@ function [fh] = display_depol_profi(ax, height, VDR, PDR, varargin)
 %        layer base height. (km)
 %    LTH: numeric
 %        layer top height. (km)
-% Outputs:
+%
+% OUTPUTS:
 %    fh: figure
 %        figure handle.
-% History:
-%    2020-05-28. First Edition by Zhenping
-% Contact:
-%    zp.yin@whu.edu.cn
+%
+% HISTORY:
+%    2020-05-28: first edition by Zhenping
+% .. Authors: - zp.yin@whu.edu.cn
 
 p = inputParser;
 p.KeepUnmatched = true;

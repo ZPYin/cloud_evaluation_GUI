@@ -1,15 +1,18 @@
 function [fh] = display_bsc_profi(ax, height, aerBsc, varargin)
 % DISPLAY_BSC_PROFI display particle backscatter profile.
-% Example:
+%
+% USAGE:
 %    [fh] = display_bsc_profi(ax, height, aerBsc, varargin)
-% Inputs:
+%
+% INPUTS:
 %    ax: axes
 %        axes handle.
 %    height: array
 %        height above ground. (km)
 %    aerBsc: array
 %        particle backscatter. (Mm-1sr-1)
-% Keywords:
+%
+% KEYWORDS:
 %    hRange: 2-element array
 %        spatial range. (km)
 %    aerBscRange: 2-element array
@@ -22,13 +25,14 @@ function [fh] = display_bsc_profi(ax, height, aerBsc, varargin)
 %        dust backscatter. (Mm-1sr-1)
 %    nondustBsc: array
 %        non-dust backscatter. (Mm-1sr-1)
-% Outputs:
+%
+% OUTPUTS:
 %    fh: figure
 %        figure handle.
-% History:
-%    2020-05-28. First Edition by Zhenping
-% Contact:
-%    zp.yin@whu.edu.cn
+%
+% HISTORY:
+%    2020-05-28: first edition by Zhenping
+% .. Authors: - zp.yin@whu.edu.cn
 
 p = inputParser;
 p.KeepUnmatched = true;

@@ -1,15 +1,18 @@
 function [fh] = display_RH_profi(ax, height, RH, varargin)
 % DISPLAY_RH_PROFI display relative humidity profile.
-% Example:
+%
+% USAGE:
 %    [fh] = display_RH_profi(ax, height, RH, varargin)
-% Inputs:
+%
+% INPUTS:
 %    ax: axes
 %        axes handle.
 %    height: array
 %        height above ground. (km)
 %    RH: array
-%        relative humidity. (% )
-% Keywords:
+%        relative humidity. (%)
+%
+% KEYWORDS:
 %    hRange: 2-element array
 %        spatial range. (km)
 %    RHRange: 2-element array
@@ -20,13 +23,14 @@ function [fh] = display_RH_profi(ax, height, RH, varargin)
 %        cloud top height. (km)
 %    CTT: numeric
 %        cloud top temperature. (celsius)
-% Outputs:
+%
+% OUTPUTS:
 %    fh: figure
 %        figure handle.
-% History:
-%    2020-05-28. First Edition by Zhenping
-% Contact:
-%    zp.yin@whu.edu.cn
+%
+% HISTORY:
+%    2020-05-28: first edition by Zhenping
+% .. Authors: - zp.yin@whu.edu.cn
 
 p = inputParser;
 p.KeepUnmatched = true;

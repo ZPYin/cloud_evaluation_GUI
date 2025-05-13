@@ -1,15 +1,17 @@
 function [tStr] = tNow()
 % TNOW generate the string of the present time with a certain format
-% Example:
+%
+% USAGE:
 %    [tStr] = tNow()
-% Inputs:
-% Outputs:
+%
+% OUTPUTS:
 %    tStr: char
 %        date string for now.
-% History:
-%    2018-12-16. First edition by Zhenping
-% Contact:
-%    zhenping@tropos.de
+%
+% HISTORY:
+%    - 2021-06-08: first edition by Zhenping
+%
+% .. Authors: - zhenping@tropos.de
 
 tStr = datestr(now, 'yyyy-mm-dd HH:MM:SS');
 

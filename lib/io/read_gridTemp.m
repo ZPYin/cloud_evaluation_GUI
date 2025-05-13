@@ -1,18 +1,21 @@
 function [temp2D] = read_gridTemp(mTime, altitude, varargin)
-% READ_GRIDTEMP read gridded temperature field.
-% Example:
+% READ_GRIDTEMP description
+%
+% USAGE:
 %    % Usecase 1: read GDAS1 data
 %    temp2D = read_gridTemp(mTime, altitude, 'meteor_data', 'GDAS1', 'station', 'wuhan', 'GDAS1Folder', '/GDAS1');
 %    % Usecase 2: read Radiosonde data
 %    temp2D = read_gridTemp(mTime, altitude, 'meteor_data', 'Radiosonde', 'RadiosondeFolder', '/Radiosonde', 'station', 'wuhan');
 %    % Usecase 3: read ERA-5 data.
 %    temp2D = read_gridTemp(mTime, altitude, 'meteor_data', 'ERA-5', 'ERA5Folder', '/ERA-5', 'station', 'wuhan');
-% Inputs:
+%
+% INPUTS:
 %    mTime: array
 %        measurement time. (UTC)
 %    altitude: array
 %        height above mean sea level. (m)
-% Keywords:
+%
+% KEYWORDS:
 %    meteor_data: char
 %        meteorological data source. 
 %        'GDAS1' (default), 'Radiosonde', or 'ERA-5'
@@ -28,13 +31,14 @@ function [temp2D] = read_gridTemp(mTime, altitude, varargin)
 %        - 2: radiosonde file for MUA (default)
 %    ERA5Folder: char
 %        ERA-5 data folder.
-% Outputs:
+%
+% OUTPUTS:
 %    temp2D: matrix (altitude * time)
 %        gridded temperature.
-% History:
-%    2020-05-28. First Edition by Zhenping
-% Contact:
-%    zp.yin@whu.edu.cn
+%
+% HISTORY:
+%    2020-05-28: first edition by Zhenping
+% .. Authors: - zp.yin@whu.edu.cn
 
 p = inputParser;
 p.KeepUnmatched = true;

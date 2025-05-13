@@ -1,15 +1,18 @@
 function [fh] = display_Temp_profi(ax, height, Temp, varargin)
 % DISPLAY_TEMP_PROFI display temperature profile.
-% Example:
+%
+% USAGE:
 %    [fh] = display_Temp_profi(ax, height, Temp, varargin)
-% Inputs:
+%
+% INPUTS:
 %    ax: axes
 %        axes handle.
 %    height: array
 %        height above ground. (km)
 %    Temp: array
 %        temperature. (degree celsius)
-% Keywords:
+%
+% KEYWORDS:
 %    hRange: 2-element array
 %        spatial range. (km)
 %    TempRange: 2-element array
@@ -20,13 +23,16 @@ function [fh] = display_Temp_profi(ax, height, Temp, varargin)
 %        cloud top height. (km)
 %    CTT: numeric
 %        cloud top temperature. (celsius)
-% Outputs:
+%
+% OUTPUTS:
 %    fh: figure
 %        figure handle.
-% History:
-%    2020-05-28. First Edition by Zhenping
-% Contact:
-%    zp.yin@whu.edu.cn
+%
+% EXAMPLE:
+%
+% HISTORY:
+%    2020-05-28: first edition by Zhenping
+% .. Authors: - zp.yin@whu.edu.cn
 
 p = inputParser;
 p.KeepUnmatched = true;

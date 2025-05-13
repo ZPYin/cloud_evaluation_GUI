@@ -1,8 +1,10 @@
 function [fh] = display_VDR_profi(ax, height, VDR, mol_VDR, varargin)
 % DISPLAY_VDR_PROFI display volume depolarization ratio profile.
-% Example:
+%
+% USAGE:
 %    [fh] = display_VDR_profi(ax, height, VDR, mol_VDR, varargin)
-% Inputs:
+%
+% INPUTS:
 %    ax: axes
 %        axes handle.
 %    height: array
@@ -11,7 +13,8 @@ function [fh] = display_VDR_profi(ax, height, VDR, mol_VDR, varargin)
 %        volume depolarization ratio.
 %    mol_VDR: array
 %        molecular volume depolarization ratio
-% Keywords:
+%
+% KEYWORDS:
 %    hRange: 2-element array
 %        spatial range. (km)
 %    VDRRange: 2-element array
@@ -22,13 +25,14 @@ function [fh] = display_VDR_profi(ax, height, VDR, mol_VDR, varargin)
 %        cloud top height. (km)
 %    CTT: numeric
 %        cloud top temperature. (celsius)
-% Outputs:
+%
+% OUTPUTS:
 %    fh: figure
 %        figure handle.
-% History:
-%    2020-05-28. First Edition by Zhenping
-% Contact:
-%    zp.yin@whu.edu.cn
+%
+% HISTORY:
+%    2020-05-28: first edition by Zhenping
+% .. Authors: - zp.yin@whu.edu.cn
 
 p = inputParser;
 p.KeepUnmatched = true;

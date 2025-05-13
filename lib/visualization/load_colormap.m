@@ -1,21 +1,24 @@
 function [cMaps] = load_colormap(cMapName)
 % LOAD_COLORMAP load colormap.
-% Example:
+%
+% USAGE:
 %    [cMaps] = load_colormap(cMapName)
-% Inputs:
+%
+% INPUTS:
 %    cMapName: char
 %    - myjet
 %    - chiljet
 %    - jet
 %    - parula and other matlab built-in colormaps. (see details at MATLAB
 %      'colormap' document)
-% Outputs:
+%
+% OUTPUTS:
 %    cMaps: matrix (nColor * 3)
 %        RGB colormap
-% History:
-%    2020-08-20. First Edition by Zhenping
-% Contact:
-%    zp.yin@whu.edu.cn
+%
+% HISTORY:
+%    2020-08-20: first edition by Zhenping
+% .. Authors: - zp.yin@whu.edu.cn
 
 switch lower(cMapName)
 case 'myjet'

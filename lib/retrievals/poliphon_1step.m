@@ -1,8 +1,10 @@
 function [dustInfo, nondustInfo] = poliphon_1step(parBsc, parBscStd, parDepol, parDepolStd, lrd)
 % POLIPHON_1STEP Separate dust and nondust with POLIPHON 1-step method.
-% Example:
-%    [dustInfo, nondustInfo] = poliphon_1step(parBsc, parBscStd, parDepol, parDepolStd)
-% Inputs:
+%
+% USAGE:
+%    [dustInfo, nondustInfo] = poliphon_1step(parBsc, parBscStd, parDepol, parDepolStd, lrd)
+%
+% INPUTS:
 %    parBsc: matrix (height * time)
 %        particle backscatter coefficient. (m^-1sr^-1)
 %    parBscStd: matrix (height * time)
@@ -13,7 +15,8 @@ function [dustInfo, nondustInfo] = poliphon_1step(parBsc, parBscStd, parDepol, p
 %        uncertainty of particle depolarization ratio.
 %    lrd: float
 %        dust lidar ratio (default: 51). (sr)
-% Outputs:
+%
+% OUTPUTS:
 %    dustInfo: struct
 %        parBsc: matrix (height * time)
 %            particle backscatter coefficient. (m^-1sr^-1)
@@ -29,7 +32,8 @@ function [dustInfo, nondustInfo] = poliphon_1step(parBsc, parBscStd, parDepol, p
 %            uncertainty of particle mass. (kgm^-3)
 %    nondustInfo: struct
 %        (as above)
-% References:
+%
+% REFERENCES:
 %    1. Mamouri, R., and A. Ansmann (2014), Fine and coarse dust separation with
 %       polarization lidar, Atmospheric Measurement Techniques, 7(11), 3717-3735.
 %    2. Mamouri, R.-E., and A. Ansmann (2017), Potential of polarization/Raman
@@ -40,10 +44,10 @@ function [dustInfo, nondustInfo] = poliphon_1step(parBsc, parBscStd, parDepol, p
 %       ice-nucleating particle profiling with polarization lidar: updated
 %       POLIPHON conversion factors from global AERONET analysis, Atmos. Meas.
 %       Tech., 12(9), 4849-4865, doi:10.5194/amt-12-4849-2019.
-% History:
-%    2020-04-08. First Edition by Zhenping
-% Contact:
-%    zp.yin@whu.edu.cn
+%
+% HISTORY:
+%    2020-04-08: first edition by Zhenping
+% .. Authors: - zp.yin@whu.edu.cn
 
 if ~ exist('lrd', 'var')
     lrd = 51;   % lidar ratio of dust (sr)

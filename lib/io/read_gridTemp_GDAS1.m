@@ -1,8 +1,10 @@
 function temp2D = read_gridTemp_GDAS1(mTime, altitude, folder, gdas1site, deltaTime)
-% READ_GRIDTEMP_GDAS1 read gridded GDAS1 data
-% Example:
+% READ_GRIDTEMP_GDAS1 read gridded GDAS1 data.
+%
+% USAGE:
 %    temp2D = read_gridTemp_GDAS1(mTime, altitude, folder, gdas1site, deltaTime)
-% Inputs:
+%
+% INPUTS:
 %    mTime: array
 %        measurement time. (UTC)
 %    altitude: array
@@ -13,14 +15,15 @@ function temp2D = read_gridTemp_GDAS1(mTime, altitude, folder, gdas1site, deltaT
 %        gdas1 site (default: 'wuhan').
 %    deltaTime: numeric
 %        delta time for profile searching.
-% Outputs:
+%
+% OUTPUTS:
 %    temp: matrix (altitude * time)
 %        temperature for each range bin. If no valid data, NaN will be 
 %        filled. [C]
-% History:
-%    2020-03-17. First Edition by Zhenping
-% Contact:
-%    zhenping@tropos.de
+%
+% HISTORY:
+%    2020-03-17: First Edition by Zhenping
+% .. Authors: - zp.yin@whu.edu.cn
 
 if ~ exist('gdas1site', 'var')
     gdas1site = 'wuhan';

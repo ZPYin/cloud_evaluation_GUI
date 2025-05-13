@@ -1,17 +1,22 @@
 function config = load_settings(settingFile, settingTemplate)
 % LOAD_SETTINGS load setting file and overwrite the template settings.
-% Inputs:
+%
+% USAGE:
+%    config = load_settings(settingFile, settingTemplate)
+%
+% INPUTS:
 %    settingFile: char
 %        absolute path of the setting file (YAML).
 %    settingTemplate: char
 %        absolute path of the template setting file (YAML).
-% Outputs:
+%
+% OUTPUTS:
 %    config: struct
 %        settings.
-% History:
-%    2020-07-08. First edition by Zhenping.
-% Contact:
-%    zp.yin@whu.edu.cn
+%
+% HISTORY:
+%    2020-07-08: First edition by Zhenping.
+% .. Authors: - zp.yin@whu.edu.cn
 
 if exist(settingFile, 'file') ~= 2
     error('setting file does not exist.\n%s', settingFile);

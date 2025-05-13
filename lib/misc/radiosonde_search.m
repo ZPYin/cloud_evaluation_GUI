@@ -4,7 +4,7 @@ function [sondeFile] = radiosonde_search(sondeFolder, measurementTime, fileType)
 % USAGE:
 %    [sondeFile] = radiosonde_search(sondeFolder, measurementTime, fileType)
 %
-% Inputs:
+% INPUTS:
 %    sondeFolder: str
 %        the folder of the sonding files. 
 %    measurementTime: datenum
@@ -17,17 +17,17 @@ function [sondeFile] = radiosonde_search(sondeFolder, measurementTime, fileType)
 %        - 3: CMA radiosonde file
 %        - 4: radiosonde file for MUA (HDF5)
 %
-% Outputs:
+% OUTPUTS:
 %    sondeFile: str
 %        the filename of the searched sonding file. If no file was found, an 
 %        empty string will be returned.
 %
-% History:
-%    2019-07-19. First Edition by Zhenping
-%    2019-12-18. Add `fileType` to specify the type of the radiosonde file.
+% EXAMPLE:
 %
-% Contact:
-%    zhenping@tropos.de
+% HISTORY:
+%    2019-07-19: First Edition by Zhenping
+%    2019-12-18: Add `fileType` to specify the type of the radiosonde file.
+% .. Authors: - zp.yin@whu.edu.cn
 
 if ~ exist('fileType', 'var')
     fileType = 1;
