@@ -1,0 +1,45 @@
+# PLidar data folder
+dataDir: ''
+
+# version of lidar data
+# 1: glued by old algorithm with 30-m resolution
+# 2: glued by new algorithm with 3.75-m resolution (default)
+# 3: CMA data
+# 4: WHU-1030 vis lidar data
+data_version: 1
+
+# detection mode
+# PC: photon counting
+# AD: analog detection
+detect_mode: 'PC'
+
+# measurement station
+station: ''
+
+# GDAS1 data folder
+GDAS1Dir: ''
+
+# radiosonde data folder
+soundingDir: ''
+# 1: radiosonde file for MOSAiC (default)
+# 2: radiosonde file for MUA
+# 3: CMA radiosonde file
+RadiosondeType: 1
+
+# ERA-5 data folder
+ERA5Dir: ''
+
+# save folder
+saveDir: ''
+
+# header info for HDF5 file
+metadata:
+  institute: ''
+  instrument: ''
+  PI: ''
+  PI_email: ''
+  operator: 'Zhenping Yin'
+  operator_email: 'zp.yin@whu.edu.cn'
+  altitude: 74
+  longitude: 114.37
+  latitude: 30.53

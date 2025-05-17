@@ -1,0 +1,21 @@
+infoFile: ''
+QLStartTime: '2011-01-01 00:00:00'
+QLStopTime: '2011-01-01 23:00:00'
+QLHBase: 0
+QLHTop: 12
+QLCloudStartTime: '2011-01-01 00:10:00'
+QLCloudStopTime: '2011-01-01 00:10:00'
+CloudHBase: 4
+CloudHTop: 5
+GainRatio: 0.0829
+HOffset: 0
+RetrievalStartTime: '2011-01-01 00:10:00'
+RetrievalStopTime: '2011-01-01 01:10:00'
+RetrievalHBase: 0
+RetrievalHTop: 12
+RefHBase: 10
+RefHTop: 11
+RefVal: 0.01
+LidarRatio: 45
+SmoothWin: 30
+Wavelength: 532
