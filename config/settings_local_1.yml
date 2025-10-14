@@ -1,0 +1,27 @@
+# PLidar data folder
+dataDir: 'D:\\Data\\PLidar532'
+
+# version of lidar data
+# 1: glued by old algorithm with 30-m resolution
+# 2: glued by new algorithm with 3.75-m resolution (default)
+data_version: 1
+
+# detection mode
+# PC: photon counting
+# AD: analog detection
+detect_mode: 'PC'
+
+# measurement station
+station: 'wuhan'
+
+# GDAS1 data folder
+GDAS1Dir: 'G:\\GDAS1'
+
+# radiosonde data folder
+soundingDir: 'D:\\Data\\Radiosonde'
+
+# ERA-5 data folder
+ERA5Dir: ''
+
+# save folder
+saveDir: 'C:\\Users\\zhenping\\Desktop\\'

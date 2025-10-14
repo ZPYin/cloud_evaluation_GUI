@@ -1,0 +1,20 @@
+# PLidar data folder
+dataDir: 'E:\MUA-PLidar'
+dataDirFormat: 1
+
+# version of lidar data
+# 1: glued by old algorithm with 30-m resolution
+# 2: glued by new algorithm with 3.75-m resolution (default)
+data_version: 1
+
+# GDAS1 data folder
+GDAS1Dir: 'C:\Users\zhenp\Documents\Data\GDAS\wuhan'
+
+# radiosonde data folder
+soundingDir: 'G:\Radiosonde'
+
+# ERA-5 data folder
+ERA5Dir: 'D:\Data\ERA5'
+
+# save folder
+saveDir: 'D:\MUA\stratiform_clouds_wuhan'

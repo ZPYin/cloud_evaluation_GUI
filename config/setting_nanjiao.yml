@@ -1,0 +1,33 @@
+# PLidar data folder
+dataDir: 'D:\Data\CMA_data\level0'
+
+# version of lidar data
+# 1: glued by old algorithm with 30-m resolution
+# 2: glued by new algorithm with 3.75-m resolution (default)
+# 3: CMA data
+data_version: 3
+
+# detection mode
+# PC: photon counting
+# AD: analog detection
+detect_mode: 'AD'
+
+# measurement station
+station: 'nanjiao'
+
+# GDAS1 data folder
+GDAS1Dir: 'D:\Data\GDAS'
+
+# radiosonde data folder
+soundingDir: ''
+
+# ERA-5 data folder
+ERA5Dir: ''
+
+# save folder
+saveDir: ''
+
+# header info for HDF5 file
+metadata:
+  operator: ''
+  operator_email: ''

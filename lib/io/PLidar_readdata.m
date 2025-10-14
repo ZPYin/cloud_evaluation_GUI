@@ -19,6 +19,10 @@ function data = PLidar_readdata(folder, tRange, hRange, varargin)
 %        2: glued by new algorithm with 3.75-m resolution (default)
 %        3: CMA polarization lidar
 %        4: WHU 1030 vis lidar
+%    dataDirFormat: integer
+%        format of the data folder (default: 2).
+%        1: folder contains subfolders named by date
+%        2: folder contains all files
 %
 % OUTPUTS:
 %    data: struct
@@ -43,6 +47,7 @@ function data = PLidar_readdata(folder, tRange, hRange, varargin)
 %
 % HISTORY:
 %    2020-03-03: first edition by Zhenping
+%    2025-10-14: add `dataDirFormat` option to specify data folder format by Zhenping
 % .. Authors: - zp.yin@whu.edu.cn
 
 p = inputParser;
@@ -52,6 +57,7 @@ addRequired(p, 'folder', @ischar);
 addRequired(p, 'tRange', @isnumeric);
 addRequired(p, 'hRange', @isnumeric);
 addParameter(p, 'dVersion', 2, @isnumeric);
+addParameter(p, 'dataDirFormat', 2, @isnumeric);
 
 parse(p, folder, tRange, hRange, varargin{:});
 
@@ -68,8 +74,13 @@ data.BGCH2 = [];
 
 for iDate = 1:length(mDateArr)
     mDate = mDateArr(iDate);
+    if p.Results.dataDirFormat == 1
+        subfolder = fullfile(folder, datestr(mDate, 'yyyy'));
+    else
+        subfolder = folder;
+    end
 
-    subdata = PLidar_read_data(mDate, folder, p.Results.dVersion, hRange, tRange);
+    subdata = PLidar_read_data(mDate, subfolder, p.Results.dVersion, hRange, tRange);
 
     if isfield(subdata, 'height')
         data.height = subdata.height;

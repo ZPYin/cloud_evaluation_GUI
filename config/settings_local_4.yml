@@ -1,0 +1,24 @@
+# PLidar data folder
+dataDir: 'C:\\Users\\ZPYin\\Documents\\Data\\3wl_12ch_data\\waz_data'
+
+# version of lidar data
+# 1: glued by old algorithm with 30-m resolution
+# 2: glued by new algorithm with 3.75-m resolution (default)
+# 4: WHU-1030 vis lidar data
+data_version: 4
+
+detect_mode: 'PC'
+
+station: 'wuhan'
+
+# GDAS1 data folder
+GDAS1Dir: 'D:\\Data\\GDAS\\'
+
+# radiosonde data folder
+soundingDir: 'D:\\Data\\Radiosonde'
+
+# ERA-5 data folder
+ERA5Dir: ''
+
+# save folder
+saveDir: 'C:\\Users\\zpyin\\Desktop\\'

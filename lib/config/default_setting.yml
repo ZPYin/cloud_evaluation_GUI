@@ -1,6 +1,11 @@
 # PLidar data folder
 dataDir: ''
 
+# PLidar data folder format
+# 1: folder contains subfolders named by date (default)
+# 2: folder contains all files
+dataDirFormat: 2
+
 # version of lidar data
 # 1: glued by old algorithm with 30-m resolution
 # 2: glued by new algorithm with 3.75-m resolution (default)

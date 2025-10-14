@@ -1,6 +1,6 @@
 results
 .vscode
-config
+./config
 
 # ignore matlab temporary files
 *.asv
