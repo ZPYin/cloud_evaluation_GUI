@@ -1,5 +1,5 @@
 # PLidar data folder
-dataDir: 'D:\Data\CMA_data\level0'
+dataDir: 'G:\lidar\test\CARLNET'
 
 # version of lidar data
 # 1: glued by old algorithm with 30-m resolution

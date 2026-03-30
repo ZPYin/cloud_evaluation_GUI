@@ -1,5 +1,5 @@
 # PLidar data folder
-dataDir: 'E:\MUA-PLidar'
+dataDir: 'C:\Users\zhenp\Documents\Data\PLidar532\Level0'
 dataDirFormat: 1
 
 # version of lidar data

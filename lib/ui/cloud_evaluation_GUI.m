@@ -68,7 +68,7 @@ logPrint(handles.log_tb, sprintf('[%s] load settings successfully!', tNow()));
 % Choose default command line output for cloud_evaluation_GUI
 handles.output = hObject;
 handles.lidarData = struct();
-handles.mTime = linspace(datenum(2010, 1, 1, 0, 0, 0), ...
+handles.mTime = linspace(datenum(2011, 1, 1, 0, 0, 0), ...
                          datenum(2010, 1, 1, 1, 0, 0), 100);
 handles.height = linspace(0, 10000, 100);
 handles.RCS = NaN(100, 100);
